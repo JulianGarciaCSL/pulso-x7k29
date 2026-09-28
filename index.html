@@ -21,6 +21,24 @@
 .pwa-tip{position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));z-index:200;background:#2D3034;color:#fff;border-radius:18px;padding:14px 44px 14px 16px;font:600 13px/1.4 system-ui,-apple-system,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);max-width:460px;margin:0 auto}
 .pwa-tip b{font-weight:800}.pwa-tip .sh{display:inline-block;vertical-align:-3px;width:16px;height:16px}
 .pwa-tip button{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:16px;border:0}
+/* ---------- Escritorio (app instalada desde Chrome / Edge) ---------- */
+/* Barra de título integrada: sin la franja "Pulso Comercial"; quedan solo los botones de la ventana sobre la banda gris */
+.pwa-drag{display:none;position:fixed;top:0;left:env(titlebar-area-x,0);width:env(titlebar-area-width,100%);height:env(titlebar-area-height,33px);-webkit-app-region:drag;app-region:drag;z-index:300}
+@media (display-mode: window-controls-overlay){
+  .pwa-drag{display:block}
+  html body .app{--safe-top:env(titlebar-area-height,33px)}
+  .login{padding-top:calc(28px + env(titlebar-area-height,33px))!important}
+  .intro-top{top:calc(14px + env(titlebar-area-height,33px))!important}
+  .pwa-upd{top:calc(8px + env(titlebar-area-height,33px))}
+}
+/* Barra de desplazamiento fina, redondeada y en el gris de la app */
+::-webkit-scrollbar{width:10px;height:10px;background:transparent}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(60,64,69,.28);border-radius:999px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:rgba(60,64,69,.55);background-clip:padding-box;border:2.5px solid transparent}
+::-webkit-scrollbar-thumb:active{background:#3C4045;background-clip:padding-box}
+::-webkit-scrollbar-button,::-webkit-scrollbar-corner{display:none;background:transparent}
+@supports not selector(::-webkit-scrollbar){html,.sheet{scrollbar-width:thin;scrollbar-color:rgba(60,64,69,.4) transparent}}
 .pwa-upd{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:200;background:#fff;color:#2D3034;border-radius:999px;padding:10px 16px;font:700 13px system-ui,-apple-system,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.25);border:0}
 </style>
 </head>
@@ -4711,6 +4729,19 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
 </script>
 
 
+<div class="pwa-drag" aria-hidden="true"></div>
+<script>
+/* Escritorio: la ventana de la app abre siempre con tamaño de celular */
+(function () {
+  try {
+    var app = matchMedia('(display-mode: standalone), (display-mode: window-controls-overlay), (display-mode: minimal-ui)').matches;
+    if (!app || !matchMedia('(pointer: fine)').matches || window.Capacitor) return;
+    var W = 430, H = Math.min(920, (screen.availHeight || 960) - 24);
+    var ajustar = function () { if (Math.abs(window.outerWidth - W) > 4 || Math.abs(window.outerHeight - H) > 4) window.resizeTo(W, H); };
+    ajustar(); setTimeout(ajustar, 300);
+  } catch (e) { /* el navegador no permite cambiar el tamaño */ }
+})();
+</script>
 <script>
 /* PWA: modo sin conexión, aviso de actualización y ayuda para instalar en iPhone */
 (function () {
