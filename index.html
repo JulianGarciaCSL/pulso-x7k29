@@ -1590,6 +1590,78 @@ button.kpi:active{transform:scale(.98)}
 .dia-tot div{background:var(--surface);border-radius:14px;padding:10px}
 .dia-tot span{display:block;font-size:11px;color:var(--ink-2)}.dia-tot b{font-size:14px}
 #cDaily,#cDaily .c-hit{touch-action:manipulation}
+/* ---------- UB · Utilidad bruta (v0.22) ---------- */
+.nav-in .tab{font-size:10px;padding:7px 2px}
+.ub-kpis{margin-bottom:12px}
+.ub-card{padding:6px 0 4px}
+.ub-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ub-t{border-collapse:separate;border-spacing:0;width:100%;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ub-t th,.ub-t td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left}
+.ub-t thead th{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3,#8A8F98);background:var(--surface)}
+.ub-t .n{text-align:right}
+.ub-t .ub-n{position:sticky;left:0;background:var(--surface);z-index:1;max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:600;box-shadow:6px 0 8px -8px rgba(0,0,0,.25)}
+.ub-r.grupo{cursor:pointer}
+.ub-r.grupo .ub-n{font-weight:800}
+.ub-r.nv0 td,.ub-r.nv0 th{background:#F4F5F7}
+.ub-r.nv0 .ub-n{background:#F4F5F7}
+.ub-r.tot th,.ub-r.tot td{font-weight:800;border-top:2px solid var(--ink);border-bottom:0;background:var(--surface)}
+.ub-tg{display:inline-block;width:14px;font-size:10px;color:var(--ink-2)}
+.ub-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.ub-p{font-weight:800}.ub-p.pos{color:var(--good-ink,#146B3B)}.ub-p.warn{color:var(--warn-ink,#8A5300)}.ub-p.neg{color:var(--bad-ink,#A8202F)}
+.ub-t b.neg{color:var(--bad-ink,#A8202F)}
+.ub-part{display:inline-block;width:34px;height:6px;border-radius:3px;background:var(--track);margin-right:6px;vertical-align:1px;overflow:hidden}
+.ub-part i{display:block;height:100%;background:var(--accent)}
+/* ---------- UB v0.23 ---------- */
+.sin-metrica #metricSeg,.sin-metrica .hdr-met{display:none!important}
+.sin-metrica #catTog{margin-top:30px}
+.ub-met{background:var(--surface);border-radius:18px;padding:12px 14px;margin:0 0 12px;display:flex;flex-direction:column;gap:8px}
+.ub-met-l{display:flex;flex-wrap:wrap;gap:6px}
+.ub-mc{padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:700;color:var(--ink-3,#8A8F98);transition:all .2s}
+.ub-mc[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+/* ---------- UB tabla limpia (v0.24) ---------- */
+.ub-card{background:transparent!important;box-shadow:none!important;border:0!important;border-radius:0!important;padding:0!important;overflow:visible}
+.ub-t{font-size:11px;width:100%}
+.ub-t th,.ub-t td{padding:7px 6px;border-bottom:0}
+.ub-t .n{width:1%}
+.ub-t .ub-n{width:auto;max-width:170px;background:inherit}
+.ub-t thead th{font-size:9.5px;background:var(--bg,#E9EBEE);border-bottom:1.5px solid #C9CDD3;position:static}
+.ub-t thead th.ub-n{background:var(--bg,#E9EBEE)}
+.ub-t tbody tr{background:#fff}
+.ub-t tbody tr:nth-child(even){background:#F3F4F6}
+.ub-t tbody tr.nv0{background:#E4E7EB}
+.ub-t tbody tr .ub-n{background:inherit}
+.ub-r.nv0 td,.ub-r.nv0 th,.ub-r.nv0 .ub-n{background:inherit}
+.ub-r.tot th,.ub-r.tot td{background:#fff;border-top:1.5px solid var(--ink)}
+.ub-part{width:26px;margin-right:4px}
+.ap-link{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px dashed #B9BEC6;background:transparent;color:var(--ink-3,#8A8F98);margin:0 2px;transition:all .2s}
+.ap-link .ico{width:15px;height:15px}
+.ap-link[aria-pressed="true"]{background:var(--accent);border:1px solid var(--accent);color:#fff}
+.ub-t th,.ub-t td{padding:7px 4px}
+.ub-t .ub-n{padding-left:6px;max-width:130px}
+.ub-part{width:18px}
+.ub-t thead th{white-space:normal;line-height:1.15;vertical-align:bottom}.ub-t thead th.n{min-width:0}
+/* ---------- UB tabla: letra +15%, títulos en una línea, columnas repartidas (v0.25) ---------- */
+.ub-t{font-size:12.6px;min-width:100%;width:100%;table-layout:auto}
+.ub-t col.c-n{width:1%}
+.ub-t .ub-n{white-space:nowrap;max-width:none;overflow:visible;text-overflow:clip;padding-left:10px;padding-right:10px}
+.ub-t th,.ub-t td{padding:8px 5px}
+.ub-t .n{width:auto}
+.ub-t tr > :last-child{padding-right:10px}
+.ub-t thead th{font-size:11px;text-transform:none;letter-spacing:0;white-space:nowrap;line-height:1.2;vertical-align:bottom;font-weight:700}
+.ub-t thead th.ub-n{padding-left:10px}
+.ub-part{width:20px}
+.ub-t th,.ub-t td{padding:8px 3px}
+.ub-t .ub-n{padding-right:6px}
+.ub-t tr > :last-child{padding-right:10px}
+.ub-t .ub-part{display:none}
+.ub-tg{width:12px}
+.ub-t thead th{font-size:10.5px}
+.ub-t .ub-n{padding-right:4px}
+.ub-t{font-size:12.4px}.ub-t th,.ub-t td{padding-left:2.5px;padding-right:2.5px}.ub-t .ub-n{padding-left:10px;padding-right:4px}.ub-t tr > :last-child{padding-right:10px}
+.ub-tg{width:10px;font-size:9px}.ub-t tr > :last-child{padding-right:9px}
+.ub-card{margin-left:-16px!important;margin-right:-16px!important}.ub-t .ub-n,.ub-t thead th.ub-n{padding-left:16px}.ub-t tr > :last-child{padding-right:16px}
+.ub-t{font-size:11.2px}.ub-t thead th{font-size:9.5px}
+.ub-t tbody,.ub-t tfoot{font-size:10.1px}
 
 </style>
 
@@ -1690,6 +1762,7 @@ button.kpi:active{transform:scale(.98)}
     <section class="screen" id="scr-analisis" hidden></section>
     <section class="screen" id="scr-equipo" hidden></section>
     <section class="screen" id="scr-mapa" hidden></section>
+    <section class="screen" id="scr-ub" hidden></section>
     <section class="screen stack" id="scr-datos" hidden></section>
   </main>
 </div>
@@ -1701,6 +1774,7 @@ button.kpi:active{transform:scale(.98)}
       <button class="tab" data-tab="analisis"><svg viewBox="0 0 24 24" class="ico"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>Análisis</button>
       <button class="tab" data-tab="equipo"><svg viewBox="0 0 24 24" class="ico"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20v-1a5 5 0 0 0-3.5-4.8"/></svg>Equipo</button>
       <button class="tab" data-tab="mapa"><svg viewBox="0 0 24 24" class="ico"><path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z M9 4v13.5M15 6.5V20"/></svg>Mapa</button>
+      <button class="tab" data-tab="ub" hidden><svg viewBox="0 0 24 24" class="ico"><rect x="2.5" y="7" width="15" height="9" rx="1.5"/><circle cx="10" cy="11.5" r="2"/><path d="M6.5 19h13a1.5 1.5 0 0 0 1.5-1.5V10"/></svg>UB</button>
       <button class="tab" data-tab="datos"><svg viewBox="0 0 24 24" class="ico"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Datos</button>
     </nav>
     <button class="fab" id="fab" aria-label="Nuevo registro manual"><svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -3038,9 +3112,9 @@ function heroPrecioHTML(a, cal, e) {
       <div><span>Precio prom.</span><b>${e.real == null ? '—' : fmtMoneyFull(e.real)}</b></div>
       <div><span>${esc(esRango() ? 'Período ant.' : perLabel(perAnterior(S.periodo)).mes)}</span><b>${pv.precio == null ? '—' : fmtMoneyFull(pv.precio)}</b></div>
       <div><span>Objetivo</span><b>${e.obj == null ? '—' : fmtMoneyFull(e.obj)}</b></div>
+      <div><span>Operaciones</span><b>${c.vacio ? '—' : NF0.format(c.n) + ' / ' + NF0.format(c.total)}</b></div>
       <div><span>Vs. mes ant.</span><b class="${pv.ratio == null ? '' : pv.ratio >= 1 ? 'pos' : 'neg'}">${pv.ratio == null ? '—' : fmtDelta(pv.ratio - 1)}</b></div>
-      <div><span>Vs. objetivo</span><b class="${e.ratio == null ? '' : e.ratio >= 1 ? 'pos' : 'neg'}">${e.ratio == null ? '—' : fmtDelta(e.ratio - 1)}</b></div>
-      <div><span>Operaciones</span><b>${c.vacio ? '—' : NF0.format(c.n) + ' / ' + NF0.format(c.total)}</b></div></div>`; })()}
+      <div><span>Vs. objetivo</span><b class="${e.ratio == null ? '' : e.ratio >= 1 ? 'pos' : 'neg'}">${e.ratio == null ? '—' : fmtDelta(e.ratio - 1)}</b></div></div>`; })()}
     <div class="hero-foot"><span class="mk"></span>Campana: operaciones de ${esc(refTxt)}, cada una contra ${c.porLinea ? 'el precio promedio de su producto' : 'el precio promedio por unidad del grupo'}. Punto = ${esc(c.lblSel)}.${c.fuera ? ` ${c.fuera} operación${c.fuera > 1 ? 'es' : ''} sin producto comparable.` : ''}</div>
   </div>`;
 }
@@ -3377,6 +3451,138 @@ function precioPrevMix(f) {
   return { precio: u ? sm / u : null, ratio: sm ? su / sm : null };
 }
 
+/* ============================================================================
+   L. UB · UTILIDAD BRUTA (solo aprobadores, v0.22)
+   Tabla por apertura configurable (por defecto Categoría ▶ Producto) con precio de lista,
+   precio neto, descuento total, UB unitaria, UB %, UB total y participación en la UB.
+   Solo cuentan las ventas cuya línea tiene Costo unit. en BASE GENERAL.
+   ============================================================================ */
+const UB_DEF = ['categoria', 'producto'];
+const UB_DIMS = { categoria: 'Categoría', marca: 'Marca', producto: 'Producto', calidad: 'Calidad', zona: 'Zona', vendedor: 'Vendedor', cliente: 'Cliente' };
+const UB_EST = new Map();
+/* Columnas de la tabla: se prenden y apagan con el botón Métricas */
+const UB_COLS = [['cant', 'Cant. k'], ['lista', 'P. lista'], ['neto', 'P. neto'], ['cost', 'Cost.'], ['dt', 'DT%'], ['ubu', 'UB unit.'], ['ubp', 'UB%'], ['ubt', 'UB total'], ['part', 'Part.']];
+const UB_COLS_DEF = ['cant', 'neto', 'cost', 'dt', 'ubp', 'ubt', 'part'];
+const colsUB = () => { const c = Array.isArray(S.ubCols) && S.ubCols.length ? S.ubCols : UB_COLS_DEF; return UB_COLS.map(([k]) => k).filter(k => c.includes(k)); };          // id de fila → abierta / cerrada (por defecto abierto el primer nivel)
+function aperturaUB() {
+  let a = Array.isArray(S.aperturaUB) && S.aperturaUB.length ? S.aperturaUB.filter(d => UB_DIMS[d]) : UB_DEF.slice();
+  if (!(IDX.valores.calidad || []).length) a = a.filter(d => d !== 'calidad');
+  return a.length ? a : UB_DEF.slice();
+}
+function selectorAperturaUB() {
+  const a = aperturaUB(), dims = Object.keys(UB_DIMS).filter(d => !(d === 'calidad' && !(IDX.valores.calidad || []).length));
+  const sel = [];
+  for (let i = 0; i <= Math.min(a.length, dims.length - 1); i++) {
+    const usados = new Set(a.slice(0, i)), val = a[i] || '';
+    const ops = dims.filter(d => !usados.has(d));
+    sel.push(`<label class="ap-n"><span>${i + 1}</span><select data-nivelub="${i}" aria-label="Nivel ${i + 1}">${i ? '<option value="">—</option>' : ''}${ops.map(d => `<option value="${d}"${d === val ? ' selected' : ''}>${UB_DIMS[d]}</option>`).join('')}</select></label>`);
+    if (!val) break;
+  }
+  const esDef = a.join() === UB_DEF.join();
+  const un = unionUB();
+  const sep = i => i < a.length - 1 ? `<button class="ap-link" data-ubunir="${i}" aria-pressed="${!!un[i]}" title="${un[i] ? 'Separar' : 'Unir en una fila'}" aria-label="${un[i] ? 'Separar' : 'Unir'} ${UB_DIMS[a[i]]} y ${UB_DIMS[a[i + 1]]}"><svg viewBox="0 0 24 24" class="ico sm"><path d="M10 13a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1.2 1.2M14 11a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1.2-1.2"/></svg></button>` : '<span class="ap-sep">▶</span>';
+  return `<div class="apertura"><span class="ap-t">Apertura · 🔗 une dos niveles en una fila</span>${sel.map((h, i) => h + (i < sel.length - 1 ? sep(i) : '')).join('')}${esDef && !un.some(Boolean) ? '' : '<button class="link-btn ap-reset" data-act="ubreset">Restablecer</button>'}</div>`;
+}
+/** Niveles unidos: un[i] = true une el nivel i con el i+1 en una sola fila (ej. "CSL · 45X45"). */
+const unionUB = () => { const a = aperturaUB(); return a.map((_, i) => !!(Array.isArray(S.ubUnir) && S.ubUnir[i] && i < a.length - 1)); };
+/** Grupos de dimensiones que forman cada nivel visible de la tabla. */
+function gruposUB() { const a = aperturaUB(), un = unionUB(), g = []; a.forEach((d, i) => { if (i && un[i - 1]) g[g.length - 1].push(d); else g.push([d]); }); return g; }
+document.addEventListener('click', ev => {
+  const b = ev.target.closest && ev.target.closest('[data-ubunir]');
+  if (!b) return;
+  const i = +b.dataset.ubunir, u = unionUB(); u[i] = !u[i]; S.ubUnir = u; UB_EST.clear(); render();
+});
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (!t.matches || !t.matches('select[data-nivelub]')) return;
+  const i = +t.dataset.nivelub, v = t.value;
+  let a = aperturaUB().slice();
+  if (!v) a = a.slice(0, i);
+  else { const j = a.indexOf(v), viejo = a[i]; if (j > i) a[j] = viejo; a[i] = v; a = a.filter(Boolean); }
+  S.aperturaUB = a.length ? a : UB_DEF.slice(); S.ubUnir = null; UB_EST.clear(); render();
+});
+function renderUB() {
+  const el = $('#scr-ub'), niveles = aperturaUB(), grupos = gruposUB();
+  const nodo = () => ({ F: 0, U: 0, C: 0, L: 0, UL: 0, FL: 0, h: new Map() });
+  const raiz = nodo();
+  let factTot = 0, cantTot = 0;
+  const nomVal = (d, k) => d === 'categoria' ? nomCat(k) : d === 'zona' ? zonaCorta(k) : k;
+  const valor = (v, d) => d === 'calidad' ? (v.calidad || 'Sin calidad') : (v[d] || '—');
+  const clave = g => v => g.map(d => valor(v, d)).join(' · ');
+  for (const v of DATA.ventas) {
+    if (!enSel(v._p) || !ventaOK(v) || !match(v, S.f) || !(v.precio > 0)) continue;
+    const F = v.unidades * v.precio; factTot += F; cantTot += v.unidades;
+    if (v._costo == null) continue;
+    const suma = x => { x.F += F; x.U += v.unidades; x.C += v.unidades * v._costo; if (v._lista) { x.L += v.unidades * v._lista; x.UL += v.unidades; x.FL += F; } };
+    suma(raiz);
+    let n = raiz;
+    grupos.forEach(g => { const k = clave(g)(v); let x = n.h.get(k); if (!x) { n.h.set(k, x = nodo()); x.nom = g.map(d => nomVal(d, valor(v, d))).join(' · '); x.mk = g.includes('marca') ? v.marca : null; } suma(x); n = x; });
+  }
+  const ubT = raiz.F - raiz.C;
+  const cols = colsUB();
+  const celdas = x => {
+    const ub = x.F - x.C, pl = x.UL ? x.L / x.UL : null, pn = x.U ? x.F / x.U : null, desc = x.L ? 1 - x.FL / x.L : null;
+    const ubU = x.U ? ub / x.U : null, ubP = x.F ? ub / x.F : null, part = ubT ? ub / ubT : null;
+    const c = {
+      cant: `<td class="n">${NF1.format(x.U / 1000)}</td>`,
+      lista: `<td class="n">${pl == null ? '—' : esc(fmtMoneyFull(pl))}</td>`,
+      neto: `<td class="n">${pn == null ? '—' : NF0.format(pn)}</td>`,
+      cost: `<td class="n">${x.U ? NF0.format(x.C / x.U) : '—'}</td>`,
+      dt: `<td class="n">${desc == null ? '—' : fmtPct(desc, 0)}</td>`,
+      ubu: `<td class="n">${ubU == null ? '—' : esc(fmtMoneyFull(ubU))}</td>`,
+      ubp: `<td class="n"><span class="ub-p ${ubP == null ? '' : ubP < 0 ? 'neg' : ubP < (raiz.F ? ubT / raiz.F : 0) * 0.85 ? 'warn' : 'pos'}">${ubP == null ? '—' : fmtPct(ubP, 1)}</span></td>`,
+      ubt: `<td class="n"><b class="${ub < 0 ? 'neg' : ''}">${NF0.format(ub / 1e6)}</b></td>`,
+      part: `<td class="n"><span class="ub-part"><i style="width:${Math.max(0, Math.min(100, (part || 0) * 100)).toFixed(1)}%"></i></span>${part == null ? '—' : fmtPct(part, 0)}</td>`,
+    };
+    return cols.map(k => c[k]).join('');
+  };
+  const filas = [];
+  const pintar = (n, nivel, ruta) => {
+    [...n.h.entries()].sort((a, b) => (b[1].F - b[1].C) - (a[1].F - a[1].C)).forEach(([k, x]) => {
+      const id = ruta.concat(k).join('»'), hoja = nivel === grupos.length - 1;
+      const abierto = !hoja && (UB_EST.has(id) ? UB_EST.get(id) : nivel === 0);
+      const col = x.mk ? colorMarca(x.mk) : null;
+      filas.push(`<tr class="ub-r nv${Math.min(nivel, 4)}${hoja ? '' : ' grupo'}"${hoja ? '' : ` data-ubt="${esc(id)}"`}>
+        <th class="ub-n" style="padding-left:${16 + nivel * 12}px">${hoja ? '' : `<span class="ub-tg">${abierto ? '▼' : '▶'}</span>`}${col ? `<i class="ub-dot" style="background:${col}"></i>` : ''}${esc(x.nom)}</th>${celdas(x)}</tr>`);
+      if (abierto) pintar(x, nivel + 1, ruta.concat(k));
+    });
+  };
+  pintar(raiz, 0, []);
+  const cobertura = factTot ? raiz.F / factTot : 0;
+  const desc = raiz.L ? 1 - raiz.FL / raiz.L : null;
+  el.innerHTML = `<h1 class="section-t">Utilidad bruta</h1><p class="section-s">Rentabilidad por ${esc(grupos.map(g => g.map(d => UB_DIMS[d].toLowerCase()).join(' · ')).join(' ▶ '))} · ${esc(lblSel())} · solo aprobadores</p>
+    <div class="kpis ub-kpis">
+      ${kpiHTML('money', fmtMoney(ubT), 'UB total', raiz.F ? fmtPct(ubT / raiz.F, 1) + ' de la facturación' : '—')}
+      ${kpiHTML('tag', raiz.U ? fmtMoneyFull(ubT / raiz.U) : '—', 'UB por unidad', raiz.U ? 'Precio neto ' + fmtMoneyFull(raiz.F / raiz.U) : '')}
+      ${kpiHTML('down', desc == null ? '—' : fmtPct(desc, 1), 'Descuento total', raiz.UL ? 'Lista ' + fmtMoneyFull(raiz.L / raiz.UL) + ' → neto ' + fmtMoneyFull(raiz.FL / raiz.UL) : 'Sin precio de lista')}
+      ${kpiHTML('box', fmtUc(cantTot), 'Cantidad total', 'Vendida en el período')}
+    </div>
+    <div class="vista-bar"><div class="card-s">Tocá una fila para abrir o cerrar · ordenado por UB total</div>
+      <div class="vista-der"><button class="link-btn" data-act="verMetricasUB" aria-pressed="${!!S.verMetricasUB}">${ico('list', 'sm')} Métricas</button><button class="link-btn" data-act="verAperturaUB" aria-pressed="${!!S.verAperturaUB}">${ico('sliders', 'sm')} Apertura${niveles.join() !== UB_DEF.join() ? ' · personalizada' : ''}</button></div></div>
+    ${S.verMetricasUB ? `<div class="ub-met"><span class="ap-t">Métricas</span><div class="ub-met-l">${UB_COLS.map(([k, l]) => `<button class="ub-mc" data-ubcol="${k}" aria-pressed="${cols.includes(k)}">${l}</button>`).join('')}</div>${cols.join() === UB_COLS_DEF.join() ? '' : '<button class="link-btn ap-reset" data-act="ubcolsreset">Restablecer</button>'}</div>` : ''}
+    ${S.verAperturaUB ? selectorAperturaUB() : ''}
+    <div class="card ub-card">${raiz.U ? `<div class="ub-scroll"><table class="ub-t"><colgroup><col class="c-n">${cols.map(() => `<col style="width:${(99 / cols.length).toFixed(2)}%">`).join('')}</colgroup>
+      <thead><tr><th class="ub-n">${esc(grupos[0].map(d => UB_DIMS[d]).join(' · '))}</th>${cols.map(k => `<th class="n">${UB_COLS.find(c => c[0] === k)[1]}</th>`).join('')}</tr></thead>
+      <tbody>${filas.join('')}</tbody>
+      <tfoot><tr class="ub-r tot"><th class="ub-n">Total</th>${celdas(raiz)}</tr></tfoot></table></div>` : '<p class="card-s">No hay ventas con costo cargado para este filtro.</p>'}</div>
+    <p class="map-nota" style="margin-top:10px">P. lista: precio de lista del objetivo del mes (o de BASE GENERAL). P. neto: precio facturado promedio. DT%: descuento total de lista a neto. Cant. k: cantidad en miles. P. neto y Cost. (costo unitario) en $. UB total en millones de $ = (precio neto − costo unitario) × cantidad. Part.: participación en la UB total. UB % en ámbar cuando queda por debajo del 85% del promedio.</p>`;
+}
+document.addEventListener('click', ev => {
+  const tr = ev.target.closest && ev.target.closest('tr[data-ubt]');
+  if (!tr) return;
+  const id = tr.dataset.ubt, nivel = id.split('»').length - 1;
+  const actual = UB_EST.has(id) ? UB_EST.get(id) : nivel === 0;
+  UB_EST.set(id, !actual); renderUB();
+});
+document.addEventListener('click', ev => {
+  const b = ev.target.closest && ev.target.closest('[data-ubcol]');
+  if (!b) return;
+  let c = colsUB().slice(); const k = b.dataset.ubcol;
+  c = c.includes(k) ? c.filter(x => x !== k) : c.concat(k);
+  if (!c.length) return;
+  S.ubCols = c; render();
+});
+
 'use strict';
 /* ============================================================================
    A. UTILIDADES
@@ -3550,7 +3756,8 @@ function buildIndex() {
   const d = DATA;
   const periodos = new Set();
   const precioObj = new Map();     // periodo|cliente|marca|producto (v1) y periodo|zona|marca|categoria|producto (v2)
-  const precioProd = new Map();    // periodo|marca|categoria|producto → promedio ponderado
+  const precioProd = new Map();
+  const listaObj = new Map();      // periodo|zona|producto(|calidad) → precio de lista del objetivo    // periodo|marca|categoria|producto → promedio ponderado
   const valores = { zona: new Set(), vendedor: new Set(), cliente: new Set(), marca: new Set(), categoria: new Set(), producto: new Set(), calidad: new Set() };
   const clienteInfo = new Map();
   const lineas = new Map();        // marca|categoria|producto|gp → datos de BASE GENERAL
@@ -3562,6 +3769,7 @@ function buildIndex() {
     periodos.add(o.periodo);
     if (o.cliente) precioObj.set([o.periodo, o.cliente, o.marca, o.producto].join('|'), o.precio);
     precioObj.set([o.periodo, o.zona, kProdC(o)].join('|'), o.precio);
+    if (o.precioLista) { listaObj.set([o.periodo, o.zona, kProdC(o)].join('|'), o.precioLista); if (!listaObj.has([o.periodo, o.zona, kProd(o)].join('|'))) listaObj.set([o.periodo, o.zona, kProd(o)].join('|'), o.precioLista); }
     if (!o.calidad || !precioObj.has([o.periodo, o.zona, kProd(o)].join('|'))) precioObj.set([o.periodo, o.zona, kProd(o)].join('|'), o.precio);
     [o.periodo + '|' + kProd(o), o.periodo + '|' + kProdC(o)].forEach(k => {
       const a = precioProd.get(k) || { f: 0, u: 0 };
@@ -3588,6 +3796,7 @@ function buildIndex() {
     const l = lineas.get(kLinea(v));
     v._costo = l && l.costo != null ? l.costo : null;
     v._min = l && l.precioMin ? l.precioMin : null;
+    v._lista = listaObj.get([v._p, v.zona, kProdC(v)].join('|')) || listaObj.get([v._p, v.zona, kProd(v)].join('|')) || (l && l.precioLista) || null;
   });
   const corte = (d.meta.actualizado && d.meta.actualizado > maxFecha) ? d.meta.actualizado : (maxFecha || d.meta.actualizado || hoyISO());
   const sortEs = (a, b) => a.localeCompare(b, 'es');
@@ -3749,7 +3958,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.21</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.27</p></div>`;
 }
 
 /* ============================================================================
@@ -3806,7 +4015,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.21</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.27</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -3876,7 +4085,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.21</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.27</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -3916,7 +4125,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.21</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.27</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -3990,23 +4199,30 @@ function render() {
   if (esVend() && S.tab === 'equipo') S.tab = 'inicio';
   if (esVend() && S.dimA === 'vendedor') S.dimA = 'marca';
   $('.tab[data-tab="equipo"]').hidden = esVend();
+  const verUB = !esVend() && IDX.conCostos;
+  $('.tab[data-tab="ub"]').hidden = !verUB;
+  if (S.tab === 'ub' && !verUB) S.tab = 'inicio';
+  $('.tab[data-tab="datos"]').hidden = esVend();
+  if (esVend() && S.tab === 'datos') S.tab = 'inicio';
+  document.body.classList.toggle('sin-metrica', S.tab === 'ub');
   renderHeader();
   renderCtx();
   const t = S.tab;
   $$('.tab').forEach(b => b.toggleAttribute('aria-current', false));
   $(`.tab[data-tab="${t}"]`).setAttribute('aria-current', 'page');
-  ['inicio', 'analisis', 'equipo', 'mapa', 'datos'].forEach(k => { $('#scr-' + k).hidden = k !== t; });
+  ['inicio', 'analisis', 'equipo', 'mapa', 'ub', 'datos'].forEach(k => { $('#scr-' + k).hidden = k !== t; });
   $('#ctx').hidden = t === 'datos';
   if (t === 'inicio') renderInicio();
   else if (t === 'analisis') renderAnalisis();
   else if (t === 'equipo') renderEquipo();
   else if (t === 'mapa') renderMapa();
+  else if (t === 'ub') renderUB();
   else renderDatos();
   ajustarBanda(); encabezadoScroll();
   // Animación de carga de barras: al entrar a una solapa o cambiar mes, métrica o filtros.
   const clave = [t, S.periodo, JSON.stringify(S.rango), S.metric, JSON.stringify(S.f), S.dimA].join('|');
   if (clave !== ultimaVista) { ultimaVista = clave; animarBarras($('#scr-' + t)); }
-  store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura }));
+  store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2 }));
 }
 
 function renderHeader() {
@@ -4039,7 +4255,7 @@ function ajustarBanda() {
   const app = $('#app'), ctx = $('#ctx'), seg = $('#metricSeg');
   if (!app) return;
   const top = app.getBoundingClientRect().top;
-  const hasta = ctx.hidden ? $('#hdr').offsetHeight + 10 : seg.getBoundingClientRect().top - top + 34;
+  const hasta = ctx.hidden ? $('#hdr').offsetHeight + 10 : !seg.offsetParent ? $('#ctx .period').getBoundingClientRect().bottom - top + 16 : seg.getBoundingClientRect().top - top + 34;
   app.style.setProperty('--banda', Math.round(hasta) + 'px');
 }
 /** Al bajar, el encabezado queda fijo y compacto: logo + nombre, actualizar y perfil. */
@@ -4211,17 +4427,45 @@ function sheetDia(clave, sub) {
     ${rows.length ? `${leyendaMarcas(dim)}<ul class="alist">${rows.map((r, i) => barraHTML({ dim, k: r.k, nombre: dim === 'categoria' ? nomCat(r.k) : r.k, a: r.a, e: evalua(r.a, cal), cal, max, total, mezcla, sinObj: true, rank: dim === 'cliente' ? i + 1 : null, det: [dim, r.k], sub: dim === 'cliente' ? subInfo('cliente', r.k).split(' · ')[0] : '' })).join('')}</ul>` : '<p class="card-s">Sin ventas en este período.</p>'}`;
   openSheet(`Ventas · ${titulo}`, `${METRIC_NAME[S.metric]} · ${rows.length} ${DIM_PLURAL[dim]} · tocá uno para ver su detalle`, body);
 }
-/** Lista de clientes o productos con precio peor a −2,5% vs. objetivo, ordenados por impacto en $. */
-function sheetBajoPrecio(dim) {
-  const cal = calSel();
-  const filas = [...aggPorDim(SEL, dim, S.f).entries()].filter(([, a]) => a.rFo > 0 && a.rF / a.rFo < 0.975)
-    .map(([k, a]) => ({ k, a, gap: a.rF / a.rFo - 1, imp: a.rF - a.rFo })).sort((x, y) => x.imp - y.imp);
-  const tot = filas.reduce((t, f) => t + f.imp, 0);
-  const nom = dim === 'sku' ? 'Productos' : 'Clientes';
-  const body = filas.length ? `<div class="pace-note" style="margin-bottom:6px"><i></i>Impacto total ${esc(sgnMoney(tot))} · ordenados de mayor a menor impacto negativo · tocá uno para ver su detalle</div>
-    <div>${filas.map(f => `<button class="bp-row" data-det-dim="${dim}" data-det-key="${esc(f.k)}"><div class="grow"><b>${esc(f.k)}</b><small>${dim === 'cliente' ? esc(subInfo('cliente', f.k).split(' · ')[0]) + ' · ' : ''}Precio ${esc(fmtMoneyFull(f.a.rU ? f.a.rF / f.a.rU : 0))} vs. objetivo ${esc(fmtMoneyFull(f.a.rU ? f.a.rFo / f.a.rU : 0))} · ${esc(fmtMoney(f.a.rF))} facturados</small></div>
-      <div class="bp-v"><b>${fmtDelta(f.gap)}</b><small>${esc(sgnMoney(f.imp))}</small></div></button>`).join('')}</div>` : '<p class="card-s">Ninguno con desvío peor a −2,5% en este período.</p>';
-  openSheet(`${nom} bajo precio`, `${filas.length} con desvío peor a −2,5% vs. precio objetivo · ${lblSel()}`, body);
+/* ---------- Bajo precio: contra el promedio de los 2 meses previos (por defecto) o contra el objetivo ---------- */
+let BP_MODO = 'prom2';
+const mesesProm2 = () => [2, 1].map(n => mesMas(perSel()[0], -n)).filter(p => IDX.periodos.includes(p));
+/** Por cliente o producto: precio real vs. referencia a igual mix de productos. */
+function bajoPrecioFilas(dim, modo) {
+  if (modo === 'obj') return [...aggPorDim(SEL, dim, S.f).entries()].filter(([, a]) => a.rFo > 0)
+    .map(([k, a]) => ({ k, F: a.rF, U: a.rU, ref: a.rFo, gap: a.rF / a.rFo - 1, imp: a.rF - a.rFo }));
+  const base = filtroActual(); if (dim === 'sku') { delete base.producto; delete base.marca; } else delete base[dim];
+  const ps = new Set(mesesProm2()), inc = v => S.sim || v.origen !== 'manual', lin = new Map();
+  for (const v of DATA.ventas) {
+    if (!ps.has(v._p) || !inc(v) || !(v.precio > 0) || !ventaEnFiltro(v, base)) continue;
+    const k = kLinea(v), o = lin.get(k) || { f: 0, u: 0 }; o.f += v.unidades * v.precio; o.u += v.unidades; lin.set(k, o);
+  }
+  const out = new Map();
+  for (const v of DATA.ventas) {
+    if (!enSel(v._p) || !ventaOK(v) || !(v.precio > 0) || !match(v, S.f)) continue;
+    const o = lin.get(kLinea(v)); if (!o || !o.u) continue;
+    const k = valDim(v, dim); if (k == null) continue;
+    let x = out.get(k); if (!x) out.set(k, x = { k, F: 0, U: 0, ref: 0 });
+    x.F += v.unidades * v.precio; x.U += v.unidades; x.ref += v.unidades * o.f / o.u;
+  }
+  return [...out.values()].filter(x => x.ref > 0).map(x => ({ ...x, gap: x.F / x.ref - 1, imp: x.F - x.ref }));
+}
+function bajoPrecioKPI(dim) {
+  const filas = bajoPrecioFilas(dim, BP_MODO);
+  return { bajo: filas.filter(f => f.gap < -0.025).length, total: filas.length };
+}
+const lblProm2 = () => { const ps = mesesProm2(); return ps.length ? 'prom. ' + ps.map(p => perLabel(p).corto).join('–') : 'meses previos'; };
+/** Lista de clientes o productos con precio peor a −2,5% vs. la referencia elegida, ordenados por impacto en $. */
+function sheetBajoPrecio(dim, modo) {
+  if (modo) BP_MODO = modo;
+  const filas = bajoPrecioFilas(dim, BP_MODO).filter(f => f.gap < -0.025).sort((x, y) => x.imp - y.imp);
+  const tot = filas.reduce((t, f) => t + f.imp, 0), obj = BP_MODO === 'obj';
+  const nom = dim === 'sku' ? 'Productos' : 'Clientes', refLbl = obj ? 'objetivo' : lblProm2();
+  const tog = `<div class="seg mini" role="group" style="margin-bottom:10px">${[['prom2', 'Vs. promedio 2 meses'], ['obj', 'Vs. objetivo']].map(([k, l]) => `<button data-bpmodo="${k}" data-bpdim="${dim}" aria-pressed="${k === BP_MODO}">${l}</button>`).join('')}</div>`;
+  const body = tog + (filas.length ? `<div class="pace-note" style="margin-bottom:6px"><i></i>Impacto total ${esc(sgnMoney(tot))} · precio vs. ${esc(refLbl)} a igual mix de productos · de mayor a menor impacto negativo · tocá uno para ver su detalle</div>
+    <div>${filas.map(f => `<button class="bp-row" data-det-dim="${dim}" data-det-key="${esc(f.k)}"><div class="grow"><b>${esc(f.k)}</b><small>${dim === 'cliente' ? esc(subInfo('cliente', f.k).split(' · ')[0]) + ' · ' : ''}Precio ${esc(fmtMoneyFull(f.U ? f.F / f.U : 0))} vs. ${esc(obj ? 'objetivo' : 'promedio')} ${esc(fmtMoneyFull(f.U ? f.ref / f.U : 0))} · ${esc(fmtMoney(f.F))} facturados</small></div>
+      <div class="bp-v"><b>${fmtDelta(f.gap)}</b><small>${esc(sgnMoney(f.imp))}</small></div></button>`).join('')}</div>` : `<p class="card-s">Ninguno con desvío peor a −2,5% vs. ${esc(refLbl)}.</p>`);
+  openSheet(`${nom} bajo precio`, `${filas.length} con desvío peor a −2,5% vs. ${refLbl} · ${lblSel()}`, body);
 }
 function kpisHTML(a, cal) {
   const m = S.metric;
@@ -4249,13 +4493,11 @@ function kpisHTML(a, cal) {
     tiles.push(kpiHTML('tag', eP.real == null ? '—' : fmtMoneyFull(eP.real), 'Precio promedio', eP.ratio == null ? '—' : fmtDelta(eP.ratio - 1) + ' vs. objetivo'));
   } else {
     const efecto = a.rF - a.rFo;
-    const porCli = [...aggPorDim(SEL, 'cliente', S.f).values()].filter(x => x.rFo > 0);
-    const bajo = porCli.filter(x => x.rF / x.rFo < 0.975).length;
-    const porSku = [...aggPorDim(SEL, 'sku', S.f).values()].filter(x => x.rFo > 0);
-    const bajoS = porSku.filter(x => x.rF / x.rFo < 0.975).length;
+    const kc = bajoPrecioKPI('cliente'), ks = bajoPrecioKPI('sku');
+    const refK = BP_MODO === 'obj' ? 'objetivo' : lblProm2();
     tiles.push(kpiHTML('money', sgnMoney(efecto), 'Efecto precio en $', 'Real vs. precio objetivo'));
-    tiles.push(kpiHTML('store', `${bajo} de ${porCli.length}`, 'Clientes bajo precio', 'Desvío peor a −2,5% · ver lista', 'bajoCli'));
-    tiles.push(kpiHTML('box', `${bajoS} de ${porSku.length}`, 'Productos bajo precio', 'Desvío peor a −2,5% · ver lista', 'bajoSku'));
+    tiles.push(kpiHTML('store', `${kc.bajo} de ${kc.total}`, 'Clientes bajo precio', `Peor a −2,5% vs. ${refK} · ver lista`, 'bajoCli'));
+    tiles.push(kpiHTML('box', `${ks.bajo} de ${ks.total}`, 'Productos bajo precio', `Peor a −2,5% vs. ${refK} · ver lista`, 'bajoSku'));
     tiles.push(kpiHTML('trend', fmtMoney(eF.real), 'Facturación', fmtPct(eF.ratio, 0) + ' del objetivo'));
   }
   // Utilidad bruta: solo aprobador y solo si el archivo trae costos.
@@ -4436,17 +4678,17 @@ function renderDatos() {
       <div class="facts"><div><b>${fmtInt(d.objetivos.filter(enScope).length)}</b><span>objetivos</span></div><div><b>${fmtInt(d.ventas.filter(v => enScope(v) && !esManual(v)).length)}</b><span>ventas</span></div><div><b>${pers.length}</b><span>${pers.length ? esc(perLabel(pers[0]).corto + '–' + perLabel(pers[pers.length - 1]).corto) : 'meses'}</span></div></div>
     </div>
     <div class="menu">
-      <button class="menu-i" data-act="cargar"><span class="mi">${ico('refresh')}</span><span class="grow"><b>Actualizar datos</b><span class="sub">${REMOTO ? 'Trae la última versión publicada; los registros manuales se conservan' : 'Elegí pulso_datos.json en OneDrive; los registros manuales se conservan'}</span></span>${ico('chevR', 'sm chev')}</button>
-      ${esVend() ? '' : `<button class="menu-i" data-act="exportar"><span class="mi">${ico('download')}</span><span class="grow"><b>Exportar datos</b><span class="sub">Descargar o copiar el JSON actual</span></span>${ico('chevR', 'sm chev')}</button>
-      <button class="menu-i" data-act="plantilla"><span class="mi">${ico('file')}</span><span class="grow"><b>Plantilla vacía</b><span class="sub">Estructura del archivo con filas de ejemplo</span></span>${ico('chevR', 'sm chev')}</button>
+      ${esVend() ? '' : `      <button class="menu-i" data-act="plantilla"><span class="mi">${ico('file')}</span><span class="grow"><b>Plantilla vacía</b><span class="sub">Estructura del archivo con filas de ejemplo</span></span>${ico('chevR', 'sm chev')}</button>
       ${SIN_DEMO ? '' : `<button class="menu-i danger" data-act="restaurar"><span class="mi">${ico('refresh')}</span><span class="grow"><b>Volver a los datos demo</b><span class="sub">Reemplaza el archivo cargado; los registros manuales se conservan</span></span>${ico('chevR', 'sm chev')}</button>`}`}
     </div>
     <details class="help"><summary>¿Cómo se actualizan los datos? ${ico('chevR', 'sm')}</summary>
-      <p>El aprobador mantiene el Excel <b>ARCHIVO BASE APP</b> (hojas del Simulador: BASE GENERAL, PRODUCTOS, CLIENTE, BASE X CLIENTE y BASE OBJETIVOS, más VENTAS, USUARIOS y CONFIG) y lo convierte con <b>conversor_pulso.html</b> en <b>pulso_datos.json</b>, un archivo cifrado que no se puede leer con Excel ni con un editor.</p>
-      <p>Ese archivo se reemplaza en la carpeta compartida de OneDrive, siempre con el mismo nombre. Para ver los datos nuevos: <b>Actualizar</b> › elegí <b>OneDrive</b> en el selector › <b>pulso_datos.json</b>. Hace falta tener la app de OneDrive instalada con la cuenta de la empresa.</p>
-      <p>Los registros manuales quedan en este teléfono y no se borran al actualizar.</p>
+      <p><b>1. El administrador prepara los datos.</b> Actualiza el Excel <b>ARCHIVO BASE APP</b> (ventas desde Snowflake, objetivos, clientes, productos, usuarios y configuración) y lo procesa con el <b>conversor</b>, que revisa que no haya errores antes de seguir.</p>
+      <p><b>2. Se cifran y se publican.</b> El conversor cifra toda la información (AES-256) con la <b>clave de acceso</b> vigente y la publica en el servidor de la app. Lo publicado es ilegible: solo se puede abrir desde esta aplicación y con la clave.</p>
+      <p><b>3. La app se actualiza sola.</b> Al abrirla (o al tocar ${ico('refresh', 'sm')} arriba) descarga la última versión, la descifra en el teléfono y muestra los datos. Sin conexión, se ven los últimos datos descargados.</p>
+      <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
+      <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.21 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.27 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -4955,6 +5197,7 @@ document.addEventListener('click', ev => {
     if (t.dataset.agrup) S.agrup = t.dataset.agrup; if (t.dataset.evol) S.evol = t.dataset.evol; if (t.dataset.fxvs) S.fxVs = t.dataset.fxvs;
     const card = t.closest('.card'); render(); if (card && card.id) animarBarras($('#' + card.id)); return;
   }
+  if (t.dataset.bpmodo) { sheetBajoPrecio(t.dataset.bpdim, t.dataset.bpmodo); if (S.tab === 'inicio') renderInicio(); return; }
   if (t.dataset.diasub) { sheetDia(t.dataset.diak, t.dataset.diasub); return; }
   if (t.dataset.dia) {
     const ahora = Date.now();
@@ -4973,6 +5216,10 @@ document.addEventListener('click', ev => {
     case 'apreset': S.apertura = null; ABIERTOS.clear(); render(); break;
     case 'bajoCli': sheetBajoPrecio('cliente'); break;
     case 'bajoSku': sheetBajoPrecio('sku'); break;
+    case 'verMetricasUB': S.verMetricasUB = !S.verMetricasUB; renderUB(); break;
+    case 'ubcolsreset': S.ubCols = null; render(); break;
+    case 'verAperturaUB': S.verAperturaUB = !S.verAperturaUB; renderUB(); break;
+    case 'ubreset': S.aperturaUB = null; S.ubUnir = null; UB_EST.clear(); render(); break;
     case 'verApertura': S.verApertura = !S.verApertura; renderAnalisis(); break;
     case 'sigMetrica': { const ms = ['fact', 'unid', 'precio']; S.metric = ms[(ms.indexOf(S.metric) + 1) % 3]; const y = window.scrollY; render(); window.scrollTo({ top: y }); const m = $('#hdrMet'); m.classList.remove('pop'); void m.offsetWidth; m.classList.add('pop'); break; }
     case 'detalle': S.detalle = !S.detalle; renderAnalisis(); if (!$('#sheetWrap').hidden && detState) sheetDetalle(detState.dim, detState.key, detState.sub2); store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura })); break;
@@ -5043,7 +5290,7 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
 })();
 
 (function init() {
-  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; } catch (e) { /* preferencias por defecto */ }
+  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
   let d = null, origen = 'Demo';
   try {
     const raw = store.get(KEY_DATA);
