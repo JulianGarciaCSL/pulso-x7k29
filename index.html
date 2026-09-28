@@ -1662,6 +1662,7 @@ button.kpi:active{transform:scale(.98)}
 .ub-card{margin-left:-16px!important;margin-right:-16px!important}.ub-t .ub-n,.ub-t thead th.ub-n{padding-left:16px}.ub-t tr > :last-child{padding-right:16px}
 .ub-t{font-size:11.2px}.ub-t thead th{font-size:9.5px}
 .ub-t tbody,.ub-t tfoot{font-size:10.1px}
+.ub-t tbody,.ub-t tfoot{font-size:var(--ub-fs,10.1px)}.ub-t thead th{font-size:var(--ub-hs,9.5px)}
 
 </style>
 
@@ -3501,6 +3502,12 @@ document.addEventListener('change', ev => {
   else { const j = a.indexOf(v), viejo = a[i]; if (j > i) a[j] = viejo; a[i] = v; a = a.filter(Boolean); }
   S.aperturaUB = a.length ? a : UB_DEF.slice(); S.ubUnir = null; UB_EST.clear(); render();
 });
+/** Letra según la cantidad de métricas visibles: 7 columnas = 10,1 px; menos columnas, más grande (tope 13 px). */
+function tipoUB(n) {
+  const fs = n <= 7 ? Math.min(13, 10.1 + (7 - n) * 0.75) : Math.max(9.6, 10.1 - (n - 7) * 0.25);
+  const hs = Math.min(11.5, 9.5 + (fs - 10.1) * 0.7);
+  return `--ub-fs:${fs.toFixed(2)}px;--ub-hs:${hs.toFixed(2)}px`;
+}
 function renderUB() {
   const el = $('#scr-ub'), niveles = aperturaUB(), grupos = gruposUB();
   const nodo = () => ({ F: 0, U: 0, C: 0, L: 0, UL: 0, FL: 0, h: new Map() });
@@ -3561,7 +3568,7 @@ function renderUB() {
       <div class="vista-der"><button class="link-btn" data-act="verMetricasUB" aria-pressed="${!!S.verMetricasUB}">${ico('list', 'sm')} Métricas</button><button class="link-btn" data-act="verAperturaUB" aria-pressed="${!!S.verAperturaUB}">${ico('sliders', 'sm')} Apertura${niveles.join() !== UB_DEF.join() ? ' · personalizada' : ''}</button></div></div>
     ${S.verMetricasUB ? `<div class="ub-met"><span class="ap-t">Métricas</span><div class="ub-met-l">${UB_COLS.map(([k, l]) => `<button class="ub-mc" data-ubcol="${k}" aria-pressed="${cols.includes(k)}">${l}</button>`).join('')}</div>${cols.join() === UB_COLS_DEF.join() ? '' : '<button class="link-btn ap-reset" data-act="ubcolsreset">Restablecer</button>'}</div>` : ''}
     ${S.verAperturaUB ? selectorAperturaUB() : ''}
-    <div class="card ub-card">${raiz.U ? `<div class="ub-scroll"><table class="ub-t"><colgroup><col class="c-n">${cols.map(() => `<col style="width:${(99 / cols.length).toFixed(2)}%">`).join('')}</colgroup>
+    <div class="card ub-card">${raiz.U ? `<div class="ub-scroll"><table class="ub-t" style="${tipoUB(cols.length)}"><colgroup><col class="c-n">${cols.map(() => `<col style="width:${(99 / cols.length).toFixed(2)}%">`).join('')}</colgroup>
       <thead><tr><th class="ub-n">${esc(grupos[0].map(d => UB_DIMS[d]).join(' · '))}</th>${cols.map(k => `<th class="n">${UB_COLS.find(c => c[0] === k)[1]}</th>`).join('')}</tr></thead>
       <tbody>${filas.join('')}</tbody>
       <tfoot><tr class="ub-r tot"><th class="ub-n">Total</th>${celdas(raiz)}</tr></tfoot></table></div>` : '<p class="card-s">No hay ventas con costo cargado para este filtro.</p>'}</div>
@@ -3958,7 +3965,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.27</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.28</p></div>`;
 }
 
 /* ============================================================================
@@ -4015,7 +4022,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.27</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.28</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4085,7 +4092,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.27</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.28</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4125,7 +4132,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.27</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.28</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4688,7 +4695,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.27 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.28 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
