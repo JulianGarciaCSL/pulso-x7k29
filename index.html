@@ -1568,6 +1568,14 @@ body{letter-spacing:-.005em}
 .girando .ico{animation:girar .9s linear infinite}
 @keyframes girar{to{transform:rotate(360deg)}}
 .clave-aviso{margin-bottom:12px}
+/* ---------- Emoji de la métrica fijo en el encabezado compacto (v0.20) ---------- */
+.hdr-met{position:absolute;left:50%;bottom:-21px;width:46px;height:46px;margin-left:-23px;border-radius:50%;background:#fff;border:5px solid #26292D;display:grid;place-items:center;font-size:21px;line-height:1;box-shadow:0 6px 14px rgba(12,14,18,.22);opacity:0;transform:translateY(-14px) scale(.6);transition:opacity .22s,transform .35s cubic-bezier(.3,1.4,.5,1);pointer-events:none;z-index:2;padding:0}
+
+.hdr.compacto .hdr-met{opacity:1;transform:none;pointer-events:auto}
+.hdr-met.pop span{animation:metPop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes metPop{0%{transform:scale(.4) rotate(-20deg)}100%{transform:none}}
+.hdr-met:active{transform:scale(.92)}
+.vista-der{flex-direction:column;align-items:flex-end;gap:6px}
 
 </style>
 
@@ -1628,6 +1636,7 @@ body{letter-spacing:-.005em}
 
 <div class="app" id="app">
   <header class="hdr" id="hdr">
+    <button class="hdr-met" id="hdrMet" data-act="sigMetrica" aria-label="Cambiar métrica" tabindex="-1"><span id="hdrMetE">💰</span></button>
     <div class="hdr-id">
       <div class="hdr-hola">
         <div class="hdr-t" id="hdrT">Pulso Comercial</div>
@@ -2232,10 +2241,19 @@ function colorMarca(m) {
   return MARCA_PALETA[(i < 0 ? 0 : i) % MARCA_PALETA.length];
 }
 const esAcum = () => S.vista === 'acum';
-/** Acumulado con Facturación o Cantidad: comparar contra el período anterior COMPLETO (piso / target mínimo). */
+/** Acumulado con Facturación o Cantidad: comparar contra el PROMEDIO MENSUAL de los 3 meses cerrados previos
+    (con un período de varios meses: contra el período anterior equivalente completo). */
 const vsPrevActivo = dim => esAcum() && S.metric !== 'precio' && ['marca', 'sku', 'cliente'].includes(dim);
-const persPrevCompletos = () => esRango() ? perSelPrev() : [perAnterior(S.periodo)];
-const lblPrevCompleto = () => esRango() ? lblPrev() : perLabel(perAnterior(S.periodo)).mes;
+const persPrevCompletos = () => esRango() ? perSelPrev() : [3, 2, 1].map(n => mesMas(S.periodo, -n)).filter(p => IDX.periodos.includes(p));
+/** Factor para pasar la suma de los meses de referencia a promedio mensual. */
+const factorPrev = () => esRango() ? 1 : 1 / Math.max(1, persPrevCompletos().length);
+const lblPrevCompleto = () => {
+  if (esRango()) return lblPrev();
+  const ps = persPrevCompletos();
+  if (!ps.length) return 'meses anteriores';
+  const n = p => perLabel(p).corto;
+  return ps.length === 1 ? n(ps[0]) : `prom. ${n(ps[0])}–${n(ps[ps.length - 1])}`;
+};
 function prevPorDim(dim, f) {
   const ps = new Set(persPrevCompletos()), out = new Map();
   for (const v of DATA.ventas) {
@@ -2243,11 +2261,13 @@ function prevPorDim(dim, f) {
     const k = valDim(v, dim); if (k == null) continue;
     out.set(k, (out.get(k) || 0) + (S.metric === 'unid' ? v.unidades : v.unidades * v.precio));
   }
+  const fx = factorPrev();
+  if (fx !== 1) out.forEach((x, k) => out.set(k, x * fx));
   return out;
 }
 function vsPrevHTML(real, prev) {
   if (prev == null) return '';
-  if (!prev) return `<div class="arow-vs"><span class="vs-l">vs. ${esc(lblPrevCompleto())}</span><b class="pos">nuevo</b><span>sin ventas en el período anterior</span></div>`;
+  if (!prev) return `<div class="arow-vs"><span class="vs-l">vs. ${esc(lblPrevCompleto())}</span><b class="pos">nuevo</b><span>sin ventas en ${esRango() ? 'el período anterior' : 'los 3 meses anteriores'}</span></div>`;
   const d = real - prev, pct = real / prev - 1, pos = d >= 0;
   return `<div class="arow-vs"><span class="vs-l">vs. ${esc(lblPrevCompleto())} ${esc(fmtMetric(prev))}</span><b class="${pos ? 'pos' : 'neg'}">${fmtDelta(pct, 1)}</b><span class="${pos ? 'pos' : 'neg'}">${pos ? '+' : '−'}${esc(fmtMetric(Math.abs(d)))}</span></div>`;
 }
@@ -2330,7 +2350,7 @@ function arbolProducto(cal) {
   };
   for (const o of DATA.objetivos) if (enSel(o.periodo) && enScope(o) && match(o, f)) bajar(o, true).forEach(n => { n.a.oF += o.unidades * o.precio; n.a.oU += o.unidades; });
   const conPrev = vsPrevActivo('sku'), psPrev = new Set(persPrevCompletos());
-  if (conPrev) for (const v of DATA.ventas) if (psPrev.has(v._p) && ventaOK(v) && match(v, f)) bajar(v, false).forEach(n => { n.prev += S.metric === 'unid' ? v.unidades : v.unidades * v.precio; });
+  if (conPrev) for (const v of DATA.ventas) if (psPrev.has(v._p) && ventaOK(v) && match(v, f)) bajar(v, false).forEach(n => { n.prev += (S.metric === 'unid' ? v.unidades : v.unidades * v.precio) * factorPrev(); });
   for (const v of DATA.ventas) if (enSel(v._p) && ventaOK(v) && match(v, f)) bajar(v, false).forEach(n => { n.a.rF += v.unidades * v.precio; n.a.rU += v.unidades; n.a.rFo += v.unidades * v._po; n.mk.set(v.marca, (n.mk.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : v.unidades * v.precio)); });
   const prods = new Map(((DATA.maestros || {}).productos || []).map(x => [x.sku, x]));
   const orden = (a, b) => {
@@ -2656,7 +2676,7 @@ function renderTrend() {
   const nomG = g => g == null ? 'Total' : dim === 'categoria' ? nomCat(g) : g;
   if (S.tablas.trend) {
     h += `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Mes</th>${dim ? '<th>' + DIMS[dim] + '</th>' : ''}<th>Real</th><th>Objetivo</th><th>%</th></tr></thead><tbody>` +
-      rows.flatMap(r => r.gs.map(g => `<tr><td>${esc(perLabel(r.p).corto)} ${perLabel(r.p).anio}</td>${dim ? `<td>${esc(nomG(g.g))}</td>` : ''}<td>${fmtMetric(g.e.real, m)}</td><td>${fmtMetric(g.e.obj, m)}</td><td>${fmtPct(g.e.ratio)}</td></tr>`)).join('') + '</tbody></table></div>';
+      rows.flatMap(r => r.gs.map(g => `<tr><td>${esc(perLabel(r.p).corto)} ${perLabel(r.p).anio}</td>${dim ? `<td>${esc(nomG(g.g))}</td>` : ''}<td>${fmtMetric(g.e.real, m)}</td><td>${fmtMetric(g.e.obj, m)}</td><td>${fmtPct(g.e.ratio, 0)}</td></tr>`)).join('') + '</tbody></table></div>';
     box.innerHTML = h; return;
   }
   const act = rows.find(r => r.p === S.periodo) || rows[rows.length - 1];
@@ -2994,6 +3014,10 @@ function aperturaActual() {
   if (!(IDX.valores.calidad || []).length) a = a.filter(d => d !== 'calidad');
   return a;
 }
+/** ¿El orden de la apertura difiere del predeterminado? */
+function aperturaPersonalizada() {
+  return aperturaActual().join() !== APERT_DEF.filter(d => !(esVend() && d === 'vendedor') && !(d === 'calidad' && !(IDX.valores.calidad || []).length)).join();
+}
 function selectorApertura() {
   const a = aperturaActual(), dims = Object.keys(APERT_DIMS).filter(d => !(esVend() && d === 'vendedor') && !(d === 'calidad' && !(IDX.valores.calidad || []).length));
   const sel = [];
@@ -3050,7 +3074,7 @@ function precioArbol() {
     }
   }
   const tog = segMini('pvs', S.precioVs, [['curso', 'Mes en curso'], ['prev', 'Mes anterior']]);
-  const cab = `<div class="card-tools">${tog}</div>${selectorApertura()}`;
+  const cab = `<div class="card-tools">${tog}</div>${S.verApertura ? selectorApertura() : ''}`;
   if (!cur.u) return cab + '<div class="card-s">Sin ventas para este filtro.</div>';
   const refNodo = ruta => { let n = ref; for (const k of ruta) { n = n && n.h.get(k); } return n; };
   const nomVal = (d, k) => d === 'categoria' ? nomCat(k) : d === 'zona' ? zonaCorta(k) : k;
@@ -3632,7 +3656,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.19</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.20</p></div>`;
 }
 
 /* ============================================================================
@@ -3689,7 +3713,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.19</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.20</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -3759,7 +3783,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.19</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.20</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -3799,7 +3823,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.19</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.20</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -3945,6 +3969,7 @@ function renderCtx() {
   $('#perPrev').disabled = esRango() ? S.rango.d <= IDX.periodos[0] : i <= 0;
   $('#perNext').disabled = i >= IDX.periodos.length - 1;
   $$('#metricSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === S.metric)));
+  const me = $('#hdrMetE'); if (me) { me.textContent = { fact: '💰', unid: '📦', precio: '🏷️' }[S.metric]; $('#hdrMet').setAttribute('aria-label', 'Métrica: ' + METRIC_NAME[S.metric] + ' · tocá para cambiar'); }
   moverIndicador();
 
   renderCatTog();
@@ -4032,14 +4057,14 @@ function heroHTML(a, cal, e) {
   let big, sub, t, marker, stats, foot;
   if (m === 'precio') {
     const r = e.ratio;
-    big = r == null ? '—' : NF1.format(r * 100) + '<small>%</small>';
+    big = r == null ? '—' : NF0.format(r * 100) + '<small>%</small>';
     sub = 'Precio logrado vs. objetivo';
     t = r == null ? 0 : (r - 0.9) / 0.2; marker = 0.5;
     stats = [['Precio real', e.real == null ? '—' : fmtMoneyFull(e.real)], ['Precio objetivo', e.obj == null ? '—' : fmtMoneyFull(e.obj)], ['Desvío', r == null ? '—' : fmtDelta(r - 1)]];
     foot = '<span class="mk"></span>Marca = 100% del precio objetivo · escala 90–110%';
   } else {
     const r = e.ratio;
-    big = r == null ? '—' : NF1.format(r * 100) + '<small>%</small>';
+    big = r == null ? '—' : NF0.format(r * 100) + '<small>%</small>';
     sub = 'Cumplimiento de ' + (m === 'fact' ? 'facturación' : 'cantidad');
     t = r || 0;
     const pr = proyeccionSel(S.f, m, a, cal);
@@ -4068,10 +4093,10 @@ function kpisHTML(a, cal) {
   const eF = evalua(a, cal, 'fact'), eU = evalua(a, cal, 'unid'), eP = evalua(a, cal, 'precio');
   const tiles = [];
   const proyTile = (e, mm) => {
-    if (cal.closed) return kpiHTML('flag', fmtMetric(e.real - e.obj, mm), 'Brecha final vs. objetivo', fmtPct(e.ratio) + ' logrado');
+    if (cal.closed) return kpiHTML('flag', fmtMetric(e.real - e.obj, mm), 'Brecha final vs. objetivo', fmtPct(e.ratio, 0) + ' logrado');
     if (!cal.elapsed) return kpiHTML('trend', '—', 'Proyección de cierre', 'Sin ventas aún');
     const pr = proyeccionSel(S.f, mm, agg(SEL, S.f), cal), proy = pr ? pr.fin : e.real;
-    return kpiHTML('trend', fmtMetric(proy, mm), 'Proyección de cierre', fmtPct(e.obj ? proy / e.obj : null) + ' del objetivo');
+    return kpiHTML('trend', fmtMetric(proy, mm), 'Proyección de cierre', fmtPct(e.obj ? proy / e.obj : null, 0) + ' del objetivo');
   };
   const faltaTile = (e, mm) => {
     const falta = Math.max(0, e.obj - e.real);
@@ -4081,11 +4106,11 @@ function kpisHTML(a, cal) {
   };
   if (m === 'fact') {
     tiles.push(proyTile(eF, 'fact'), faltaTile(eF, 'fact'));
-    tiles.push(kpiHTML('box', fmtUc(eU.real), 'Cantidad vendida', fmtPct(eU.ratio) + ' del objetivo'));
+    tiles.push(kpiHTML('box', fmtUc(eU.real), 'Cantidad vendida', fmtPct(eU.ratio, 0) + ' del objetivo'));
     tiles.push(kpiHTML('tag', eP.real == null ? '—' : fmtMoneyFull(eP.real), 'Precio promedio', eP.ratio == null ? '—' : fmtDelta(eP.ratio - 1) + ' vs. objetivo'));
   } else if (m === 'unid') {
     tiles.push(proyTile(eU, 'unid'), faltaTile(eU, 'unid'));
-    tiles.push(kpiHTML('money', fmtMoney(eF.real), 'Facturación', fmtPct(eF.ratio) + ' del objetivo'));
+    tiles.push(kpiHTML('money', fmtMoney(eF.real), 'Facturación', fmtPct(eF.ratio, 0) + ' del objetivo'));
     tiles.push(kpiHTML('tag', eP.real == null ? '—' : fmtMoneyFull(eP.real), 'Precio promedio', eP.ratio == null ? '—' : fmtDelta(eP.ratio - 1) + ' vs. objetivo'));
   } else {
     const efecto = a.rF - a.rFo;
@@ -4096,7 +4121,7 @@ function kpisHTML(a, cal) {
     tiles.push(kpiHTML('money', sgnMoney(efecto), 'Efecto precio en $', 'Real vs. precio objetivo'));
     tiles.push(kpiHTML('store', `${bajo} de ${porCli.length}`, 'Clientes bajo precio', 'Desvío peor a −2,5%'));
     tiles.push(kpiHTML('box', `${bajoS} de ${porSku.length}`, 'Productos bajo precio', 'Desvío peor a −2,5%'));
-    tiles.push(kpiHTML('trend', fmtMoney(eF.real), 'Facturación', fmtPct(eF.ratio) + ' del objetivo'));
+    tiles.push(kpiHTML('trend', fmtMoney(eF.real), 'Facturación', fmtPct(eF.ratio, 0) + ' del objetivo'));
   }
   // Utilidad bruta: solo aprobador y solo si el archivo trae costos.
   if (!esVend() && IDX.conCostos && a.rFc > 0) {
@@ -4149,7 +4174,7 @@ function renderAlertas(cal) {
   let h = `<div class="card-h"><div><div class="card-t">Requieren atención</div><div class="card-s">${S.metric === 'precio' ? 'Mayor desvío de precio' : cal.closed ? 'Más lejos del objetivo' : 'Menor % logrado del objetivo'}</div></div></div>`;
   if (!cand.length) h += `<div class="card-s">Nada crítico: todos los frentes están en ritmo.</div>`;
   else h += cand.map(x => `<button class="alert-row" data-det-dim="${x.dim}" data-det-key="${esc(x.k)}">
-      <div class="alert-main"><span class="tag">${esc(DIMS_A[x.dim])}</span><b>${esc(x.k)}</b><span>${S.metric === 'precio' ? fmtDelta(x.e.ratio - 1) + ' vs. precio objetivo' : fmtPct(x.e.ratio) + ' logrado'}</span></div>
+      <div class="alert-main"><span class="tag">${esc(DIMS_A[x.dim])}</span><b>${esc(x.k)}</b><span>${S.metric === 'precio' ? fmtDelta(x.e.ratio - 1) + ' vs. precio objetivo' : fmtPct(x.e.ratio, 0) + ' logrado'}</span></div>
       ${pill(x.e.estado)}${ico('chevR', 'sm chev')}</button>`).join('');
   box.innerHTML = h;
 }
@@ -4186,7 +4211,7 @@ function rowHTML(dim, r, cal, compact = false) {
     foot = `<span>${fmtMetric(e.real)} de ${fmtMetric(e.obj)}</span><span>${e.obj ? 'Falta ' + fmtMetric(Math.max(0, e.obj - e.real)) : ''}</span>`;
     sub = [subInfo(dim, r.k), eP.ratio == null ? '' : 'Precio ' + fmtDelta(eP.ratio - 1)].filter(Boolean).join(' · ');
   }
-  const val = m === 'precio' ? (e.ratio == null ? '—' : fmtDelta(e.ratio - 1)) : fmtPct(e.ratio);
+  const val = m === 'precio' ? (e.ratio == null ? '—' : fmtDelta(e.ratio - 1)) : fmtPct(e.ratio, 0);
   return `<li><button class="row" data-det-dim="${dim}" data-det-key="${esc(r.k)}"${compact ? ' style="box-shadow:none"' : ''}>
     <div class="row-top"><div class="row-name">${esc(r.k)}${sub ? `<small>${esc(sub)}</small>` : ''}</div><div class="row-val"><b>${val}</b>${pill(e.estado)}</div></div>
     ${bar}<div class="row-foot">${foot}</div></button></li>`;
@@ -4203,8 +4228,9 @@ function renderAnalisis() {
       <button class="link-btn" id="btnOrden">${ico('sliders', 'sm')} ${ORDENES[S.orden]}</button></div>
     <div class="vista-bar"><div class="seg mini" id="vistaSeg" role="group" aria-label="Vista"><button data-vista="obj" aria-pressed="${!esAcum()}">Vs. objetivo</button><button data-vista="acum" aria-pressed="${esAcum()}">${S.metric === 'precio' ? 'Vs. promedio' : 'Acumulado'}</button></div>
       <div class="vista-der">
-      <button class="link-btn" data-act="detalle" aria-pressed="${S.detalle}">${ico('list', 'sm')} Detalle</button></div></div>
-    ${vsPrevActivo(S.dimA) ? `<div class="pace-note" style="margin-bottom:10px"><i></i>Marca negra = total de ${esc(lblPrevCompleto())} completo (piso a superar) · debajo, la variación en % y absoluta</div>` : ''}
+      <button class="link-btn" data-act="detalle" aria-pressed="${S.detalle}">${ico('list', 'sm')} Detalle</button>
+      ${S.metric === 'precio' && esAcum() && S.dimA === 'categoria' ? `<button class="link-btn" data-act="verApertura" aria-pressed="${!!S.verApertura}">${ico('sliders', 'sm')} Apertura${aperturaPersonalizada() ? ' · personalizada' : ''}</button>` : ''}</div></div>
+    ${vsPrevActivo(S.dimA) ? `<div class="pace-note" style="margin-bottom:10px"><i></i>Marca negra = ${esRango() ? `total de ${esc(lblPrevCompleto())} completo` : `promedio mensual de los 3 meses cerrados previos (${esc(lblPrevCompleto().replace('prom. ', ''))})`} (piso a superar) · debajo, la variación en % y absoluta</div>` : ''}
     ${S.metric === 'precio' && esAcum() ? (S.dimA === 'categoria' ? precioArbol() : precioPromedioLista(S.dimA)) : S.metric === 'precio' && !esAcum() ? `<div class="pace-note" style="margin-bottom:10px"><i></i>Centro = precio objetivo · escala ±6%</div>
     <ul class="rows">${rows.map(r => rowHTML(S.dimA, r, cal)).join('') || '<li class="card-s">Sin datos para este filtro.</li>'}</ul>`
     : `${S.dimA === 'categoria' ? marimekkoHTML(S.f) : leyendaMarcas(S.dimA)}<ul class="alist">${(S.dimA === 'sku' ? arbolProducto(cal) : listaBarras(S.dimA, rows, cal, S.f)) || '<li class="card-s">Sin datos para este filtro.</li>'}</ul>`}`;
@@ -4274,7 +4300,7 @@ function renderDatos() {
       <p>Ese archivo se reemplaza en la carpeta compartida de OneDrive, siempre con el mismo nombre. Para ver los datos nuevos: <b>Actualizar</b> › elegí <b>OneDrive</b> en el selector › <b>pulso_datos.json</b>. Hace falta tener la app de OneDrive instalada con la cuenta de la empresa.</p>
       <p>Los registros manuales quedan en este teléfono y no se borran al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.19 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.20 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -4792,6 +4818,8 @@ document.addEventListener('click', ev => {
     case 'btnFiltros': case 'filtros': sheetFiltros(); break;
     case 'btnPerfil': sheetPerfil(); break;
     case 'apreset': S.apertura = null; ABIERTOS.clear(); render(); break;
+    case 'verApertura': S.verApertura = !S.verApertura; renderAnalisis(); break;
+    case 'sigMetrica': { const ms = ['fact', 'unid', 'precio']; S.metric = ms[(ms.indexOf(S.metric) + 1) % 3]; const y = window.scrollY; render(); window.scrollTo({ top: y }); const m = $('#hdrMet'); m.classList.remove('pop'); void m.offsetWidth; m.classList.add('pop'); break; }
     case 'detalle': S.detalle = !S.detalle; renderAnalisis(); if (!$('#sheetWrap').hidden && detState) sheetDetalle(detState.dim, detState.key, detState.sub2); store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura })); break;
     case 'sim': S.sim = !S.sim; S.selDia = null; render(); toast(S.sim ? 'Simulación visible en los gráficos' : 'Simulación oculta: solo ventas reales'); break;
     case 'perSel': sheetPeriodo(); break;
