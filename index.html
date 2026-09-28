@@ -8,7 +8,7 @@
 <title>Pulso Comercial</title>
 <style>/* APK: deja libre la barra de estado de Android (hora, batería) */ body .app{--safe-top:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px))}</style>
 <meta name="robots" content="noindex, nofollow">
-<script>window.PULSO_SIN_DEMO = true;</script>
+<script>window.PULSO_SIN_DEMO = true; window.PULSO_REMOTO = {"base":"https://juliangarciacsl.github.io/pulso-x7k29/"};</script>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1562,6 +1562,12 @@ body{letter-spacing:-.005em}
 .tog-r{display:flex}
 .tog-g+.tog-g::before{content:"";position:absolute;left:0;top:2px;bottom:6px;width:1.5px;background:#CDD1D6;border-radius:2px}
 .cat-tog .tog-r button+button::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:1px;background:#E1E3E7}
+/* ---------- Acceso con clave (v0.19) ---------- */
+.clave-in{font-size:15px!important;letter-spacing:.06em!important;text-transform:uppercase}
+.clave-in::placeholder{letter-spacing:.04em;opacity:.45}
+.girando .ico{animation:girar .9s linear infinite}
+@keyframes girar{to{transform:rotate(360deg)}}
+.clave-aviso{margin-bottom:12px}
 
 </style>
 
@@ -1718,8 +1724,15 @@ async function flujo(bytes, Clase, modo) {
   const s = new Blob([bytes]).stream().pipeThrough(new Clase(modo));
   return new Uint8Array(await new Response(s).arrayBuffer());
 }
+/** Identificador público de una clave de acceso (no permite deducir la clave). */
+async function kidDe(clave) {
+  const h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('pulso-kid:' + clave)));
+  return [...h.slice(0, 6)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+/** Normaliza lo que pega el usuario: sin espacios, en mayúsculas y con guiones. */
+const limpiarClave = c => String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^PULSO/, '').replace(/(.{4})(?=.)/g, '$1-').replace(/^/, 'PULSO-');
 /** Cifra un objeto de datos y devuelve el texto del archivo a publicar. */
-async function cifrarDatos(obj, clave = CLAVE_DATOS) {
+async function cifrarDatos(obj, clave = CLAVE_DATOS, kid) {
   if (!(window.crypto && crypto.subtle)) throw new Error('Este navegador no permite cifrar. Abrí el archivo con Chrome o Edge actualizados.');
   let bytes = new TextEncoder().encode(JSON.stringify(obj));
   const comp = typeof CompressionStream === 'function';
@@ -1730,7 +1743,7 @@ async function cifrarDatos(obj, clave = CLAVE_DATOS) {
   return JSON.stringify({
     formato: FORMATO_CIFRADO, version: 1, generado: new Date().toISOString(),
     actualizado: obj.meta && obj.meta.actualizado || '', compresion: comp ? 'gzip' : 'ninguna',
-    kdf: 'PBKDF2-SHA256', iteraciones: iter, salt: b64.enc(salt), iv: b64.enc(iv), datos: b64.enc(datos),
+    ...(kid ? { kid } : {}), kdf: 'PBKDF2-SHA256', iteraciones: iter, salt: b64.enc(salt), iv: b64.enc(iv), datos: b64.enc(datos),
   });
 }
 const esCifrado = o => !!o && o.formato === FORMATO_CIFRADO;
@@ -3607,8 +3620,9 @@ let LOGIN = { paso: 'rol', rol: null, usuario: null };
 const SIN_DEMO = !!window.PULSO_SIN_DEMO;
 let SIN_DATOS = false, ARCH_ERR = '';
 /** "Ingresar" de la bienvenida: sin datos, abre directamente el selector de archivos. */
-window.PULSO_AL_INGRESAR = () => { if (SIN_DATOS) $('#fileInput').click(); };
+window.PULSO_AL_INGRESAR = () => { if (SIN_DATOS && !(window.PULSO_REMOTO && window.PULSO_REMOTO.base)) $('#fileInput').click(); else if (SIN_DATOS) setTimeout(() => { const i = $('#claveIn'); if (i) i.focus(); }, 1700); };
 function mostrarArchivo() {
+  if (REMOTO) return mostrarClave();
   const el = $('#login');
   el.hidden = false;
   document.body.style.overflow = 'hidden';
@@ -3618,7 +3632,142 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.18</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.19</p></div>`;
+}
+
+/* ============================================================================
+   ACCESO CON CLAVE Y DATOS DESDE GITHUB (v0.19)
+   window.PULSO_REMOTO = { base: 'https://usuario.github.io/repo/' }
+   - datos/estado.json  { estado: 'activo' | 'bloqueado', kid, generado, mensaje }
+   - datos/pulso_datos.json  archivo cifrado con la clave de acceso (lleva kid en claro)
+   La clave se pega una sola vez. Dentro de los datos viaja meta.acceso { kid, vence,
+   avisoDias, offlineDias }: al vencer, o si GitHub informa bloqueo o una clave nueva,
+   se borran los datos del equipo y se vuelve a pedir la clave.
+   ============================================================================ */
+const REMOTO = window.PULSO_REMOTO && window.PULSO_REMOTO.base ? window.PULSO_REMOTO : null;
+const KEY_ACC = 'pulsoComercial.v1.acceso', KEY_CHEQ = 'pulsoComercial.v1.chequeo';
+let CLAVE_MSG = '', CLAVE_TIPO = '', SINC = false;
+const accesoLocal = () => { try { return JSON.parse(store.get(KEY_ACC) || 'null'); } catch (e) { return null; } };
+const urlRemota = f => REMOTO.base.replace(/\/?$/, '/') + 'datos/' + f + '?t=' + Date.now();
+async function traerJSON(f) {
+  const r = await fetch(urlRemota(f), { cache: 'no-store' });
+  if (r.status === 404) { const e = new Error('404'); e.codigo = 404; throw e; }
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+const hoyLocal = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const diasHasta = iso => Math.round((parseISO(iso) - parseISO(hoyLocal())) / 864e5);
+/** Borra datos, sesión y clave del equipo y vuelve a la pantalla de clave. */
+function bloquearEquipo(msg, tipo) {
+  [KEY_DATA, KEY_SES, KEY_ACC, KEY_CHEQ].forEach(k => store.del(k));
+  SES = null; SIN_DATOS = true; CLAVE_MSG = msg || ''; CLAVE_TIPO = tipo || 'bad';
+  DATA = { meta: { _origen: 'Sin datos' }, usuarios: [], objetivos: [], ventas: [], maestros: {} };
+  closeSheet && !$('#sheetWrap').hidden && closeSheet();
+  render();
+}
+/** Controles locales al abrir (funcionan sin internet): vencimiento y días sin conexión. */
+function controlLocal() {
+  const acc = (DATA.meta || {}).acceso;
+  if (acc && acc.vence && diasHasta(acc.vence) < 0) { bloquearEquipo(`Tu clave venció el ${fechaDia(acc.vence)}. Pedí la clave nueva y pegala acá.`); return false; }
+  return true;
+}
+function faltaConexion() {
+  const acc = (DATA.meta || {}).acceso || {}, lim = +acc.offlineDias || 7;
+  const ult = +store.get(KEY_CHEQ) || 0;
+  return ult && (Date.now() - ult) / 864e5 > lim;
+}
+function mostrarClave() {
+  const el = $('#login');
+  el.hidden = false;
+  document.body.style.overflow = 'hidden';
+  el.innerHTML = `<div class="login-in">
+    <div class="login-brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" class="ico"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></div><div><div class="hdr-t" style="font-size:20px">Pulso Comercial</div><div class="hdr-s">Seguimiento de ventas</div></div></div>
+    <h1>Clave de acceso</h1>
+    <p>Pegá la clave que te envió tu aprobador. Se hace una sola vez en este equipo; después los datos se actualizan con un toque.</p>
+    ${CLAVE_MSG ? `<div class="${CLAVE_TIPO === 'ok' ? 'okbox' : 'warnbox'}" role="alert" style="margin:0 0 4px">${esc(CLAVE_MSG)}</div>` : ''}
+    <form id="claveForm" novalidate style="display:flex;flex-direction:column;gap:12px">
+      <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
+      <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
+    </form>
+    <p class="login-foot">Pulso Comercial · v0.19</p></div>`;
+  $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
+}
+/** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
+async function validarClave(txt) {
+  const clave = limpiarClave(txt), btn = $('#claveOk');
+  if (clave.replace(/[^A-Z0-9]/g, '').length < 25) { CLAVE_MSG = 'La clave está incompleta. Copiala entera, con los guiones.'; CLAVE_TIPO = 'bad'; return mostrarClave(); }
+  btn.disabled = true; btn.textContent = 'Verificando…';
+  try {
+    const est = await traerJSON('estado.json').catch(e => { if (e.codigo === 404) return null; throw e; });
+    if (est && est.estado === 'bloqueado') throw new Error(est.mensaje || 'El acceso está suspendido. Esperá la clave nueva.');
+    const kid = await kidDe(clave);
+    if (est && est.kid && est.kid !== kid) throw new Error('Esa clave no es la vigente. Pedí la clave nueva a tu aprobador.');
+    const env = await traerJSON('pulso_datos.json');
+    if (env.kid && env.kid !== kid) throw new Error('Esa clave no es la vigente. Pedí la clave nueva a tu aprobador.');
+    const obj = await descifrarDatos(env, clave).catch(() => { throw new Error('La clave no es correcta.'); });
+    const res = normalizar(obj);
+    if (!res.data.objetivos.length) throw new Error('El archivo publicado no trae objetivos.');
+    const acc = res.data.meta.acceso;
+    if (acc && acc.vence && diasHasta(acc.vence) < 0) throw new Error('Esa clave ya venció. Pedí la clave nueva.');
+    store.set(KEY_ACC, JSON.stringify({ clave, kid }));
+    store.set(KEY_CHEQ, String(Date.now()));
+    res.data.meta._cargado = new Date().toISOString();
+    SIN_DATOS = false; CLAVE_MSG = '';
+    aplicarDatos(res.data, 'GitHub');
+  } catch (e) {
+    CLAVE_MSG = e.codigo === 404 ? 'Todavía no hay datos publicados.' : /fetch|network|HTTP|Load failed/i.test(e.message) ? 'Sin conexión: para ingresar la primera vez hace falta internet.' : e.message;
+    CLAVE_TIPO = 'bad'; mostrarClave();
+  }
+}
+/** Consulta GitHub: bloqueo, clave nueva y datos nuevos. manual = tocaron Actualizar. */
+async function sincronizar(manual) {
+  if (!REMOTO || SIN_DATOS || SINC) return;
+  const acc = accesoLocal();
+  if (!acc || !acc.clave) return bloquearEquipo('Pegá tu clave de acceso.', 'bad');
+  SINC = true;
+  const bt = $('#btnActualizar'); if (bt) bt.classList.add('girando');
+  if (manual) toast('Buscando datos nuevos…');
+  try {
+    const est = await traerJSON('estado.json').catch(e => { if (e.codigo === 404) return null; throw e; });
+    store.set(KEY_CHEQ, String(Date.now()));
+    if (est && est.estado === 'bloqueado') return bloquearEquipo(est.mensaje || 'El acceso está suspendido temporalmente. Cuando recibas la clave nueva, pegala acá.');
+    if (est && est.kid && est.kid !== acc.kid) return bloquearEquipo('Hay una clave de acceso nueva. Pedila a tu aprobador y pegala acá.');
+    const gen = (DATA.meta || {}).generado || '';
+    if (!manual && est && est.generado && gen && est.generado <= gen) { if (NECESITA_CONEXION) { NECESITA_CONEXION = false; render(); } return; }
+    const env = await traerJSON('pulso_datos.json');
+    if (env.kid && env.kid !== acc.kid) return bloquearEquipo('Hay una clave de acceso nueva. Pedila a tu aprobador y pegala acá.');
+    if (!manual && env.generado && gen && env.generado <= gen) { if (NECESITA_CONEXION) { NECESITA_CONEXION = false; render(); } return; }
+    if (manual && env.generado && gen && env.generado <= gen) { NECESITA_CONEXION = false; render(); toast('Ya tenés los datos más recientes · ' + fechaDia(IDX.corte)); return; }
+    const res = normalizar(await descifrarDatos(env, acc.clave));
+    if (!res.data.objetivos.length) throw new Error('El archivo publicado no trae objetivos.');
+    res.data.meta._cargado = new Date().toISOString();
+    NECESITA_CONEXION = false;
+    aplicarDatos(res.data, 'GitHub');
+    if (controlLocal()) toast('Datos actualizados al ' + fechaDia(IDX.corte));
+  } catch (e) {
+    if (manual || NECESITA_CONEXION) toast(/fetch|network|HTTP|Load failed/i.test(e.message) ? 'Sin conexión: se muestran los últimos datos descargados' : 'No se pudo actualizar: ' + e.message);
+  } finally { SINC = false; if (bt) bt.classList.remove('girando'); }
+}
+let NECESITA_CONEXION = false;
+function mostrarConexion() {
+  const el = $('#login');
+  el.hidden = false;
+  document.body.style.overflow = 'hidden';
+  const acc = (DATA.meta || {}).acceso || {};
+  el.innerHTML = `<div class="login-in">
+    <div class="login-brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" class="ico"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></div><div><div class="hdr-t" style="font-size:20px">Pulso Comercial</div><div class="hdr-s">Seguimiento de ventas</div></div></div>
+    <h1>Conectate para seguir</h1>
+    <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
+    <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
+    <p class="login-foot">Pulso Comercial · v0.19</p></div>`;
+}
+/** Aviso en Inicio cuando la clave está por vencer. */
+function avisoClaveHTML() {
+  const acc = REMOTO && (DATA.meta || {}).acceso;
+  if (!acc || !acc.vence) return '';
+  const d = diasHasta(acc.vence), aviso = +acc.avisoDias || 7;
+  if (d > aviso) return '';
+  return `<div class="fresh old clave-aviso"><span class="fi">${ico('alert', 'sm')}</span><span class="grow"><b>${d === 0 ? 'Tu clave vence hoy' : `Tu clave vence en ${d} día${d === 1 ? '' : 's'}`}</b><span>El ${esc(fechaDia(acc.vence))} vas a necesitar la clave nueva. Pedila a tu aprobador.</span></span></div>`;
 }
 function mostrarLogin() {
   const el = $('#login');
@@ -3650,7 +3799,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.18</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.19</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -3719,6 +3868,7 @@ function animarBarras(root) {
 
 function render() {
   if (SIN_DATOS) { mostrarArchivo(); return; }
+  if (NECESITA_CONEXION) { mostrarConexion(); return; }
   if (!SES) { mostrarLogin(); return; }
   if (esVend() && S.tab === 'equipo') S.tab = 'inicio';
   if (esVend() && S.dimA === 'vendedor') S.dimA = 'marca';
@@ -3843,7 +3993,7 @@ function frescuraHTML() {
 function renderInicio() {
   const cal = calSel(), a = agg(SEL, S.f), e = evalua(a, cal);
   const el = $('#scr-inicio');
-  el.innerHTML = heroHTML(a, cal, e) + kpisHTML(a, cal) +
+  el.innerHTML = avisoClaveHTML() + heroHTML(a, cal, e) + kpisHTML(a, cal) +
     `<div class="card" id="cDaily"></div>
      <div class="card" id="cBurn"></div>
      <div class="card" id="cTrend"></div>
@@ -4114,7 +4264,7 @@ function renderDatos() {
       <div class="facts"><div><b>${fmtInt(d.objetivos.filter(enScope).length)}</b><span>objetivos</span></div><div><b>${fmtInt(d.ventas.filter(v => enScope(v) && !esManual(v)).length)}</b><span>ventas</span></div><div><b>${pers.length}</b><span>${pers.length ? esc(perLabel(pers[0]).corto + '–' + perLabel(pers[pers.length - 1]).corto) : 'meses'}</span></div></div>
     </div>
     <div class="menu">
-      <button class="menu-i" data-act="cargar"><span class="mi">${ico('refresh')}</span><span class="grow"><b>Actualizar datos</b><span class="sub">Elegí pulso_datos.json en OneDrive; los registros manuales se conservan</span></span>${ico('chevR', 'sm chev')}</button>
+      <button class="menu-i" data-act="cargar"><span class="mi">${ico('refresh')}</span><span class="grow"><b>Actualizar datos</b><span class="sub">${REMOTO ? 'Trae la última versión publicada; los registros manuales se conservan' : 'Elegí pulso_datos.json en OneDrive; los registros manuales se conservan'}</span></span>${ico('chevR', 'sm chev')}</button>
       ${esVend() ? '' : `<button class="menu-i" data-act="exportar"><span class="mi">${ico('download')}</span><span class="grow"><b>Exportar datos</b><span class="sub">Descargar o copiar el JSON actual</span></span>${ico('chevR', 'sm chev')}</button>
       <button class="menu-i" data-act="plantilla"><span class="mi">${ico('file')}</span><span class="grow"><b>Plantilla vacía</b><span class="sub">Estructura del archivo con filas de ejemplo</span></span>${ico('chevR', 'sm chev')}</button>
       ${SIN_DEMO ? '' : `<button class="menu-i danger" data-act="restaurar"><span class="mi">${ico('refresh')}</span><span class="grow"><b>Volver a los datos demo</b><span class="sub">Reemplaza el archivo cargado; los registros manuales se conservan</span></span>${ico('chevR', 'sm chev')}</button>`}`}
@@ -4124,7 +4274,7 @@ function renderDatos() {
       <p>Ese archivo se reemplaza en la carpeta compartida de OneDrive, siempre con el mismo nombre. Para ver los datos nuevos: <b>Actualizar</b> › elegí <b>OneDrive</b> en el selector › <b>pulso_datos.json</b>. Hace falta tener la app de OneDrive instalada con la cuenta de la empresa.</p>
       <p>Los registros manuales quedan en este teléfono y no se borran al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.18 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.19 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -4649,7 +4799,7 @@ document.addEventListener('click', ev => {
     case 'perNext': cambiarPeriodo(1); break;
     case 'fab': case 'nueva': sheetNuevaVenta(); break;
     case 'btnOrden': { const k = Object.keys(ORDENES); S.orden = k[(k.indexOf(S.orden) + 1) % k.length]; render(); break; }
-    case 'cargar': $('#fileInput').click(); break;
+    case 'cargar': if (REMOTO) sincronizar(true); else $('#fileInput').click(); break;
     case 'exportar': { const d = limpio(DATA, false); d.meta.actualizado = IDX.corte; sheetExport(jsonTexto(d), 'ventas_' + IDX.corte + '.json', 'Exportar datos'); break; }
     case 'plantilla': sheetExport(jsonTexto(plantilla()), 'plantilla_pulso_comercial.json', 'Plantilla JSON'); break;
     case 'restaurar': sheetConfirmar('Volver a los datos demo', 'Se reemplaza el archivo cargado por los datos de prueba. Los registros manuales se conservan.', 'Restaurar demo', () => { aplicarDatos(normalizar(generarDemo()).data, 'Demo'); toast('Datos demo restaurados'); }); break;
@@ -4716,6 +4866,7 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
     const raw = store.get(KEY_DATA);
     if (raw) { const p = JSON.parse(raw); const res = normalizar(p); if (res.data.objetivos.length || res.data.ventas.length) { d = res.data; origen = (p.meta && p.meta._origen) || 'Datos guardados'; if (!esV2(p)) d.ventas.forEach((v, i) => { const o = p.ventas[i]; if (o && o.origen) v.origen = o.origen; }); } }
   } catch (e) { d = null; }
+  if (REMOTO && d && !(accesoLocal() || {}).clave) d = null;          // datos sin clave guardada: se vuelve a pedir
   if (!d && SIN_DEMO) { SIN_DATOS = true; DATA = { meta: { _origen: 'Sin datos' }, usuarios: [], objetivos: [], ventas: [], maestros: {} }; render(); return; }
   DATA = d || normalizar(generarDemo()).data;
   DATA.meta._origen = origen;
@@ -4723,7 +4874,15 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
   try { const ses = JSON.parse(store.get(KEY_SES) || 'null'); if (ses && usuarios().some(u => u.usuario === ses.usuario && u.rol === ses.rol)) SES = { rol: ses.rol, usuario: ses.usuario }; } catch (e) { SES = null; }
   const cp = IDX.corte.slice(0, 7);
   S.periodo = IDX.periodos.includes(cp) ? cp : IDX.periodos[IDX.periodos.length - 1]; S.rango = null;
+  if (REMOTO) {
+    if (!controlLocal()) return;
+    if (faltaConexion()) NECESITA_CONEXION = true;
+  }
   render();
+  if (REMOTO) {
+    sincronizar(false);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !SIN_DATOS) { if (controlLocal()) sincronizar(false); } });
+  }
 })();
 
 </script>
