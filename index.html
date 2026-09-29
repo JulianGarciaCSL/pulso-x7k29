@@ -1667,6 +1667,132 @@ button.kpi:active{transform:scale(.98)}
 .hdr .mon-btn{font-weight:800;font-size:14px;letter-spacing:.04em;line-height:1}
 .hdr .mon-btn.usd{background:#fff;color:#2D3034;border-color:#fff}
 .hdr.compacto .mon-btn{transform:scale(.84)}
+/* ---------- Cuadrante central desplegable por categoría (v0.30) ---------- */
+.hero-exp-row{display:flex;justify-content:flex-end;margin:6px -6px -8px 0}
+.hero-exp{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;font-size:12px;line-height:1;display:grid;place-items:center;transition:background .2s}
+.hero-exp:active{background:rgba(255,255,255,.2)}
+.hero-desg{margin-top:14px;padding-top:12px;border-top:1px solid var(--hero-track);display:flex;flex-direction:column;gap:6px;animation:hdIn .35s ease}
+@keyframes hdIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.hd-head{font-size:11.5px;color:var(--hero-muted,rgba(255,255,255,.6));margin-bottom:4px}
+.hd-row{display:grid;grid-template-columns:34% 1fr 52px;align-items:center;gap:10px;width:100%;background:none;border:0;padding:5px 0;color:#fff;text-align:left;font:inherit}
+.hd-row.nv1{padding-left:14px;grid-template-columns:calc(34% - 14px) 1fr 52px}
+.hd-n{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd-row.nv1 .hd-n{font-weight:500;color:rgba(255,255,255,.8)}
+.hd-t{display:inline-block;width:14px;opacity:.7}
+.hd-b{position:relative;height:10px;border-radius:5px;background:rgba(255,255,255,.12);overflow:hidden}
+.hd-row.nv1 .hd-b{height:7px}
+.hd-f{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#fff;animation:hdGrow .6s ease}
+.hd-row.nv1 .hd-f{background:rgba(255,255,255,.65)}
+@keyframes hdGrow{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}
+.hd-p{position:absolute;top:0;bottom:0}.hd-p.pos{background:#8BE3B0}.hd-p.neg{background:#FF9EA8}
+.hd-mid{position:absolute;left:50%;top:-2px;bottom:-2px;width:1.5px;background:#fff;opacity:.8}
+.hd-v{font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.hd-esc{display:grid;grid-template-columns:34% 1fr 52px;gap:10px;font-size:10.5px;color:rgba(255,255,255,.5)}
+.hd-esc span:nth-child(1){grid-column:2;justify-self:start}
+.hd-esc{position:relative}
+.hd-esc span:nth-child(1){grid-column:auto}
+.hd-esc-m{display:flex;justify-content:space-between}.hd-esc-m i{font-style:normal}
+.hd-row.nv1{padding-left:0;grid-template-columns:34% 1fr 52px}.hd-row.nv1 .hd-n{padding-left:28px}
+
+/* ---------- v0.31 · Mapa bloqueado hasta "Interactuar" ---------- */
+.map-lock{position:absolute;inset:0;z-index:450;display:none;touch-action:pan-y}
+.map-card.bloq .map-lock{display:block}
+.map-card.bloq .leaflet-control-zoom,.map-card.bloq .map-btn{opacity:0;pointer-events:none}
+.map-card .leaflet-control-zoom,.map-card .map-btn{transition:opacity .2s}
+.map-inter{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:520;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px 0 11px;border-radius:999px;background:rgba(255,255,255,.94);color:var(--ink);font-size:12.5px;font-weight:800;box-shadow:var(--shadow);border:0}
+.map-inter[aria-pressed="true"]{background:var(--accent);color:#fff}
+.map-zona,.map-ley{z-index:510}
+
+/* ---------- v0.31 · Sin compra segmentado ---------- */
+.map-sin{padding:12px!important;display:flex;flex-direction:column;gap:10px}
+.map-sin>.alert-row{padding:0;border:0}
+.sin-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sin-seg button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 4px;border-radius:12px;background:var(--surface-2,#F1F2F4);border:1.5px solid transparent;color:var(--ink)}
+.sin-seg button b{font-size:17px;font-weight:800;line-height:1.1;color:var(--warn-ink)}
+.sin-seg button span{font-size:11px;font-weight:700;color:var(--muted)}
+.sin-seg button[aria-pressed="true"]{border-color:var(--warn);background:var(--warn-bg)}
+.sin-seg button:disabled{opacity:.45}
+
+/* ---------- v0.31 · Lista de clientes compacta (barra gruesa + semáforo) ---------- */
+.map-alist{padding:0;box-shadow:none;background:none;gap:7px;border-radius:0}
+.map-arow{align-items:center;gap:7px}
+.map-arow .arow-b{gap:0}
+.map-arow .abar{height:32px}
+.map-arow .abar-n{line-height:32px;font-size:12.5px;right:78px;left:10px}
+.map-arow .abar-v{font-size:12.5px;right:10px}
+.map-arow .abar-v.sin{font-size:11px;font-weight:700;color:var(--warn-ink)}
+.map-row.on .abar{box-shadow:0 0 0 2px var(--accent)}
+.tnd{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center}
+.tnd svg{width:14px;height:14px;stroke-width:2.6}
+.tnd-good{background:var(--good-bg);color:var(--good)}
+.tnd-bad{background:var(--bad-bg);color:var(--bad)}
+.tnd-warn{background:var(--warn-bg);color:var(--warn)}
+.tnd-neu{background:#ECEDEF;color:var(--muted)}
+.map-var{flex:none;width:44px;text-align:right;font-size:12.5px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums}
+.map-var.pos{color:var(--good-ink)}.map-var.neg{color:var(--bad-ink)}
+.map-grp{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:8px 2px 2px;border-top:1px solid var(--line);margin-top:4px}
+.map-grp:first-child{border-top:0;margin-top:0;padding-top:0}
+.map-grp b{font-size:12.5px;font-weight:800;color:var(--warn-ink)}
+.map-grp span{font-size:11.5px;font-weight:600;color:var(--muted);text-align:right}
+
+/* ---------- v0.31 · Análisis · Cliente acumulado ---------- */
+.cli-ley{display:flex;flex-direction:column;gap:6px;margin:0 2px 10px}
+.cli-ley-c{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;font-weight:700;color:var(--ink-2)}
+.cli-ley-c span{display:inline-flex;align-items:center;gap:5px}
+.cli-ley-c i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.cli-ley-c i.c-base{background:#8A9099}.cli-ley-c i.c-var{background:linear-gradient(90deg,var(--good) 50%,var(--bad) 50%)}.cli-ley-c i.c-tot{background:#3B6FB6}
+.cli-acum{gap:8px}
+.acli{display:flex;align-items:center;gap:8px}
+.acli .abar{flex:1;min-width:0}
+.acli-r{flex:none;width:44px;text-align:right;font-size:12.5px;font-variant-numeric:tabular-nums}
+.acli-r b{font-weight:800}
+.acli-r .pos{color:var(--good-ink)}.acli-r .neg{color:var(--bad-ink)}.acli-r .nuevo{color:#3B6FB6;font-size:11.5px}
+.acli-r.det{width:98px;display:grid;grid-template-columns:1fr 38px;column-gap:6px;row-gap:1px;font-size:11px;line-height:15px;font-weight:700}
+.acli-r.det .c-base{color:#8A9099}.acli-r.det .c-tot{color:#3B6FB6}
+.map-off{top:52px}
+.map-zona{top:52px}
+.cli-acum.det .abar-n{right:70px;font-size:12.5px}
+/* v0.31b · zona de cada sin compra y segmentador por vendedor */
+.map-zn{flex:none;max-width:84px;min-width:44px;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-zn::before{content:"";flex:none;width:9px;height:9px;border-radius:3px;background:var(--zc)}
+.map-vend{margin:0 0 12px}
+.map-vend button{display:inline-flex;align-items:center;gap:6px}
+.map-vend button i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.map-zn{width:88px;max-width:none;min-width:0}
+.map-zn>span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- v0.33 · vendedores en grilla, zona de fondo ---------- */
+.map-vend{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px;margin:0 0 12px}
+.map-vend button{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:32px;border-radius:10px;background:var(--surface-2);font-size:12px;font-weight:800;color:var(--ink-2);border:1.5px solid transparent}
+.map-vend button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.map-vend button i{width:8px;height:8px;border-radius:50%;flex:none}
+.map-zn{filter:brightness(.8)}
+.map-zn::before{display:none}
+
+/* ---------- v0.33 · ventana del cliente: evolución de compras ---------- */
+.ev-ubic{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--ink-2);background:var(--surface-2);border-radius:999px;padding:5px 11px 5px 8px;margin:-4px 0 12px}
+.ev .sub-t{margin-bottom:2px}
+.ev .map-nota{margin:0 0 10px}
+.ev-mix{display:flex;flex-wrap:wrap;align-items:center;gap:6px 2px;margin-bottom:10px}
+.ev-mix .ap-t{margin-bottom:2px}
+.ev-d{height:30px;padding:0 12px;border-radius:999px;background:var(--surface-2);font-size:12px;font-weight:700;color:var(--muted);border:1.5px solid transparent}
+.ev-d[aria-pressed="true"]{background:#fff;color:var(--ink);border-color:var(--accent)}
+.ev-ley{margin:0 2px 10px}
+.ev-list{gap:6px;padding:10px}
+.ev-row .abar{height:30px}
+.ev-row .abar-n{line-height:30px;font-size:12.5px;right:90px}
+.ev-row .abar-v{font-size:12.5px}
+.ev-row .arow-b[disabled]{opacity:1}
+.ev-row .arow-b[aria-expanded="true"] .abar{box-shadow:0 0 0 2px var(--accent)}
+.ev-open ul{list-style:none;margin:2px 0 6px;padding:0;display:flex;flex-direction:column}
+.ev-sub-b{width:100%;display:grid;grid-template-columns:16px 1fr auto 40px;align-items:center;gap:6px;padding:5px 4px;border-bottom:1px solid var(--line);font-size:12.5px;text-align:left;color:var(--ink)}
+.ev-sub-b[disabled]{opacity:1;color:var(--ink)}
+.ev-sub.nv1 .ev-sub-b{padding-left:18px;font-size:12px}.ev-sub.nv2 .ev-sub-b{padding-left:32px;font-size:11.5px;color:var(--ink-2)}
+.ev-tg{font-size:10px;color:var(--muted)}
+.ev-sn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;display:flex;align-items:center;gap:6px}
+.ev-sn i{width:9px;height:9px;border-radius:3px;flex:none}
+.ev-sub-b b{font-weight:800;font-variant-numeric:tabular-nums}
+.ev-pc{text-align:right;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
 
 </style>
 
@@ -2032,11 +2158,22 @@ function realPrevSel(f, metric) {
    Usa Leaflet (embebido); las calles del fondo se descargan si hay señal.
    ============================================================================ */
 let MAPA = null;                          // { map, capas, encuadre, sel, lista }
-const MAPA_UI = { lista: 'todos', color: 'estado', zona: null };
+const MAPA_UI = { lista: 'todos', color: 'estado', zona: null, sinN: null, activo: false, vend: null };
 const TEND = {
   sube: { k: 'good', t: 'Creciendo' }, cae: { k: 'bad', t: 'En caída' }, igual: { k: 'neu', t: 'Estable' },
   sin: { k: 'sin', t: 'Sin compra' }, nuevo: { k: 'neu', t: 'Sin historia' },
+  pend: { k: 'neu', t: 'Aún sin compra en el mes' },
 };
+/** Mes contra el que se mide "sin compra" (v0.31): el último del período elegido; si es el mes en curso
+    y van 15 días o menos, el último mes cerrado (a principio de mes todavía no compró casi nadie). */
+function mesRefSin() {
+  const ps = perSel(), cp = IDX.corte.slice(0, 7);
+  let r = ps[ps.length - 1];
+  if (r > cp) r = cp;
+  if (r === cp && Number(IDX.corte.slice(8, 10)) <= 15) r = mesMas(r, -1);
+  return r;
+}
+const SIN_SEG = { 1: '1 mes', 2: '2 meses', 3: '3 meses o más' };
 const COL_VEND = ['#3E6D8E', '#8A5A83', '#4E7F5B', '#9A6A2F', '#5B5FA8', '#8C4A4A', '#3F7F7F', '#6B6F2E'];
 
 function geoDatos() {
@@ -2060,26 +2197,30 @@ function clientesMapa() {
     if (S.f.zona && !enF(c.zona, S.f.zona)) return;
     if (S.f.vendedor && !enF(c.vendedor, S.f.vendedor)) return;
     if (S.f.cliente && !enF(k, S.f.cliente)) return;
-    filas.set(k, { k, zona: c.zona, vendedor: c.vendedor, val: 0, prev: 0, ult: null, marcas: new Map(), cds: [], suc: [], pos: null });
+    filas.set(k, { k, zona: c.zona, vendedor: c.vendedor, vcod: c.vendCod || iniciales(c.vendedor || ''), val: 0, prev: 0, ult: null, marcas: new Map(), cds: [], suc: [], pos: null, pers: new Set() });
   });
   for (const v of DATA.ventas) {
     const r = filas.get(v.cliente);
     if (!r || !ventaOK(v)) continue;
     if (!r.ult || v.fecha > r.ult) r.ult = v.fecha;
-    if (!match(v, { marca: fV.marca, categoria: fV.categoria, producto: fV.producto })) continue;
+    if (!match(v, { marca: fV.marca, categoria: fV.categoria, producto: fV.producto, calidad: fV.calidad })) continue;
     const x = m === 'unid' ? v.unidades : v.unidades * v.precio;
+    if (x > 0) r.pers.add(v._p);
     if (enSel(v._p)) { r.val += x; r.marcas.set(v.marca, (r.marcas.get(v.marca) || 0) + x); }
     else if (esRango() ? enPrevComparable(v, prev) : prev.includes(v._p)) r.prev += esRango() ? x : x / prev.length;
   }
   g.cds.forEach(p => { const r = filas.get(p.cliente); if (r) r.cds.push(p); });
   g.suc.forEach(p => { const r = filas.get(p.cliente); if (r) r.suc.push(p); });
+  const ref = mesRefSin();
   const avance = esRango() || cal.closed || cal.future ? 1 : Math.max(0.05, proporcionEsperada(curvaHistorica(S.periodo, S.f), cal.elapsed / cal.total, m));
   filas.forEach(r => {
     if (r.cds.length) r.pos = [r.cds[0].lat, r.cds[0].lon];
     else if (r.suc.length) r.pos = [r.suc.reduce((t, p) => t + p.lat, 0) / r.suc.length, r.suc.reduce((t, p) => t + p.lon, 0) / r.suc.length];
     const esperado = r.prev * avance;
     r.var = esperado > 0 ? r.val / esperado - 1 : null;
-    r.tend = r.val <= 0 ? TEND.sin : r.var == null ? TEND.nuevo : r.var >= 0.1 ? TEND.sube : r.var <= -0.1 ? TEND.cae : TEND.igual;
+    // Meses seguidos sin compra contados desde el mes de referencia (1, 2 o 3 = 3 o más)
+    r.sinN = r.val > 0 || r.pers.has(ref) ? 0 : r.pers.has(mesMas(ref, -1)) ? 1 : r.pers.has(mesMas(ref, -2)) ? 2 : 3;
+    r.tend = r.sinN ? TEND.sin : r.val <= 0 ? TEND.pend : r.var == null ? TEND.nuevo : r.var >= 0.1 ? TEND.sube : r.var <= -0.1 ? TEND.cae : TEND.igual;
   });
   return [...filas.values()].sort((a, b) => b.val - a.val);
 }
@@ -2110,16 +2251,18 @@ function crearMapa(el) {
       ${esVend() ? '' : `<div class="seg mini" id="mapColor" role="group" aria-label="Color de zonas"><button data-mcol="estado">Estado</button><button data-mcol="vendedor">Vendedor</button></div>`}</div>
     <div class="map-card">
       <div id="mapBox" class="map-box" aria-label="Mapa de zonas y clientes"></div>
+      <div class="map-lock" id="mapLock" aria-hidden="true"></div>
+      <button class="map-inter" id="mapInter" aria-pressed="false">${ico('hand', 'sm')}<span>Interactuar</span></button>
       <button class="map-btn" id="mapCentrar" aria-label="Ver todas mis zonas">${ico('target', 'sm')}</button>
       <div class="map-off" id="mapOff" hidden>Sin conexión · mapa sin calles</div>
       <div class="map-zona" id="mapZona" hidden></div>
       <div class="map-ley" id="mapLey"></div>
     </div>
     <div id="mapRes"></div>
-    <div class="card map-list"><div class="card-h"><div><div class="card-t" id="mapListT">Clientes</div><div class="card-s" id="mapListS"></div></div></div>
+    <div class="card map-list">${esVend() ? '' : '<div class="map-vend" id="mapVend" role="group" aria-label="Vendedor"></div>'}<div class="card-h"><div><div class="card-t" id="mapListT">Clientes</div><div class="card-s" id="mapListS"></div></div></div>
       <div class="seg scroll mini" id="mapFiltro" role="group" aria-label="Filtrar clientes">
         <button data-mlis="todos">Todos</button><button data-mlis="sin">Sin compra</button><button data-mlis="cae">En caída</button><button data-mlis="sube">Creciendo</button></div>
-      <ul class="rows" id="mapLista"></ul></div>`;
+      <ul class="alist map-alist" id="mapLista"></ul></div>`;
   const map = L.map($('#mapBox'), { zoomControl: false, attributionControl: true, preferCanvas: true, zoomSnap: 0.5, minZoom: 3, maxZoom: 17 });
   L.control.zoom({ position: 'topright' }).addTo(map);
   map.attributionControl.setPrefix('');
@@ -2130,6 +2273,21 @@ function crearMapa(el) {
   map.on('zoomend', () => visibilidadPuntos());
   map.on('moveend', () => { if (!MAPA_UI.zona) listaMapa(); });
   map.on('click', () => { MAPA_UI.zona = null; zonaInfo(); listaMapa(); estiloZonas(); });
+  MAPA_UI.activo = false; bloqueoMapa();
+  // Se vuelve a bloquear solo cuando el mapa sale de la pantalla (al scrollear o cambiar de sección)
+  if ('IntersectionObserver' in window) {
+    MAPA.obs = new IntersectionObserver(es => es.forEach(e => { if (MAPA_UI.activo && e.intersectionRatio < 0.35) { MAPA_UI.activo = false; bloqueoMapa(); } }), { threshold: [0, 0.35] });
+    MAPA.obs.observe($('.map-card'));
+  }
+}
+/** v0.31: el mapa arranca bloqueado (se scrollea la sección sin moverlo); "Interactuar" lo habilita. */
+function bloqueoMapa() {
+  if (!MAPA) return;
+  const on = MAPA_UI.activo, m = MAPA.map;
+  ['dragging', 'touchZoom', 'doubleClickZoom', 'scrollWheelZoom', 'boxZoom', 'keyboard'].forEach(h => m[h] && (on ? m[h].enable() : m[h].disable()));
+  const card = $('.map-card'); if (card) card.classList.toggle('bloq', !on);
+  const b = $('#mapInter');
+  if (b) { b.setAttribute('aria-pressed', String(on)); b.innerHTML = on ? `${ico('check', 'sm')}<span>Listo</span>` : `${ico('hand', 'sm')}<span>Interactuar</span>`; }
 }
 
 /* Fondos de mapa sin clave (CARTO pasó a exigir API key y marca las teselas anónimas).
@@ -2167,13 +2325,12 @@ function dibujarMapa(cli) {
   const zonasVis = new Set(cli.map(c => c.zona));
   if (!esVend() && !S.f.zona && !S.f.vendedor) opciones('zona').forEach(z => zonasVis.add(z));
   const est = new Map(filasDim('zona', S.f, cal).map(r => [r.k, r]));
-  const vendDe = new Map(); IDX.clienteInfo.forEach(c => { if (!vendDe.has(c.zona)) vendDe.set(c.zona, c.vendedor); });
-  const vends = [...new Set([...vendDe.values()])];
+  const { vendDe, colV } = coloresVend();
   MAPA.zonas = [];
   g.zonas.filter(z => zonasVis.has(z.zona) && z.puntos && z.puntos.length >= 3).forEach(z => {
     const r = est.get(z.zona), k = r ? r.e.estado.k : 'neu';
     const colEstado = { good: colorVar('good'), warn: colorVar('warn'), bad: colorVar('bad'), neu: '#8A9099' }[k] || '#8A9099';
-    const colVend = COL_VEND[vends.indexOf(vendDe.get(z.zona)) % COL_VEND.length] || '#8A9099';
+    const colVend = colV(vendDe.get(z.zona));
     const poly = L.polygon(recorteArgentina(z.puntos), { pane: 'zonas', weight: 2, color: '#2C2F33', fillOpacity: .18 });
     poly._z = { zona: z.zona, colEstado, colVend, r, vend: vendDe.get(z.zona) };
     const pct = r ? (S.metric === 'precio' ? (r.e.ratio == null ? '—' : fmtDelta(r.e.ratio - 1)) : fmtPct(r.e.ratio, 0)) : '—';
@@ -2198,7 +2355,7 @@ function dibujarMapa(cli) {
       radius: sin ? 7 : 7 + 19 * Math.sqrt(c.val / max), _r: sin ? 7 : 7 + 19 * Math.sqrt(c.val / max), weight: sin ? 2 : 1.5, color: sin ? col.sin : '#fff',
       fillColor: col[c.tend.k] || col.neu, fillOpacity: sin ? 0.12 : 0.78, dashArray: sin ? '3 3' : null, className: 'map-cli',
     });
-    mk.bindTooltip(`<b>${esc(c.k)}</b><br>${sin ? 'Sin compras en el mes' : esc(fmtMetric(c.val, S.metric === 'unid' ? 'unid' : 'fact'))}${c.var != null && !sin ? ' · ' + fmtDelta(c.var, 0) : ''}`, { direction: 'top', offset: [0, -6] });
+    mk.bindTooltip(`<b>${esc(c.k)}</b><br>${sin ? (c.ult ? 'Última compra ' + esc(fechaCorta(c.ult)) : 'Sin compras') : c.tend === TEND.pend ? 'Aún sin compra en el mes' : esc(fmtMetric(c.val, S.metric === 'unid' ? 'unid' : 'fact'))}${c.var != null && !sin ? ' · ' + fmtDelta(c.var, 0) : ''}`, { direction: 'top', offset: [0, -6] });
     mk.on('click', ev => { L.DomEvent.stopPropagation(ev); fichaCliente(c.k); });
     mk.addTo(capas.cli);
     MAPA.marcas.set(c.k, mk);
@@ -2212,6 +2369,20 @@ function dibujarMapa(cli) {
   $$('#mapFiltro button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mlis === MAPA_UI.lista)));
   leyendaMapa();
   zonaInfo();
+}
+/** Color de cada vendedor (el mismo que pinta sus zonas en la vista "Vendedor" del mapa). */
+function coloresVend() {
+  const vendDe = new Map(); IDX.clienteInfo.forEach(c => { if (!vendDe.has(c.zona)) vendDe.set(c.zona, c.vendedor); });
+  const vends = [...new Set([...vendDe.values()])];
+  return { vendDe, vends, colV: v => COL_VEND[vends.indexOf(v) % COL_VEND.length] || '#8A9099' };
+}
+/** Texto de la comparación del mapa (v0.31): vs. prom. de los 3 meses previos a igual avance del mes. */
+function lblVsMapa() {
+  if (esRango()) return `vs. ${lblPrev()} a la misma fecha`;
+  const i = IDX.periodos.indexOf(S.periodo), ps = IDX.periodos.slice(Math.max(0, i - 3), Math.max(0, i));
+  if (!ps.length) return 'sin meses previos para comparar';
+  const n = p => perLabel(p).corto, cal = calendario(S.periodo);
+  return `vs. prom. ${ps.length === 1 ? n(ps[0]) : n(ps[0]) + '–' + n(ps[ps.length - 1])}${cal.closed ? '' : ' a igual avance del mes'}`;
 }
 function encuadrar() {
   const pts = [];
@@ -2261,10 +2432,33 @@ function resumenMapa(cli) {
   const el = $('#mapRes'); if (!el) return;
   const sin = cli.filter(c => c.tend.k === 'sin'), cae = cli.filter(c => c.tend === TEND.cae), sinPos = cli.filter(c => !c.pos).length;
   let h = '';
-  if (sin.length) h += `<button class="alert-row map-alert" data-mlis="sin"><span class="ai warn">${ico('alert', 'sm')}</span><span class="grow"><b>${sin.length} cliente${sin.length === 1 ? '' : 's'} sin compra en ${esc(lblSel().toLowerCase())}</b><small>${esc(sin.slice(0, 3).map(c => c.k).join(' · '))}${sin.length > 3 ? '…' : ''}</small></span>${ico('chevR', 'sm')}</button>`;
+  if (sin.length) {
+    const n = k => sin.filter(c => c.sinN === k).length;
+    h += `<div class="map-alert map-sin"><button class="alert-row" data-mlis="sin"><span class="ai warn">${ico('alert', 'sm')}</span><span class="grow"><b>${sin.length} cliente${sin.length === 1 ? '' : 's'} sin compra en ${esc(perLabel(mesRefSin()).mes.toLowerCase())}</b></span>${ico('chevR', 'sm')}</button>
+      <div class="sin-seg">${[1, 2, 3].map(k => `<button data-msin="${k}" aria-pressed="${MAPA_UI.lista === 'sin' && MAPA_UI.sinN === k}"${n(k) ? '' : ' disabled'}><b>${n(k)}</b><span>${SIN_SEG[k]}</span></button>`).join('')}</div></div>`;
+  }
   if (cae.length) h += `<button class="alert-row map-alert" data-mlis="cae"><span class="ai bad">${ico('down', 'sm')}</span><span class="grow"><b>${cae.length} en caída contra su promedio</b><small>Compran 10 % o menos que sus 3 meses anteriores, a igual avance del mes</small></span>${ico('chevR', 'sm')}</button>`;
   if (sinPos) h += `<p class="map-nota">${sinPos} cliente${sinPos === 1 ? '' : 's'} sin ubicación: no ${sinPos === 1 ? 'tiene' : 'tienen'} sucursal ni centro de distribución cargado.</p>`;
   el.innerHTML = h ? `<div class="stack map-res">${h}</div>` : '';
+}
+const hexA = (h, a) => { const n = parseInt(h.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
+/** Ícono semáforo de la tendencia: flecha verde / flecha roja / advertencia amarilla (sin compra) / guion gris. */
+function icoTend(t) {
+  const [k, i] = t.k === 'sin' ? ['warn', 'alert'] : t === TEND.sube ? ['good', 'up'] : t === TEND.cae ? ['bad', 'down'] : ['neu', 'dash'];
+  return `<span class="tnd tnd-${k}" title="${esc(t.t)}">${ico(i, 'sm')}</span>`;
+}
+/** Fila compacta (barra gruesa como Cliente en Análisis): nombre adentro, valor a la derecha y la variación afuera. */
+function filaMapa(c, max, m, colV) {
+  const t = c.tend, sin = t.k === 'sin';
+  const W = sin ? 0 : Math.min(100, c.val / max * 100);
+  const val = sin ? (c.ult ? 'últ. ' + fechaCorta(c.ult) : 'sin compras') : fmtMetric(c.val, m);
+  const txt = `<span class="abar-n">${esc(c.k)}</span><span class="abar-v${sin ? ' sin' : ''}">${esc(val)}</span>`;
+  const inner = W > 0.5 ? `<div class="abar-in" style="width:${(10000 / W).toFixed(2)}%">${txt}</div>` : '';
+  const vr = sin || t === TEND.pend || c.var == null ? '' : fmtDelta(c.var, 0);
+  const zc = sin && colV ? colV(c.vendedor) : '';
+  return `<li class="arow map-arow">${zc ? '' : icoTend(t)}<button class="arow-b map-row ${MAPA.sel === c.k ? 'on' : ''}" data-mcli="${esc(c.k)}">
+    <div class="abar"${zc ? ` style="background:${hexA(zc, 0.26)}"` : ''}>${txt}<div class="abar-fill" style="width:${W.toFixed(2)}%"><i style="width:100%;background:var(--accent)"></i>${inner}</div></div></button>
+    ${zc ? `<span class="map-zn" style="color:${zc}" title="${esc(c.zona)}"><span>${esc(zonaCorta(c.zona))}</span></span>` : `<span class="map-var ${vr ? (c.var >= 0 ? 'pos' : 'neg') : ''}">${vr || (sin ? '' : '—')}</span>`}</li>`;
 }
 function listaMapa() {
   if (!MAPA || !MAPA.cli) return;
@@ -2277,23 +2471,40 @@ function listaMapa() {
     alcance = enVista.length < rows.length ? 'En pantalla' : 'Toda la cartera';
     rows = enVista;
   }
+  // Segmentador por vendedor (v0.31): filtra la lista
+  const { colV } = coloresVend();
+  const elV = $('#mapVend');
+  if (elV) {
+    const vs = [...new Set(MAPA.cli.map(c => c.vendedor))].filter(Boolean).sort();
+    if (MAPA_UI.vend && !vs.includes(MAPA_UI.vend)) MAPA_UI.vend = null;
+    elV.hidden = vs.length < 2;
+    const cod = new Map(MAPA.cli.map(c => [c.vendedor, c.vcod]));
+    elV.innerHTML = `<button data-mvend="" aria-pressed="${!MAPA_UI.vend}">Todos</button>` + vs.map(v => `<button data-mvend="${esc(v)}" aria-pressed="${MAPA_UI.vend === v}" title="${esc(v)}"><i style="background:${colV(v)}"></i>${esc(cod.get(v) || v)}</button>`).join('');
+  }
+  if (MAPA_UI.vend) rows = rows.filter(c => c.vendedor === MAPA_UI.vend);
   const f = MAPA_UI.lista;
-  if (f === 'sin') rows = rows.filter(c => c.tend.k === 'sin');
+  if (f === 'sin') rows = rows.filter(c => c.tend.k === 'sin' && (!MAPA_UI.sinN || c.sinN === MAPA_UI.sinN));
   else if (f === 'cae') rows = rows.filter(c => c.tend === TEND.cae);
   else if (f === 'sube') rows = rows.filter(c => c.tend === TEND.sube);
   const max = Math.max(1, ...rows.map(c => c.val)), m = S.metric === 'unid' ? 'unid' : 'fact';
-  $('#mapListT').textContent = 'Clientes · ' + alcance;
-  $('#mapListS').textContent = `${rows.length} cliente${rows.length === 1 ? '' : 's'} · ${METRIC_NAME[m].toLowerCase()} de ${lblSel().toLowerCase()} y tendencia vs. 3 meses previos`;
+  $('#mapListT').textContent = 'Clientes · ' + alcance + (MAPA_UI.vend ? ' · ' + (MAPA.cli.find(c => c.vendedor === MAPA_UI.vend) || {}).vcod : '');
+  $('#mapListS').textContent = f === 'sin'
+    ? `${rows.length} sin compra${MAPA_UI.sinN ? ' hace ' + SIN_SEG[MAPA_UI.sinN] : ''} · contado desde ${perLabel(mesRefSin()).mes.toLowerCase()}`
+    : `${rows.length} cliente${rows.length === 1 ? '' : 's'} · ${METRIC_NAME[m].toLowerCase()} de ${lblSel().toLowerCase()} · variación ${lblVsMapa()}`;
   $$('#mapFiltro button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mlis === f)));
-  $('#mapLista').innerHTML = rows.length ? rows.map((c, i) => {
-    const t = c.tend, sin = t.k === 'sin';
-    const tag = sin ? `<span class="pill st-neu">Sin compra</span>` : c.var == null ? `<span class="pill st-neu">Sin historia</span>`
-      : `<span class="pill st-${t.k === 'neu' ? 'neu' : t.k}">${ico(t === TEND.sube ? 'up' : t === TEND.cae ? 'down' : 'dash')}${fmtDelta(c.var, 0)}</span>`;
-    return `<li><button class="row map-row ${MAPA.sel === c.k ? 'on' : ''}" data-mcli="${esc(c.k)}">
-      <div class="row-top"><div class="row-name">${esc(c.k)}<small>${esc(zonaCorta(c.zona))}${c.ult ? ' · última compra ' + esc(fechaCorta(c.ult)) : ''}${c.pos ? '' : ' · sin ubicación'}</small></div>
-      <div class="row-val"><b>${sin ? '—' : esc(fmtMetric(c.val, m))}</b>${tag}</div></div>
-      <div class="pbar"><i class="fill-${sin ? 'neu' : t.k === 'bad' ? 'bad' : t.k === 'good' ? 'good' : 'neu'}" style="width:${(c.val / max * 100).toFixed(1)}%"></i></div></button></li>`;
-  }).join('') : `<li class="map-vacio">No hay clientes con este criterio${MAPA_UI.zona ? ' en la zona' : ' en pantalla'}.</li>`;
+  $$('#mapRes [data-msin]').forEach(b => b.setAttribute('aria-pressed', String(f === 'sin' && MAPA_UI.sinN === +b.dataset.msin)));
+  let h = '';
+  if (f === 'sin') {
+    // Agrupados: 1 mes · 2 meses · 3 meses o más (dentro, primero los que más compraban)
+    const ref = mesRefSin();
+    [1, 2, 3].forEach(k => {
+      const g = rows.filter(c => c.sinN === k).sort((a, b) => (b.prev - a.prev) || String(b.ult || '').localeCompare(String(a.ult || '')));
+      if (!g.length) return;
+      const desde = k < 3 ? ` · compró en ${perLabel(mesMas(ref, -k)).mes.toLowerCase()}` : ` · última en ${perLabel(mesMas(ref, -3)).mes.toLowerCase()} o antes`;
+      h += `<li class="map-grp"><b>${SIN_SEG[k]} sin compra</b><span>${g.length}${desde}</span></li>` + g.map(c => filaMapa(c, max, m, colV)).join('');
+    });
+  } else h = rows.map(c => filaMapa(c, max, m, f === 'sin' ? colV : null)).join('');
+  $('#mapLista').innerHTML = h || `<li class="map-vacio">No hay clientes con este criterio${MAPA_UI.zona ? ' en la zona' : ' en pantalla'}.</li>`;
 }
 function irACliente(k) {
   const c = MAPA && MAPA.cli.find(x => x.k === k);
@@ -2309,33 +2520,107 @@ function irACliente(k) {
 function fichaCliente(k) {
   const c = MAPA && MAPA.cli.find(x => x.k === k);
   if (!c) return;
-  MAPA.sel = k; visibilidadPuntos();
+  MAPA.sel = k;
   const m = S.metric === 'unid' ? 'unid' : 'fact', sin = c.tend.k === 'sin';
-  const marcas = [...c.marcas.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3), tot = c.val || 1;
   const dest = c.pos ? `https://www.google.com/maps/dir/?api=1&destination=${c.pos[0].toFixed(5)},${c.pos[1].toFixed(5)}` : '';
-  const puntos = [...c.cds.map(p => ({ ...p, t: 'Centro de distribución' })), ...c.suc.map(p => ({ ...p, t: 'Sucursal' }))];
   const body = `<div class="stat3">
       <div><span class="lbl">${esc(METRIC_NAME[m])}</span><b>${sin ? '—' : esc(fmtMetric(c.val, m))}</b><small>${esc(lblSel())}</small></div>
       <div><span class="lbl">Vs. 3 meses</span><b>${sin ? '—' : c.var == null ? '—' : fmtDelta(c.var, 0)}</b><span class="pill st-${c.tend.k === 'sin' ? 'neu' : c.tend.k}">${esc(c.tend.t)}</span></div>
       <div><span class="lbl">Última compra</span><b>${c.ult ? esc(fechaCorta(c.ult)) : '—'}</b><small>${c.ult ? esc(Math.round((parseISO(IDX.corte) - parseISO(c.ult)) / 864e5) + ' días') : 'sin compras'}</small></div>
     </div>
-    ${marcas.length ? `<div class="sub-t">Marcas del mes</div><ul class="mk-list">${marcas.map(([mk, v]) => `<li><span>${esc(mk)}</span><div class="pbar"><i class="fill-neu" style="width:${(v / tot * 100).toFixed(1)}%"></i></div><b>${fmtPct(v / tot, 0)}</b></li>`).join('')}</ul>` : ''}
-    ${puntos.length ? `<div class="sub-t">Puntos de entrega · ${puntos.length}</div><ul class="pt-list">${puntos.slice(0, 12).map(p => `<li><button data-mpt="${p.lat},${p.lon}"><span class="pt-i ${p.t[0] === 'C' ? 'cd' : ''}">${p.t[0] === 'C' ? 'CD' : ''}</span><span class="grow">${esc(p.nombre || p.t)}<small>${esc(p.t)}</small></span>${ico('chevR', 'sm')}</button></li>`).join('')}</ul>` : '<p class="map-nota">Sin sucursales ni centro de distribución cargados.</p>'}
+    ${c.pos ? `<button class="ev-ubic" data-mubic="${esc(k)}">${ico('pin', 'sm')} Ver ubicación</button>` : ''}
+    <div class="ev" id="evBox"></div>
     <div class="btns">
       ${dest ? `<a class="btn btn-p" href="${dest}" target="_blank" rel="noopener">${ico('nav', 'sm')} Cómo llegar</a>` : ''}
       <button class="btn btn-g" data-det-dim="cliente" data-det-key="${esc(k)}">Ver detalle de ventas</button>
     </div>`;
-  openSheet(k, `${zonaCorta(c.zona)} · ${c.vendedor}`, body);
+  S.evCli = k; S.evAb = new Set();
+  openSheet(k, `${zonaCorta(c.zona)} · ${c.vendedor}`, body, () => evRender(true));
   $$('#mapLista .map-row').forEach(b => b.classList.toggle('on', b.dataset.mcli === k));
+}
+
+/* ---------- v0.33 · Evolución de compras del cliente (m²) ----------
+   Una fila por mes, de enero al mes elegido, con la barra apilada por el mix (top 5 + Resto).
+   Mix: Categoría, Marca y/o Producto; dos niveles vecinos se pueden enlazar en una sola fila (como en UB).
+   Tocando un mes se abre su mix en filas; cada nivel siguiente se despliega con ▶. Respeta los filtros. */
+const EV_PAL = ['#3E6D8E', '#C4863A', '#7A5AA6', '#4E8F6B', '#B5555B'];   // mix que no es por marca (para no confundir con los colores de marca)
+const EV_DIMS = { categoria: 'Categoría', marca: 'Marca', producto: 'Producto' }, EV_DIMS_ORD = ['categoria', 'marca', 'producto'];
+const evMix = () => { const a = (S.evMix || ['marca']).filter(d => EV_DIMS[d]); return a.length ? a : ['marca']; };
+const evUnir = () => { const a = evMix(); return a.map((_, i) => !!(Array.isArray(S.evUnir) && S.evUnir[i] && i < a.length - 1)); };
+function evGrupos() { const a = evMix(), un = evUnir(), g = []; a.forEach((d, i) => { if (i && un[i - 1]) g[g.length - 1].push(d); else g.push([d]); }); return g; }
+const evNombre = (d, v) => d === 'categoria' ? ({ Cer: 'Cerámica', Por: 'Porcelanato' }[v] || v || '—') : (v || '—');
+const evClave = (v, g) => g.map(d => evNombre(d, v[d])).join(' · ');
+function evRender(anim) {
+  const el = $('#evBox'); if (!el) return;
+  const k = S.evCli, ps = perSel(), fin = ps[ps.length - 1], ini = fin.slice(0, 4) + '-01';
+  const meses = []; for (let p = ini; p <= fin; p = mesMas(p, 1)) meses.push(p);
+  const f = { ...S.f }; delete f.cliente; delete f.zona; delete f.vendedor;
+  const grupos = evGrupos(), g0 = grupos[0];
+  // árbol por mes: { t, hijos: Map }
+  const nodo = () => ({ t: 0, hijos: new Map() });
+  const porMes = new Map(meses.map(p => [p, nodo()])), tot0 = new Map();
+  for (const v of DATA.ventas) {
+    if (v.cliente !== k || !ventaOK(v) || !porMes.has(v._p) || !match(v, f)) continue;
+    const u = v.unidades; let n = porMes.get(v._p); n.t += u;
+    grupos.forEach(g => { const kk = evClave(v, g); if (!n.hijos.has(kk)) n.hijos.set(kk, nodo()); n = n.hijos.get(kk); n.t += u; });
+    const k0 = evClave(v, g0); tot0.set(k0, (tot0.get(k0) || 0) + u);
+  }
+  // colores del primer nivel: marca → su color; si no, paleta por peso; top 5 + Resto
+  const orden = [...tot0.entries()].sort((a, b) => b[1] - a[1]).map(x => x[0]), top = orden.slice(0, 5), hayResto = orden.length > 5;
+  const col = kk => !top.includes(kk) ? COL_RESTO : g0.length === 1 && g0[0] === 'marca' ? colorMarca(kk) : EV_PAL[top.indexOf(kk) % EV_PAL.length];
+  const max = Math.max(1, ...[...porMes.values()].map(n => n.t)), totAnio = [...porMes.values()].reduce((t, n) => t + n.t, 0);
+  const a = evMix(), un = evUnir();
+  const lnk = i => `<button class="ap-link" data-evunir="${i}" aria-pressed="${un[i]}" title="${un[i] ? 'Separar' : 'Unir en una fila'}"><svg viewBox="0 0 24 24" class="ico sm"><path d="M10 13a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1.2 1.2M14 11a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1.2-1.2"/></svg></button>`;
+  const selector = `<div class="ev-mix"><span class="ap-t">Mix</span>${EV_DIMS_ORD.map(d => {
+      const i = a.indexOf(d);
+      return `<button class="ev-d" data-evdim="${d}" aria-pressed="${i >= 0}">${EV_DIMS[d]}</button>${i >= 0 && i < a.length - 1 ? lnk(i) : ''}`;
+    }).join('')}</div>`;
+  const ley = `<div class="mk-ley ev-ley">${top.map(kk => `<span><i style="background:${col(kk)}"></i>${esc(kk)}</span>`).join('')}${hayResto ? `<span><i style="background:${COL_RESTO}"></i>Resto</span>` : ''}</div>`;
+  const hijosHTML = (n, nivel, id) => {
+    const hs = [...n.hijos.entries()].sort((x, y) => y[1].t - x[1].t);
+    return hs.map(([kk, h]) => {
+      const idn = id + '»' + kk, hoja = nivel >= grupos.length - 1, ab = S.evAb && S.evAb.has(idn);
+      const dot = nivel === 0 ? `<i style="background:${col(kk)}"></i>` : '';
+      return `<li class="ev-sub nv${nivel}"><button ${hoja ? 'disabled' : `data-evn="${esc(idn)}"`} class="ev-sub-b"><span class="ev-tg">${hoja ? '' : ab ? '▼' : '▶'}</span><span class="ev-sn">${dot}${esc(kk)}</span><b>${esc(fmtUc(h.t))}</b><span class="ev-pc">${fmtPct(h.t / (n.t || 1), 0)}</span></button></li>${ab && !hoja ? hijosHTML(h, nivel + 1, idn) : ''}`;
+    }).join('');
+  };
+  const filas = meses.map(p => {
+    const n = porMes.get(p), W = n.t / max * 100, ab = S.evAb && S.evAb.has(p);
+    const segs = new Map(); n.hijos.forEach((h, kk) => { const kx = top.includes(kk) ? kk : '__r'; segs.set(kx, (segs.get(kx) || 0) + h.t); });
+    const fill = [...segs.entries()].sort((x, y) => (x[0] === '__r' ? 99 : top.indexOf(x[0])) - (y[0] === '__r' ? 99 : top.indexOf(y[0])))
+      .map(([kk, x]) => `<i style="width:${(x / (n.t || 1) * 100).toFixed(2)}%;background:${kk === '__r' ? COL_RESTO : col(kk)}"></i>`).join('');
+    const txt = `<span class="abar-n">${esc(perLabel(p).corto)}${p === IDX.corte.slice(0, 7) ? ' · en curso' : ''}</span><span class="abar-v">${n.t ? esc(fmtUc(n.t)) : 'sin compras'}</span>`;
+    const inner = W > 0.5 ? `<div class="abar-in" style="width:${(10000 / W).toFixed(2)}%">${txt}</div>` : '';
+    return `<li class="arow ev-row"><button class="arow-b" ${n.t ? `data-evn="${p}"` : 'disabled'} aria-expanded="${!!ab}"><div class="abar">${txt}<div class="abar-fill" style="width:${W.toFixed(2)}%">${fill}${inner}</div></div></button></li>${ab ? `<li class="ev-open"><ul>${hijosHTML(n, 0, p)}</ul></li>` : ''}`;
+  }).join('');
+  el.innerHTML = `<div class="sub-t">Evolución de compras · m² · ${esc(perLabel(ini).corto)}–${esc(perLabel(fin).corto)} ${fin.slice(0, 4)}</div>
+    <p class="map-nota">${esc(fmtUc(totAnio))} m² en el año · tocá un mes para ver su mix</p>
+    ${selector}${ley}<ul class="alist ev-list">${filas}</ul>`;
+  if (anim) animarBarras(el);
 }
 
 /** Clicks propios de la sección (se engancha antes que el manejador general). */
 document.addEventListener('click', ev => {
-  const t = ev.target.closest('[data-mcol],[data-mlis],[data-mcli],[data-mzona],[data-mpt],#mapCentrar');
+  const t = ev.target.closest('[data-mcol],[data-mlis],[data-msin],[data-mvend],[data-mcli],[data-mubic],[data-evdim],[data-evunir],[data-evn],[data-mzona],[data-mpt],#mapCentrar,#mapInter');
   if (!t) return;
   if (t.dataset.mcol) { MAPA_UI.color = t.dataset.mcol; estiloZonas(); leyendaMapa(); $$('#mapColor button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mcol === MAPA_UI.color))); }
-  else if (t.dataset.mlis) { MAPA_UI.lista = MAPA_UI.lista === t.dataset.mlis && t.classList.contains('map-alert') ? 'todos' : t.dataset.mlis; listaMapa(); animarBarras($('#mapLista')); if (t.classList.contains('map-alert')) $('#mapLista').closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-  else if (t.dataset.mcli) { irACliente(t.dataset.mcli); setTimeout(() => fichaCliente(t.dataset.mcli), 450); }
+  else if (t.dataset.mlis) {
+    const alerta = !!t.closest('.map-alert');
+    MAPA_UI.lista = MAPA_UI.lista === t.dataset.mlis && alerta && !MAPA_UI.sinN ? 'todos' : t.dataset.mlis; MAPA_UI.sinN = null;
+    listaMapa(); animarBarras($('#mapLista')); if (alerta && MAPA_UI.lista !== 'todos') $('#mapLista').closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  else if (t.dataset.msin) {
+    const k = +t.dataset.msin, igual = MAPA_UI.lista === 'sin' && MAPA_UI.sinN === k;
+    MAPA_UI.lista = igual ? 'todos' : 'sin'; MAPA_UI.sinN = igual ? null : k;
+    listaMapa(); animarBarras($('#mapLista')); if (!igual) $('#mapLista').closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  else if ('mvend' in t.dataset) { MAPA_UI.vend = t.dataset.mvend || null; listaMapa(); animarBarras($('#mapLista')); }
+  else if (t.id === 'mapInter') { MAPA_UI.activo = !MAPA_UI.activo; bloqueoMapa(); }
+  else if (t.dataset.mcli) fichaCliente(t.dataset.mcli);
+  else if (t.dataset.mubic) { const k = t.dataset.mubic; closeSheet(); setTimeout(() => irACliente(k), 300); }
+  else if (t.dataset.evdim) { const d = t.dataset.evdim, a = evMix(); const on = a.includes(d); const n = on ? a.filter(x => x !== d) : EV_DIMS_ORD.filter(x => a.includes(x) || x === d); if (n.length) { S.evMix = n; S.evUnir = null; S.evAb = new Set(); } evRender(); guardarUI(); }
+  else if (t.dataset.evunir) { const i = +t.dataset.evunir, u = evUnir(); u[i] = !u[i]; S.evUnir = u; S.evAb = new Set(); evRender(); guardarUI(); }
+  else if (t.dataset.evn) { const id = t.dataset.evn; S.evAb = S.evAb || new Set(); S.evAb.has(id) ? S.evAb.delete(id) : S.evAb.add(id); evRender(); }
   else if ('mzona' in t.dataset) { MAPA_UI.zona = null; zonaInfo(); listaMapa(); estiloZonas(); }
   else if (t.dataset.mpt) { const [la, lo] = t.dataset.mpt.split(',').map(Number); closeSheet(); setTimeout(() => { MAPA.map.flyTo([la, lo], 15, { duration: 0.8 }); visibilidadPuntos(); }, 280); }
   else if (t.id === 'mapCentrar') { MAPA_UI.zona = null; MAPA.sel = null; zonaInfo(); estiloZonas(); encuadrar(); visibilidadPuntos(); }
@@ -2405,6 +2690,38 @@ function prevPorDim(dim, f) {
   if (fx !== 1) out.forEach((x, k) => out.set(k, x * fx));
   return out;
 }
+/* ---------- v0.31 · Cliente en Acumulado ----------
+   La comparación (vs. promedio de los 3 meses previos) va una sola vez arriba. Cada fila: volumen en la
+   barra y variación % a la derecha; con Detalle, a la derecha: base, variación absoluta, variación % y
+   % del total (cada una con su color, explicado en la leyenda). Botón Mix: barra apilada top 5 marcas + Resto. */
+const cliAcum = () => S.dimA === 'cliente' && vsPrevActivo('cliente');
+const RESTO = '__resto', COL_RESTO = '#A9AEB5';
+function topMarcas(f, n = 5) {
+  const t = new Map();
+  for (const v of DATA.ventas) {
+    if (!enSel(v._p) || !ventaOK(v) || !match(v, f)) continue;
+    t.set(v.marca, (t.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : v.unidades * v.precio));
+  }
+  const orden = [...t.entries()].sort((a, b) => b[1] - a[1]).map(x => x[0]);
+  return { top: orden.slice(0, n), resto: orden.length > n };
+}
+function leyendaMix(f) {
+  const { top, resto } = topMarcas(f);
+  return `<div class="mk-ley">${top.map(m => `<span><i style="background:${colorMarca(m)}"></i>${esc(m)}</span>`).join('')}${resto ? `<span><i style="background:${COL_RESTO}"></i>Resto</span>` : ''}</div>`;
+}
+function leyendaCliAcum() {
+  const ref = esRango() ? `el total de ${esc(lblPrevCompleto())}` : `el promedio mensual ${esc(lblPrevCompleto().replace('prom. ', ''))}`;
+  return `<div class="cli-ley"><div class="pace-note"><i></i>Marca negra y variación: vs. ${ref}${esRango() ? '' : ' completo'}</div>
+    ${S.detalle ? `<div class="cli-ley-c"><span><i class="c-base"></i>Base ${esc(lblPrevCompleto())}</span><span><i class="c-var"></i>Variación</span><span><i class="c-tot"></i>% del total</span></div>` : ''}</div>`;
+}
+function derCliAcum(real, prev, total) {
+  const nuevo = !prev, pct = nuevo ? null : real / prev - 1, d = real - (prev || 0), cl = d >= 0 ? 'pos' : 'neg';
+  const vp = nuevo ? (real > 0 ? 'nuevo' : '—') : fmtDelta(pct, 0);
+  if (!S.detalle) return `<div class="acli-r"><b class="${nuevo ? 'nuevo' : cl}">${vp}</b></div>`;
+  const abs = (d >= 0 ? '+' : '−') + fmtMetric(Math.abs(d)).replace(/^\$\s?/, '');
+  return `<div class="acli-r det"><span class="c-base">${nuevo ? '—' : esc(fmtMetric(prev).replace(/^\$\s?/, ''))}</span><b class="${nuevo ? 'nuevo' : cl}">${vp}</b>
+    <span class="${cl}">${esc(abs)}</span><span class="c-tot">${total > 0 ? fmtPct(real / total, 0) : '—'}</span></div>`;
+}
 function vsPrevHTML(real, prev) {
   if (prev == null) return '';
   if (!prev) return `<div class="arow-vs"><span class="vs-l">vs. ${esc(lblPrevCompleto())}</span><b class="pos">nuevo</b><span>sin ventas en ${esRango() ? 'el período anterior' : 'los 3 meses anteriores'}</span></div>`;
@@ -2432,7 +2749,8 @@ function segmentos(dim, k, mezcla, marcaFija) {
   const mm = mezcla && mezcla.get(k);
   if (!mm || !mm.size) return [[null, 1]];
   const tot = [...mm.values()].reduce((t, x) => t + x, 0) || 1;
-  return [...mm.entries()].sort((a, b) => ((IDX.valores.marca || []).indexOf(a[0]) - (IDX.valores.marca || []).indexOf(b[0]))).map(([m, x]) => [m, x / tot]);
+  const pos = m => m === RESTO ? 999 : (IDX.valores.marca || []).indexOf(m);
+  return [...mm.entries()].sort((a, b) => pos(a[0]) - pos(b[0])).map(([m, x]) => [m, x / tot]);
 }
 /**
  * Una fila con barra gruesa. o = { dim, k, nombre, a, e, cal, max, total, mezcla, marca, nivel, toggle, abierto, det, sinObj }
@@ -2454,12 +2772,15 @@ function barraHTML(o) {
     foot = `${extra}<span>${[part, o.sub].filter(Boolean).join(' · ')}</span>`;
   }
   const segs = o.segs || segmentos(o.dim, o.k, o.mezcla, o.marca);
-  const fill = segs.map(([mk, p]) => `<i style="width:${(p * 100).toFixed(2)}%;background:${mk ? colorMarca(mk) : 'var(--accent)'}"></i>`).join('');
+  const fill = segs.map(([mk, p]) => `<i style="width:${(p * 100).toFixed(2)}%;background:${mk === RESTO ? COL_RESTO : mk ? colorMarca(mk) : 'var(--accent)'}"></i>`).join('');
   const pace = o.prev != null && o.max > 0 && o.prev > 0 ? `<span class="abar-prev" style="left:${Math.min(100, o.prev / o.max * 100).toFixed(2)}%" title="${esc(lblPrevCompleto())}"></span>` : '';
   const txt = `<span class="abar-n">${o.rank ? `<b class="rk">#${o.rank}</b> ` : ''}${esc(o.nombre)}</span><span class="abar-v">${esc(val)}</span>`;
   const inner = W > 0.5 ? `<div class="abar-in" style="width:${(10000 / W).toFixed(2)}%">${txt}</div>` : '';
   const tog = o.toggle ? `<button class="tree-t" data-tree="${esc(o.toggle)}" aria-expanded="${!!o.abierto}" aria-label="${o.abierto ? 'Contraer' : 'Desplegar'} ${esc(o.nombre)}">${o.abierto ? '▼' : '▶'}</button>` : (o.nivel ? '<span class="tree-sp"></span>' : '');
   const det = o.det ? ` data-det-dim="${o.det[0]}" data-det-key="${esc(o.det[1])}"` : o.toggle ? ` data-tree="${esc(o.toggle)}"` : '';
+  if (o.cliAcum) return `<li class="arow">${tog}<button class="arow-b"${det}><div class="acli">
+    <div class="abar"><span class="abar-tk" style="left:25%"></span><span class="abar-tk" style="left:50%"></span><span class="abar-tk" style="left:75%"></span>
+      ${txt}<div class="abar-fill" style="width:${W.toFixed(2)}%">${fill}${inner}</div>${pace}</div>${derCliAcum(real, o.prev, o.total)}</div></button></li>`;
   return `<li class="arow nv${o.nivel || 0}">${tog}<button class="arow-b"${det}>
     <div class="abar"><span class="abar-tk" style="left:25%"></span><span class="abar-tk" style="left:50%"></span><span class="abar-tk" style="left:75%"></span>
       ${txt}<div class="abar-fill" style="width:${W.toFixed(2)}%">${fill}${inner}</div>${pace}</div>
@@ -2467,14 +2788,19 @@ function barraHTML(o) {
 }
 /** Lista plana para cualquier dimensión (Marca, Categoría, Cliente, Zona, Vendedor y el detalle). */
 function listaBarras(dim, rows, cal, f) {
-  const mezcla = mezclaMarca(dim, f);
+  const ca = dim === 'cliente' && cliAcum();
+  let mezcla = ca && !S.mixCli ? new Map() : mezclaMarca(dim, f);
+  if (ca && S.mixCli) {                                  // top 5 marcas + Resto
+    const top = new Set(topMarcas(f).top);
+    mezcla.forEach((mm, k) => { const n = new Map(); mm.forEach((x, m) => { const kk = top.has(m) ? m : RESTO; n.set(kk, (n.get(kk) || 0) + x); }); mezcla.set(k, n); });
+  }
   const prevs = vsPrevActivo(dim) ? prevPorDim(dim, f) : null;
   const max = Math.max(0, ...rows.map(r => valorDe(r.a)), ...(prevs ? [...prevs.values()] : []));
   const total = rows.reduce((t, r) => t + valorDe(r.a), 0);
   // Cliente con Facturación o Cantidad: # = puesto por venta acumulada del período
   const rank = new Map();
   if (dim === 'cliente' && S.metric !== 'precio') rows.slice().sort((x, y) => valorDe(y.a) - valorDe(x.a)).forEach((r, i) => rank.set(r.k, i + 1));
-  return rows.map(r => barraHTML({ prev: prevs ? (prevs.get(r.k) || 0) : undefined, rank: rank.get(r.k), dim, k: r.k, nombre: dim === 'categoria' ? ({ Cer: 'Cerámica', Por: 'Porcelanato' }[r.k] || r.k) : r.k, a: r.a, e: r.e, cal, max, total, mezcla, det: [dim, r.k], sub: dim === 'cliente' || dim === 'vendedor' ? subInfo(dim, r.k).split(' · ')[0] : '' })).join('');
+  return rows.map(r => barraHTML({ prev: prevs ? (prevs.get(r.k) || 0) : undefined, rank: rank.get(r.k), dim, k: r.k, nombre: dim === 'categoria' ? ({ Cer: 'Cerámica', Por: 'Porcelanato' }[r.k] || r.k) : r.k, a: r.a, e: r.e, cal, max, total, mezcla, det: [dim, r.k], cliAcum: ca, sub: dim === 'cliente' || dim === 'vendedor' ? subInfo(dim, r.k).split(' · ')[0] : '' })).join('');
 }
 /** Árbol de Producto: Categoría ▶ Marca ▶ Producto ▶ Calidad (sin calidad en los datos: hasta Producto). */
 function arbolProducto(cal) {
@@ -3122,6 +3448,7 @@ function heroPrecioHTML(a, cal, e) {
       <div><span>Vs. mes ant.</span><b class="${pv.ratio == null ? '' : pv.ratio >= 1 ? 'pos' : 'neg'}">${pv.ratio == null ? '—' : fmtDelta(pv.ratio - 1)}</b></div>
       <div><span>Vs. objetivo</span><b class="${e.ratio == null ? '' : e.ratio >= 1 ? 'pos' : 'neg'}">${e.ratio == null ? '—' : fmtDelta(e.ratio - 1)}</b></div></div>`; })()}
     <div class="hero-foot"><span class="mk"></span>Campana: operaciones de ${esc(refTxt)}, cada una contra ${c.porLinea ? 'el precio promedio de su producto' : 'el precio promedio por unidad del grupo'}. Punto = ${esc(c.lblSel)}.${c.fuera ? ` ${c.fuera} operación${c.fuera > 1 ? 'es' : ''} sin producto comparable.` : ''}</div>
+    ${heroDesglose(calSel())}
   </div>`;
 }
 function campanaSVG(c) {
@@ -3654,6 +3981,8 @@ const I = {
   down: '<path d="M12 5v14M6 13l6 6 6-6"/>',
   up: '<path d="M12 19V5M6 11l6-6 6 6"/>',
   dash: '<path d="M6 12h12"/>',
+  hand: '<path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
+  mix: '<rect x="3" y="5" width="18" height="5" rx="1.5"/><rect x="3" y="14" width="18" height="5" rx="1.5"/><path d="M10 5v5M15 14v5"/>',
   x: '<path d="M6 6l12 12M18 6 6 18"/>',
   chevR: '<path d="M9 18l6-6-6-6"/>',
   sliders: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
@@ -3724,6 +4053,7 @@ const S = {
   sim: true,          // incluir registros manuales (simulación) en los cálculos
   vista: 'obj',       // Análisis: 'obj' (vs. objetivo) | 'acum' (acumulado)
   detalle: false,     // Análisis: línea de detalle debajo de cada barra
+  mixCli: false,      // Análisis · Cliente acumulado: barras apiladas por marca (top 5 + resto)
   agrup: 'dia',       // Inicio: ventas diarias y curva por 'dia' | 'semana'
   evol: 'total',      // Evolución mensual: 'total' | 'categoria' | 'marca'
   fxVs: 'obj',        // Brecha: vs. 'obj' (objetivo) | 'prev' (mes anterior)
@@ -3782,7 +4112,7 @@ function buildIndex() {
   const lineas = new Map();        // marca|categoria|producto|gp → datos de BASE GENERAL
   const M = d.maestros || {};
   (M.baseGeneral || []).forEach(l => lineas.set(kLinea(l), l));
-  (M.clientes || []).forEach(c => clienteInfo.set(c.cliente, { zona: c.zona, vendedor: c.vendedorNombre || c.vendedor, descCliente: c.descCliente }));
+  (M.clientes || []).forEach(c => clienteInfo.set(c.cliente, { zona: c.zona, vendedor: c.vendedorNombre || c.vendedor, vendCod: c.vendedor, descCliente: c.descCliente }));
 
   d.objetivos.forEach(o => {
     periodos.add(o.periodo);
@@ -3977,7 +4307,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.29</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.33</p></div>`;
 }
 
 /* ============================================================================
@@ -4034,7 +4364,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.29</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.33</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4104,7 +4434,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.29</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.33</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4144,7 +4474,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.29</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.33</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4241,8 +4571,9 @@ function render() {
   // Animación de carga de barras: al entrar a una solapa o cambiar mes, métrica o filtros.
   const clave = [t, S.periodo, JSON.stringify(S.rango), S.metric, JSON.stringify(S.f), S.dimA].join('|');
   if (clave !== ultimaVista) { ultimaVista = clave; animarBarras($('#scr-' + t)); }
-  store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2, moneda: S.moneda }));
+  guardarUI();
 }
+function guardarUI() { store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2, moneda: S.moneda, mixCli: S.mixCli, evMix: S.evMix, evUnir: S.evUnir })); }
 
 function renderHeader() {
   const nombre = SES.usuario.split(' ')[0];
@@ -4412,7 +4743,41 @@ function heroHTML(a, cal, e) {
     <div class="hero-stats">${stats.map(([l, v]) => `<div><span>${l}</span><b>${v}</b></div>`).join('')}</div>
     <div class="hero-foot">${foot}</div>
     ${a.mN && m !== 'precio' ? `<div class="hero-foot" style="margin-top:6px"><span class="mk" style="background:#F2C27A"></span>Incluye simulación: +${m === 'fact' ? fmtMoney(a.mF) : fmtUc(a.mU)} (${a.mN} registro${a.mN > 1 ? 's' : ''} manual${a.mN > 1 ? 'es' : ''})</div>` : ''}
+    ${heroDesglose(cal)}
   </div>`;
+}
+/* ---------- Desglose del cuadrante central por Categoría ▶ Calidad (v0.30) ----------
+   Botón ▼ abajo a la derecha: estira la tarjeta y muestra barras del % logrado (Facturación / Cantidad)
+   o del desvío vs. precio objetivo (Precio) por categoría; tocar una categoría abre sus calidades.
+   Arranca siempre cerrado (no se recuerda). */
+let HERO_ABIERTO = false, HERO_CAT = null;
+function heroDesglose(cal) {
+  const m = S.metric, cats = [...aggPorDim(SEL, 'categoria', S.f).entries()].filter(([k]) => k);
+  if (!cats.length) return '';
+  const btn = `<button class="hero-exp" data-act="heroExp" aria-expanded="${HERO_ABIERTO}" aria-label="${HERO_ABIERTO ? 'Minimizar' : 'Ver por categoría'}">${HERO_ABIERTO ? '▲' : '▼'}</button>`;
+  if (!HERO_ABIERTO) return `<div class="hero-exp-row">${btn}</div>`;
+  const conCal = (IDX.valores.calidad || []).length > 0;
+  const barra = (k, a, nombre, nivel, tog) => {
+    const e = evalua(a, cal, m), r = e.ratio;
+    let fill, val;
+    if (m === 'precio') {
+      const d = r == null ? 0 : r - 1, w = Math.min(50, Math.abs(d) / 0.1 * 50);
+      fill = `<i class="hd-p ${d >= 0 ? 'pos' : 'neg'}" style="${d >= 0 ? 'left:50%' : `left:${(50 - w).toFixed(1)}%`};width:${w.toFixed(1)}%"></i><i class="hd-mid"></i>`;
+      val = r == null ? '—' : fmtDelta(d);
+    } else {
+      fill = `<i class="hd-f" style="width:${Math.min(100, (r || 0) * 100).toFixed(1)}%"></i>`;
+      val = r == null ? '—' : fmtPct(r, 0);
+    }
+    return `<button class="hd-row nv${nivel}"${tog ? ` data-act="heroCat" data-hcat="${esc(k)}" aria-expanded="${HERO_CAT === k}"` : ''}>
+      <span class="hd-n">${tog ? `<span class="hd-t">${HERO_CAT === k ? '▾' : '▸'}</span>` : ''}${esc(nombre)}</span><span class="hd-b">${fill}</span><b class="hd-v">${val}</b></button>`;
+  };
+  const filas = cats.sort((x, y) => valorDe(y[1], m === 'precio' ? 'fact' : m) - valorDe(x[1], m === 'precio' ? 'fact' : m)).map(([k, a]) => {
+    let h = barra(k, a, nomCat(k), 0, conCal);
+    if (conCal && HERO_CAT === k) h += [...aggPorDim(SEL, 'calidad', { ...S.f, categoria: k }).entries()].sort((x, y) => String(x[0]).localeCompare(String(y[0]))).map(([q, aq]) => barra(q, aq, q || 'Sin calidad', 1, false)).join('');
+    return h;
+  }).join('');
+  return `<div class="hero-desg"><div class="hd-head"><span>${m === 'precio' ? 'Desvío vs. precio objetivo por categoría' : '% logrado por categoría'}${conCal ? ' · tocá una para ver sus calidades' : ''}</span></div>${filas}
+    ${m === 'precio' ? '<div class="hd-esc"><span></span><span class="hd-esc-m"><i>−10%</i><i>objetivo</i><i>+10%</i></span><span></span></div>' : ''}</div><div class="hero-exp-row">${btn}</div>`;
 }
 
 function kpiHTML(icon, v, l, d, act) {
@@ -4628,12 +4993,13 @@ function renderAnalisis() {
       <button class="link-btn" id="btnOrden">${ico('sliders', 'sm')} ${ORDENES[S.orden]}</button></div>
     <div class="vista-bar"><div class="seg mini" id="vistaSeg" role="group" aria-label="Vista"><button data-vista="obj" aria-pressed="${!esAcum()}">Vs. objetivo</button><button data-vista="acum" aria-pressed="${esAcum()}">${S.metric === 'precio' ? 'Vs. promedio' : 'Acumulado'}</button></div>
       <div class="vista-der">
+      ${cliAcum() ? `<button class="link-btn" data-act="mixCli" aria-pressed="${S.mixCli}">${ico('mix', 'sm')} Mix</button>` : ''}
       <button class="link-btn" data-act="detalle" aria-pressed="${S.detalle}">${ico('list', 'sm')} Detalle</button>
       ${S.metric === 'precio' && esAcum() && S.dimA === 'categoria' ? `<button class="link-btn" data-act="verApertura" aria-pressed="${!!S.verApertura}">${ico('sliders', 'sm')} Apertura${aperturaPersonalizada() ? ' · personalizada' : ''}</button>` : ''}</div></div>
-    ${vsPrevActivo(S.dimA) ? `<div class="pace-note" style="margin-bottom:10px"><i></i>Marca negra = ${esRango() ? `total de ${esc(lblPrevCompleto())} completo` : `promedio mensual de los 3 meses cerrados previos (${esc(lblPrevCompleto().replace('prom. ', ''))})`} (piso a superar) · debajo, la variación en % y absoluta</div>` : ''}
+    ${cliAcum() ? leyendaCliAcum() : vsPrevActivo(S.dimA) ? `<div class="pace-note" style="margin-bottom:10px"><i></i>Marca negra = ${esRango() ? `total de ${esc(lblPrevCompleto())} completo` : `promedio mensual de los 3 meses cerrados previos (${esc(lblPrevCompleto().replace('prom. ', ''))})`} (piso a superar) · debajo, la variación en % y absoluta</div>` : ''}
     ${S.metric === 'precio' && esAcum() ? (S.dimA === 'categoria' ? precioArbol() : precioPromedioLista(S.dimA)) : S.metric === 'precio' && !esAcum() ? `<div class="pace-note" style="margin-bottom:10px"><i></i>Centro = precio objetivo · escala ±6%</div>
     <ul class="rows">${rows.map(r => rowHTML(S.dimA, r, cal)).join('') || '<li class="card-s">Sin datos para este filtro.</li>'}</ul>`
-    : `${S.dimA === 'categoria' ? marimekkoHTML(S.f) : leyendaMarcas(S.dimA)}<ul class="alist">${(S.dimA === 'sku' ? arbolProducto(cal) : listaBarras(S.dimA, rows, cal, S.f)) || '<li class="card-s">Sin datos para este filtro.</li>'}</ul>`}`;
+    : `${S.dimA === 'categoria' ? marimekkoHTML(S.f) : cliAcum() ? (S.mixCli ? leyendaMix(S.f) : '') : leyendaMarcas(S.dimA)}<ul class="alist${cliAcum() ? ' cli-acum' + (S.detalle ? ' det' : '') : ''}">${(S.dimA === 'sku' ? arbolProducto(cal) : listaBarras(S.dimA, rows, cal, S.f)) || '<li class="card-s">Sin datos para este filtro.</li>'}</ul>`}`;
 }
 
 /* ============================================================================
@@ -4711,7 +5077,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.29 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.33 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5244,9 +5610,12 @@ document.addEventListener('click', ev => {
     case 'verAperturaUB': S.verAperturaUB = !S.verAperturaUB; renderUB(); break;
     case 'ubreset': S.aperturaUB = null; S.ubUnir = null; UB_EST.clear(); render(); break;
     case 'moneda': S.moneda = S.moneda === 'USD' ? 'ARS' : 'USD'; { const y = window.scrollY; render(); window.scrollTo({ top: y }); } toast(S.moneda === 'USD' ? `Valores en dólares · TC ${NF0.format(tcUsd())}` : 'Valores en pesos'); break;
+    case 'heroExp': HERO_ABIERTO = !HERO_ABIERTO; if (!HERO_ABIERTO) HERO_CAT = null; renderInicio(); break;
+    case 'heroCat': HERO_CAT = HERO_CAT === t.dataset.hcat ? null : t.dataset.hcat; renderInicio(); break;
     case 'verApertura': S.verApertura = !S.verApertura; renderAnalisis(); break;
     case 'sigMetrica': { const ms = ['fact', 'unid', 'precio']; S.metric = ms[(ms.indexOf(S.metric) + 1) % 3]; const y = window.scrollY; render(); window.scrollTo({ top: y }); const m = $('#hdrMet'); m.classList.remove('pop'); void m.offsetWidth; m.classList.add('pop'); break; }
-    case 'detalle': S.detalle = !S.detalle; renderAnalisis(); if (!$('#sheetWrap').hidden && detState) sheetDetalle(detState.dim, detState.key, detState.sub2); store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura })); break;
+    case 'detalle': S.detalle = !S.detalle; renderAnalisis(); if (!$('#sheetWrap').hidden && detState) sheetDetalle(detState.dim, detState.key, detState.sub2); guardarUI(); break;
+    case 'mixCli': S.mixCli = !S.mixCli; renderAnalisis(); animarBarras($('#scr-analisis')); guardarUI(); break;
     case 'sim': S.sim = !S.sim; S.selDia = null; render(); toast(S.sim ? 'Simulación visible en los gráficos' : 'Simulación oculta: solo ventas reales'); break;
     case 'perSel': sheetPeriodo(); break;
     case 'perPrev': cambiarPeriodo(-1); break;
@@ -5314,7 +5683,7 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
 })();
 
 (function init() {
-  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (ui.moneda === 'USD') S.moneda = 'USD'; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
+  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (ui.moneda === 'USD') S.moneda = 'USD'; if (typeof ui.mixCli === 'boolean') S.mixCli = ui.mixCli; if (Array.isArray(ui.evMix)) S.evMix = ui.evMix; if (Array.isArray(ui.evUnir)) S.evUnir = ui.evUnir; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
   let d = null, origen = 'Demo';
   try {
     const raw = store.get(KEY_DATA);
