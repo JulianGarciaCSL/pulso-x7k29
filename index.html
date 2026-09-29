@@ -1663,6 +1663,10 @@ button.kpi:active{transform:scale(.98)}
 .ub-t{font-size:11.2px}.ub-t thead th{font-size:9.5px}
 .ub-t tbody,.ub-t tfoot{font-size:10.1px}
 .ub-t tbody,.ub-t tfoot{font-size:var(--ub-fs,10.1px)}.ub-t thead th{font-size:var(--ub-hs,9.5px)}
+/* ---------- Moneda AR / US (v0.29) ---------- */
+.hdr .mon-btn{font-weight:800;font-size:14px;letter-spacing:.04em;line-height:1}
+.hdr .mon-btn.usd{background:#fff;color:#2D3034;border-color:#fff}
+.hdr.compacto .mon-btn{transform:scale(.84)}
 
 </style>
 
@@ -1735,6 +1739,7 @@ button.kpi:active{transform:scale(.98)}
       </div>
     </div>
     <div class="hdr-acts">
+      <button class="icon-btn mon-btn" id="btnMoneda" data-act="moneda" hidden>AR</button>
       <button class="icon-btn" id="btnActualizar" data-act="cargar" aria-label="Actualizar datos">
         <svg viewBox="0 0 24 24" class="ico"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>
       </button>
@@ -2743,7 +2748,7 @@ function renderBurn(a, cal) {
   const Y = v => T + (1 - (v - lo) / (hi - lo)) * H;
   let s = `<svg viewBox="0 0 ${W} ${H + T + B}" height="${H + T + B}" role="img" aria-label="${esc(titulo)}">`;
   if (!sem) dias.forEach((d, i) => { if (!habil.has(d)) s += `<rect x="${(L + i / D * pw).toFixed(1)}" y="${T}" width="${(pw / D).toFixed(1)}" height="${H}" class="c-offband"/>`; });
-  niceTicks(lo, hi, 3).forEach(tv => { const yy = Y(tv); if (yy < T - 1 || yy > T + H + 1) return; s += `<line x1="${L}" x2="${W - R}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}" class="c-grid"/><text x="${L - 6}" y="${(yy + 3.5).toFixed(1)}" text-anchor="end" class="c-axis">${esc(axisFmt(tv, m))}</text>`; });
+  niceTicks(lo, hi, 3, S.metric).forEach(tv => { const yy = Y(tv); if (yy < T - 1 || yy > T + H + 1) return; s += `<line x1="${L}" x2="${W - R}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}" class="c-grid"/><text x="${L - 6}" y="${(yy + 3.5).toFixed(1)}" text-anchor="end" class="c-axis">${esc(axisFmt(tv, m))}</text>`; });
   const linea = (arr, key0) => {
     let d = ''; const pts = cortes.filter(c => c <= arr.length).map(c => [c, val(arr[c - 1])]).filter(p => p[1] != null);
     if (!esPrecio && key0) d = `M${X(0.5).toFixed(1)},${Y(0).toFixed(1)}`;
@@ -3417,7 +3422,7 @@ function renderBurnRango(a, cal) {
   // separadores de mes
   let acc = 0;
   pers.forEach((p, j) => { const c = calendario(p); if (j) s += `<line x1="${X(acc).toFixed(1)}" x2="${X(acc).toFixed(1)}" y1="${T}" y2="${T + H}" class="c-grid" stroke-dasharray="2 3"/>`; s += `<text x="${X(acc + c.total / 2).toFixed(1)}" y="${H + T + 16}" text-anchor="middle" class="c-axis">${esc(perLabel(p).corto)}</text>`; acc += c.total; });
-  niceTicks(lo, hi, 3).forEach(tv => { const yy = Y(tv); if (yy < T - 1 || yy > T + H + 1) return; s += `<line x1="${L}" x2="${W - R}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}" class="c-grid"/><text x="${L - 6}" y="${(yy + 3.5).toFixed(1)}" text-anchor="end" class="c-axis">${esc(axisFmt(tv, m))}</text>`; });
+  niceTicks(lo, hi, 3, S.metric).forEach(tv => { const yy = Y(tv); if (yy < T - 1 || yy > T + H + 1) return; s += `<line x1="${L}" x2="${W - R}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}" class="c-grid"/><text x="${L - 6}" y="${(yy + 3.5).toFixed(1)}" text-anchor="end" class="c-axis">${esc(axisFmt(tv, m))}</text>`; });
   const linea = (arr, n) => arr.slice(0, n).map((x, i) => `${i ? 'L' : (esPrecio ? 'M' : `M${X(0).toFixed(1)},${Y(0).toFixed(1)}L`)}${X(i + 1).toFixed(1)},${Y(val(x)).toFixed(1)}`).join('');
   if (prevA.length) s += `<path d="${linea(prevA, N)}" class="c-prev p1"/>`;
   if (!esPrecio) {
@@ -3533,12 +3538,12 @@ function renderUB() {
     const c = {
       cant: `<td class="n">${NF1.format(x.U / 1000)}</td>`,
       lista: `<td class="n">${pl == null ? '—' : esc(fmtMoneyFull(pl))}</td>`,
-      neto: `<td class="n">${pn == null ? '—' : NF0.format(pn)}</td>`,
-      cost: `<td class="n">${x.U ? NF0.format(x.C / x.U) : '—'}</td>`,
+      neto: `<td class="n">${pn == null ? '—' : fmtUnit(pn)}</td>`,
+      cost: `<td class="n">${x.U ? fmtUnit(x.C / x.U) : '—'}</td>`,
       dt: `<td class="n">${desc == null ? '—' : fmtPct(desc, 0)}</td>`,
       ubu: `<td class="n">${ubU == null ? '—' : esc(fmtMoneyFull(ubU))}</td>`,
       ubp: `<td class="n"><span class="ub-p ${ubP == null ? '' : ubP < 0 ? 'neg' : ubP < (raiz.F ? ubT / raiz.F : 0) * 0.85 ? 'warn' : 'pos'}">${ubP == null ? '—' : fmtPct(ubP, 1)}</span></td>`,
-      ubt: `<td class="n"><b class="${ub < 0 ? 'neg' : ''}">${NF0.format(ub / 1e6)}</b></td>`,
+      ubt: `<td class="n"><b class="${ub < 0 ? 'neg' : ''}">${enUSD() ? NF0.format(cvM(ub) / 1e3) : NF0.format(ub / 1e6)}</b></td>`,
       part: `<td class="n"><span class="ub-part"><i style="width:${Math.max(0, Math.min(100, (part || 0) * 100)).toFixed(1)}%"></i></span>${part == null ? '—' : fmtPct(part, 0)}</td>`,
     };
     return cols.map(k => c[k]).join('');
@@ -3569,10 +3574,10 @@ function renderUB() {
     ${S.verMetricasUB ? `<div class="ub-met"><span class="ap-t">Métricas</span><div class="ub-met-l">${UB_COLS.map(([k, l]) => `<button class="ub-mc" data-ubcol="${k}" aria-pressed="${cols.includes(k)}">${l}</button>`).join('')}</div>${cols.join() === UB_COLS_DEF.join() ? '' : '<button class="link-btn ap-reset" data-act="ubcolsreset">Restablecer</button>'}</div>` : ''}
     ${S.verAperturaUB ? selectorAperturaUB() : ''}
     <div class="card ub-card">${raiz.U ? `<div class="ub-scroll"><table class="ub-t" style="${tipoUB(cols.length)}"><colgroup><col class="c-n">${cols.map(() => `<col style="width:${(99 / cols.length).toFixed(2)}%">`).join('')}</colgroup>
-      <thead><tr><th class="ub-n">${esc(grupos[0].map(d => UB_DIMS[d]).join(' · '))}</th>${cols.map(k => `<th class="n">${UB_COLS.find(c => c[0] === k)[1]}</th>`).join('')}</tr></thead>
+      <thead><tr><th class="ub-n">${esc(grupos[0].map(d => UB_DIMS[d]).join(' · '))}</th>${cols.map(k => `<th class="n">${k === 'ubt' && enUSD() ? 'UB total k' : UB_COLS.find(c => c[0] === k)[1]}</th>`).join('')}</tr></thead>
       <tbody>${filas.join('')}</tbody>
       <tfoot><tr class="ub-r tot"><th class="ub-n">Total</th>${celdas(raiz)}</tr></tfoot></table></div>` : '<p class="card-s">No hay ventas con costo cargado para este filtro.</p>'}</div>
-    <p class="map-nota" style="margin-top:10px">P. lista: precio de lista del objetivo del mes (o de BASE GENERAL). P. neto: precio facturado promedio. DT%: descuento total de lista a neto. Cant. k: cantidad en miles. P. neto y Cost. (costo unitario) en $. UB total en millones de $ = (precio neto − costo unitario) × cantidad. Part.: participación en la UB total. UB % en ámbar cuando queda por debajo del 85% del promedio.</p>`;
+    <p class="map-nota" style="margin-top:10px">P. lista: precio de lista del objetivo del mes (o de BASE GENERAL). P. neto: precio facturado promedio. DT%: descuento total de lista a neto. Cant. k: cantidad en miles. ${enUSD() ? `Valores en dólares (TC ${NF0.format(tcUsd())}): P. neto y Cost. en US$, UB total en miles de US$` : 'P. neto y Cost. (costo unitario) en $. UB total en millones de $'} = (precio neto − costo unitario) × cantidad. Part.: participación en la UB total. UB % en ámbar cuando queda por debajo del 85% del promedio.</p>`;
 }
 document.addEventListener('click', ev => {
   const tr = ev.target.closest && ev.target.closest('tr[data-ubt]');
@@ -3603,13 +3608,20 @@ const NF0 = nf(0), NF1 = nf(1), NF2 = nf(2);
 const neg = v => (v < 0 ? '−' : '');
 
 const fmtInt = v => neg(v) + NF0.format(Math.abs(Math.round(v || 0)));
-const fmtMoneyFull = v => neg(v) + '$ ' + NF0.format(Math.abs(Math.round(v || 0)));
+/* Moneda de visualización (v0.29): pesos o dólares al tipo de cambio de CONFIG (solo aprobadores). */
+const tcUsd = () => +((typeof DATA !== 'undefined' && DATA && DATA.meta && DATA.meta.tcUsd) || 0);
+const enUSD = () => S.moneda === 'USD' && tcUsd() > 0 && typeof SES !== 'undefined' && SES && SES.rol === 'aprobador';
+const cvM = v => enUSD() ? (v || 0) / tcUsd() : (v || 0);
+const SIMB = () => enUSD() ? 'US$ ' : '$ ';
+/** Número de un precio/costo unitario sin símbolo (tablas): en dólares con 1 decimal. */
+const fmtUnit = v => { const x = cvM(v); return enUSD() && Math.abs(x) < 1000 ? NF1.format(x) : NF0.format(Math.round(x)); };
+const fmtMoneyFull = v => { const x = cvM(v), a = Math.abs(x); return neg(x) + SIMB() + (enUSD() && a < 1000 ? NF1.format(a) : NF0.format(Math.round(a))); };
 function fmtMoney(v) {
-  const a = Math.abs(v || 0), s = neg(v);
-  if (a >= 1e9) return s + '$ ' + NF2.format(a / 1e9) + ' mil M';
-  if (a >= 1e6) return s + '$ ' + NF1.format(a / 1e6) + ' M';
-  if (a >= 1e4) return s + '$ ' + NF0.format(a / 1e3) + ' k';
-  return s + '$ ' + NF0.format(a);
+  const x = cvM(v), a = Math.abs(x), s = neg(x), $ = SIMB();
+  if (a >= 1e9) return s + $ + NF2.format(a / 1e9) + ' mil M';
+  if (a >= 1e6) return s + $ + NF1.format(a / 1e6) + ' M';
+  if (a >= 1e4) return s + $ + NF0.format(a / 1e3) + ' k';
+  return s + $ + (enUSD() && a < 1000 ? NF1.format(a) : NF0.format(a));
 }
 const fmtU = v => fmtInt(v);
 function fmtUc(v) {
@@ -3965,7 +3977,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.28</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.29</p></div>`;
 }
 
 /* ============================================================================
@@ -4022,7 +4034,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.28</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.29</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4092,7 +4104,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.28</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.29</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4132,7 +4144,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.28</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.29</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4229,7 +4241,7 @@ function render() {
   // Animación de carga de barras: al entrar a una solapa o cambiar mes, métrica o filtros.
   const clave = [t, S.periodo, JSON.stringify(S.rango), S.metric, JSON.stringify(S.f), S.dimA].join('|');
   if (clave !== ultimaVista) { ultimaVista = clave; animarBarras($('#scr-' + t)); }
-  store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2 }));
+  store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2, moneda: S.moneda }));
 }
 
 function renderHeader() {
@@ -4242,6 +4254,8 @@ function renderHeader() {
   sub.textContent = dias > 2 ? 'Datos desactualizados · última venta ' + fechaDia(IDX.corte)
     : 'Datos actualizados al ' + fechaDia(IDX.corte);
   $('#meFoto').innerHTML = fotoHTML(usuarioActual());
+  const mb = $('#btnMoneda'), puede = SES.rol === 'aprobador' && tcUsd() > 0;
+  mb.hidden = !puede; if (puede) { mb.textContent = enUSD() ? 'US' : 'AR'; mb.classList.toggle('usd', enUSD()); mb.setAttribute('aria-label', enUSD() ? 'Ver en pesos' : `Ver en dólares (TC ${NF0.format(tcUsd())})`); }
 }
 
 /** Indicador blanco del selector Facturación / Cantidad / Precio: se desliza hasta la opción elegida. */
@@ -4529,7 +4543,8 @@ function roundRect(x, y, w, h, r) {
   r = Math.min(r, w / 2, h / 2);
   return `M${x + r},${y}H${x + w - r}A${r},${r} 0 0 1 ${x + w},${y + r}V${y + h - r}A${r},${r} 0 0 1 ${x + w - r},${y + h}H${x + r}A${r},${r} 0 0 1 ${x},${y + h - r}V${y + r}A${r},${r} 0 0 1 ${x + r},${y}Z`;
 }
-function niceTicks(lo, hi, n) {
+function niceTicks(lo, hi, n, m) {
+  if (m && m !== 'unid' && enUSD()) { const t = tcUsd(); return niceTicks(lo / t, hi / t, n).map(x => x * t); }
   const span = hi - lo; if (span <= 0) return [lo];
   const step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
   const step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(k => span / k <= n) || 10 * mag;
@@ -4538,9 +4553,10 @@ function niceTicks(lo, hi, n) {
 }
 function axisFmt(v, m) {
   if (m === 'unid') return !v ? '0' : Math.abs(v) >= 1000 ? NF0.format(v / 1000) + 'k' : NF0.format(v);
-  if (m === 'precio') return '$' + NF0.format(v);
-  if (!v) return '$0';
-  return Math.abs(v) >= 1e6 ? '$' + NF0.format(v / 1e6) + 'M' : '$' + NF0.format(v / 1e3) + 'k';
+  const $ = enUSD() ? 'US$' : '$', x = cvM(v);
+  if (m === 'precio') return $ + (enUSD() && Math.abs(x) < 100 ? NF1.format(x) : NF0.format(x));
+  if (!x) return $ + '0';
+  return Math.abs(x) >= 1e6 ? $ + NF0.format(x / 1e6) + 'M' : Math.abs(x) >= 1e3 ? $ + NF0.format(x / 1e3) + 'k' : $ + NF0.format(x);
 }
 
 /* ---------- Alertas: frentes más atrasados ---------- */
@@ -4695,7 +4711,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.28 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.29 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5227,6 +5243,7 @@ document.addEventListener('click', ev => {
     case 'ubcolsreset': S.ubCols = null; render(); break;
     case 'verAperturaUB': S.verAperturaUB = !S.verAperturaUB; renderUB(); break;
     case 'ubreset': S.aperturaUB = null; S.ubUnir = null; UB_EST.clear(); render(); break;
+    case 'moneda': S.moneda = S.moneda === 'USD' ? 'ARS' : 'USD'; { const y = window.scrollY; render(); window.scrollTo({ top: y }); } toast(S.moneda === 'USD' ? `Valores en dólares · TC ${NF0.format(tcUsd())}` : 'Valores en pesos'); break;
     case 'verApertura': S.verApertura = !S.verApertura; renderAnalisis(); break;
     case 'sigMetrica': { const ms = ['fact', 'unid', 'precio']; S.metric = ms[(ms.indexOf(S.metric) + 1) % 3]; const y = window.scrollY; render(); window.scrollTo({ top: y }); const m = $('#hdrMet'); m.classList.remove('pop'); void m.offsetWidth; m.classList.add('pop'); break; }
     case 'detalle': S.detalle = !S.detalle; renderAnalisis(); if (!$('#sheetWrap').hidden && detState) sheetDetalle(detState.dim, detState.key, detState.sub2); store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura })); break;
@@ -5297,7 +5314,7 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
 })();
 
 (function init() {
-  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
+  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (ui.moneda === 'USD') S.moneda = 'USD'; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
   let d = null, origen = 'Demo';
   try {
     const raw = store.get(KEY_DATA);
