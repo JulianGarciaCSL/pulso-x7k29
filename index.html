@@ -1793,6 +1793,8 @@ button.kpi:active{transform:scale(.98)}
 .ev-sn i{width:9px;height:9px;border-radius:3px;flex:none}
 .ev-sub-b b{font-weight:800;font-variant-numeric:tabular-nums}
 .ev-pc{text-align:right;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.hdr-s{font-size:11.5px;letter-spacing:-.1px}
+.hdr-s.largo{font-size:10.5px}.hdr-s.viejo::before{margin-right:4px}
 
 </style>
 
@@ -4307,7 +4309,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.34</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.35</p></div>`;
 }
 
 /* ============================================================================
@@ -4364,7 +4366,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.34</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.35</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4418,7 +4420,7 @@ async function sincronizar(manual) {
     res.data.meta._cargado = new Date().toISOString();
     NECESITA_CONEXION = false;
     aplicarDatos(res.data, 'GitHub');
-    if (controlLocal()) toast('Datos actualizados al ' + fechaDia(IDX.corte));
+    if (controlLocal()) toast(lineaInfo());
   } catch (e) {
     if (manual || NECESITA_CONEXION) toast(/fetch|network|HTTP|Load failed/i.test(e.message) ? 'Sin conexión: se muestran los últimos datos descargados' : 'No se pudo actualizar: ' + e.message);
   } finally { SINC = false; if (bt) bt.classList.remove('girando'); }
@@ -4434,7 +4436,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.34</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.35</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4474,7 +4476,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.34</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.35</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4575,6 +4577,18 @@ function render() {
 }
 function guardarUI() { store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2, moneda: S.moneda, mixCli: S.mixCli, evMix: S.evMix, evUnir: S.evUnir })); }
 
+/** v0.35 · "Info al 30/09/26 15:05 | act. 15:07": hasta cuándo llega la información (hora en que se extrajo
+    de Power BI / se guardó el Excel) y cuándo se publicó. Si la publicación es de otro día, muestra también la fecha. */
+function lineaInfo() {
+  const m = (DATA && DATA.meta) || {};
+  const f2 = d => pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + (d.getFullYear() !== new Date().getFullYear() ? '/' + String(d.getFullYear()).slice(2) : ''), hm = d => pad(d.getHours()) + ':' + pad(d.getMinutes());
+  const inf = m.infoAl ? new Date(m.infoAl) : null, okI = inf && !isNaN(inf);
+  const c = IDX.corte || '';
+  const info = okI ? f2(inf) + ' ' + hm(inf) : c ? f2(new Date(+c.slice(0, 4), +c.slice(5, 7) - 1, +c.slice(8, 10))) : '—';
+  const act = m.generado ? new Date(m.generado) : m._cargado ? new Date(m._cargado) : null;
+  const a = act && !isNaN(act) ? (okI && f2(inf) === f2(act) ? hm(act) : f2(act) + ' ' + hm(act)) : '';
+  return 'Info al ' + info + (a ? ' | act. ' + a : '');
+}
 function renderHeader() {
   const nombre = SES.usuario.split(' ')[0];
   $('#hdrT').textContent = 'Hola, ' + nombre;
@@ -4582,8 +4596,8 @@ function renderHeader() {
   const dias = Math.round((parseISO(hoyISO()) - parseISO(IDX.corte)) / 864e5);
   const sub = $('#hdrSub');
   sub.classList.toggle('viejo', dias > 2);
-  sub.textContent = dias > 2 ? 'Datos desactualizados · última venta ' + fechaDia(IDX.corte)
-    : 'Datos actualizados al ' + fechaDia(IDX.corte);
+  sub.textContent = lineaInfo(); sub.classList.toggle('largo', sub.textContent.length > 34);
+  sub.title = dias > 2 ? 'Datos desactualizados · última venta ' + fechaDia(IDX.corte) : '';
   $('#meFoto').innerHTML = fotoHTML(usuarioActual());
   const mb = $('#btnMoneda'), puede = SES.rol === 'aprobador' && tcUsd() > 0;
   mb.hidden = !puede; if (puede) { mb.textContent = enUSD() ? 'US' : 'AR'; mb.classList.toggle('usd', enUSD()); mb.setAttribute('aria-label', enUSD() ? 'Ver en pesos' : `Ver en dólares (TC ${NF0.format(tcUsd())})`); }
@@ -5077,7 +5091,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.34 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.35 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5650,7 +5664,7 @@ $('#fileInput').addEventListener('change', ev => {
         res.data.meta._cargado = new Date().toISOString();
         SIN_DATOS = false; ARCH_ERR = '';
         aplicarDatos(res.data, 'OneDrive');
-        toast('Datos actualizados al ' + fechaDia(IDX.corte));
+        toast(lineaInfo());
         return;
       }
       // Archivos sin cifrar: solo el aprobador (revisión o pruebas). En la versión web pública, nunca.
