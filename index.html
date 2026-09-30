@@ -4307,7 +4307,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.33</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.34</p></div>`;
 }
 
 /* ============================================================================
@@ -4364,7 +4364,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.33</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.34</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4434,7 +4434,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.33</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.34</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4474,7 +4474,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.33</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.34</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -5077,7 +5077,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.33 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.34 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5728,20 +5728,26 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
 /* PWA: modo sin conexión, aviso de actualización y ayuda para instalar en iPhone */
 (function () {
   if (window.Capacitor || !('serviceWorker' in navigator) || (location.protocol !== 'https:' && location.hostname !== 'localhost')) return;
-  navigator.serviceWorker.register('sw.js').then(function (reg) {
+  // v0.33b: la versión nueva se instala sola (el service worker nuevo toma el control apenas se descarga)
+  // y la app pide recargar. Se busca actualización al abrir, al volver a la app y cada hora.
+  var yaControlada = !!navigator.serviceWorker.controller, recargando = false, aviso = false;
+  function avisar() {
+    if (aviso) return; aviso = true;
+    var b = document.createElement('button'); b.className = 'pwa-upd'; b.textContent = 'Hay una versión nueva · tocá para actualizar';
+    b.onclick = function () { recargando = true; location.reload(); }; document.body.appendChild(b);
+  }
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
+    if (reg.waiting && yaControlada) reg.waiting.postMessage('activar');       // quedó una esperando de antes
     reg.addEventListener('updatefound', function () {
       var w = reg.installing; if (!w) return;
-      w.addEventListener('statechange', function () {
-        if (w.state === 'installed' && navigator.serviceWorker.controller) {
-          var b = document.createElement('button'); b.className = 'pwa-upd'; b.textContent = 'Hay una versión nueva · tocá para actualizar';
-          b.onclick = function () { w.postMessage('activar'); }; document.body.appendChild(b);
-        }
-      });
+      w.addEventListener('statechange', function () { if (w.state === 'installed' && navigator.serviceWorker.controller) w.postMessage('activar'); });
     });
-    setInterval(function () { reg.update(); }, 60 * 60 * 1000);
+    var ult = 0, buscar = function () { if (Date.now() - ult > 60000) { ult = Date.now(); reg.update().catch(function () {}); } };
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') buscar(); });
+    window.addEventListener('focus', buscar);
+    setInterval(buscar, 60 * 60 * 1000);
   }).catch(function () {});
-  var recargando = false;
-  navigator.serviceWorker.addEventListener('controllerchange', function () { if (!recargando) { recargando = true; location.reload(); } });
+  navigator.serviceWorker.addEventListener('controllerchange', function () { if (yaControlada && !recargando) avisar(); yaControlada = true; });
   // iPhone / iPad en Safari, sin instalar: cómo agregarla a la pantalla de inicio (se muestra hasta que la cierran)
   var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   var instalada = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
