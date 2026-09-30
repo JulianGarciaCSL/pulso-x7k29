@@ -1796,6 +1796,34 @@ button.kpi:active{transform:scale(.98)}
 .hdr-s{font-size:11.5px;letter-spacing:-.1px}
 .hdr-s.largo{font-size:10.5px}.hdr-s.viejo::before{margin-right:4px}
 
+/* ---------- v0.36 ---------- */
+/* Inicio · desglose por categoría: vendido / objetivo */
+.hd-row{grid-template-columns:27% 1fr 128px}
+.hd-row.nv1{grid-template-columns:27% 1fr 128px}
+.hd-v{display:flex;align-items:baseline;justify-content:flex-end;gap:6px;min-width:52px;white-space:nowrap}
+.hd-vo{font-size:11px;font-weight:600;color:rgba(255,255,255,.62);font-variant-numeric:tabular-nums}
+/* Evolución mensual: deslizable, objetivo verde, comparación */
+.chart.scroll-x{touch-action:pan-x pan-y;cursor:grab;-webkit-overflow-scrolling:touch}
+.chart.scroll-x.arrastrando{cursor:grabbing;user-select:none}
+.c-tick-g{stroke:var(--good)}
+.sw-line.g{border-top-color:var(--good)}
+.c-lbl-s{font-size:9.5px}
+.c-sel{stroke:var(--ink);stroke-width:2}
+.c-cmp{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 3}
+.c-cmp-p{fill:var(--ink)}
+.c-cmp-bx{fill:var(--ink)}.c-cmp-bx.pos{fill:var(--good-ink)}.c-cmp-bx.neg{fill:var(--bad-ink)}
+.c-cmp-t{fill:#fff;font-size:11px;font-weight:800}
+.tr-cmp{margin-left:8px}
+.tr-cmp-res{font-size:12px;color:var(--ink-2);font-weight:600;margin:4px 2px 2px;min-height:16px}
+.tr-cmp-res .pos{color:var(--good-ink)}.tr-cmp-res .neg{color:var(--bad-ink)}
+/* Equipo: proyección en gris claro, sin color */
+.eq-proy{color:var(--muted);opacity:.75;font-weight:600}
+.hd-row,.hd-row.nv1{grid-template-columns:31% 1fr 118px;gap:8px}
+.hd-v{display:grid;grid-template-columns:36px 1fr;gap:5px;align-items:baseline;justify-content:stretch}
+.hd-v b{text-align:right}.hd-vo{text-align:left;overflow:hidden;text-overflow:ellipsis}
+.hd-precio .hd-row,.hd-precio .hd-row.nv1{grid-template-columns:25% 1fr 146px}.hd-precio .hd-v{grid-template-columns:44px 1fr}.hd-precio .hd-esc{grid-template-columns:25% 1fr 146px}
+.hd-precio .hd-row,.hd-precio .hd-row.nv1,.hd-precio .hd-esc{grid-template-columns:29% 1fr 132px;gap:8px}.hd-precio .hd-v{grid-template-columns:42px 1fr;gap:4px}.hd-precio .hd-vo{font-size:10.5px}.hd-esc{gap:8px;grid-template-columns:31% 1fr 118px}
+
 </style>
 
 <div class="intro" id="intro" role="dialog" aria-label="Bienvenida">
@@ -1907,7 +1935,7 @@ button.kpi:active{transform:scale(.98)}
       <button class="tab" data-tab="inicio" aria-current="page"><svg viewBox="0 0 24 24" class="ico"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
       <button class="tab" data-tab="analisis"><svg viewBox="0 0 24 24" class="ico"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>Análisis</button>
       <button class="tab" data-tab="equipo"><svg viewBox="0 0 24 24" class="ico"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20v-1a5 5 0 0 0-3.5-4.8"/></svg>Equipo</button>
-      <button class="tab" data-tab="mapa"><svg viewBox="0 0 24 24" class="ico"><path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z M9 4v13.5M15 6.5V20"/></svg>Mapa</button>
+      <button class="tab" data-tab="mapa"><svg viewBox="0 0 24 24" class="ico"><path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z M9 4v13.5M15 6.5V20"/></svg>Zonas</button>
       <button class="tab" data-tab="ub" hidden><svg viewBox="0 0 24 24" class="ico"><rect x="2.5" y="7" width="15" height="9" rx="1.5"/><circle cx="10" cy="11.5" r="2"/><path d="M6.5 19h13a1.5 1.5 0 0 0 1.5-1.5V10"/></svg>UB</button>
       <button class="tab" data-tab="datos"><svg viewBox="0 0 24 24" class="ico"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Datos</button>
     </nav>
@@ -2232,7 +2260,7 @@ function renderMapa() {
   const g = geoDatos();
   if (!g.zonas.length && !g.cds.length && !g.suc.length) {
     if (MAPA) { MAPA.map.remove(); MAPA = null; }
-    el.innerHTML = `<h1 class="section-t">Mapa</h1><p class="section-s">Zonas y clientes sobre el mapa</p>
+    el.innerHTML = `<h1 class="section-t">Zonas</h1><p class="section-s">Zonas y clientes sobre el mapa</p>
       <div class="card empty-map">${ico('pin')}<b>El archivo cargado no trae datos de mapa</b>
       <span>Agregá las solapas ZONAS MAPA, SUCURSALES y CENTROS DISTRIBUCION al Excel base y generá el JSON con el conversor.</span></div>`;
     return;
@@ -2249,7 +2277,7 @@ function renderMapa() {
 
 function crearMapa(el) {
   if (MAPA) { MAPA.map.remove(); MAPA = null; }
-  el.innerHTML = `<div class="map-head"><div><h1 class="section-t">Mapa</h1><p class="section-s" id="mapSub"></p></div>
+  el.innerHTML = `<div class="map-head"><div><h1 class="section-t">Zonas</h1><p class="section-s" id="mapSub"></p></div>
       ${esVend() ? '' : `<div class="seg mini" id="mapColor" role="group" aria-label="Color de zonas"><button data-mcol="estado">Estado</button><button data-mcol="vendedor">Vendedor</button></div>`}</div>
     <div class="map-card">
       <div id="mapBox" class="map-box" aria-label="Mapa de zonas y clientes"></div>
@@ -3122,7 +3150,10 @@ function renderBurn(a, cal) {
   hit.addEventListener('pointermove', show); hit.addEventListener('pointerdown', show); hit.addEventListener('pointerleave', hide);
 }
 
-/* ---------- Evolución mensual: Total / Categoría / Marca ---------- */
+/* ---------- Evolución mensual: Total / Categoría / Marca ----------
+   v0.36: con Categoría o Marca las barras se agrupan primero por grupo y dentro, por mes (Ene, Feb… de Cer; Ene, Feb… de Por).
+   Se desliza arrastrando (dedo o mouse). Botón "Comparar": se tocan 2 columnas y se muestra la diferencia % y absoluta. */
+const TREND = { cmp: false, sel: [], scroll: null };
 function renderTrend() {
   const box = $('#cTrend'), m = S.metric, modo = S.evol;
   const pers = IDX.periodos.slice();                     // todos los meses del archivo
@@ -3138,49 +3169,93 @@ function renderTrend() {
     });
     return { p, cal, gs };
   });
-  let h = `<div class="card-h"><div><div class="card-t">Evolución mensual</div><div class="card-s">${rows.length} meses del archivo · tocá un mes para verlo${rows.length > 7 ? ' · deslizá para ver más' : ''}</div></div>
-    <button class="link-btn" data-tabla="trend" aria-pressed="${S.tablas.trend}">${S.tablas.trend ? 'Gráfico' : 'Tabla'}</button></div>
-    <div class="card-tools">${segMini('evol', modo, [['total', 'Total'], ['categoria', 'Categoría'], ['marca', 'Marca']])}</div>`;
+  if (TREND.modo !== modo + '|' + m) { TREND.modo = modo + '|' + m; TREND.sel = []; }
   const nomG = g => g == null ? 'Total' : dim === 'categoria' ? nomCat(g) : g;
+  // Barras en orden: por grupo y dentro por mes
+  const barras = [];
+  grupos.forEach((g, j) => rows.forEach(r => barras.push({ r, gi: j, x: r.gs[j] })));
+  const nb = barras.length;
+  const sel = TREND.sel.filter(i => i < nb);
+  let h = `<div class="card-h"><div><div class="card-t">Evolución mensual</div><div class="card-s">${rows.length} meses del archivo · ${TREND.cmp ? 'tocá 2 columnas para compararlas' : 'tocá un mes para verlo'}</div></div>
+    <button class="link-btn" data-tabla="trend" aria-pressed="${S.tablas.trend}">${S.tablas.trend ? 'Gráfico' : 'Tabla'}</button></div>
+    <div class="card-tools">${segMini('evol', modo, [['total', 'Total'], ['categoria', 'Categoría'], ['marca', 'Marca']])}${S.tablas.trend ? '' : `<button class="link-btn tr-cmp" data-trcmp aria-pressed="${TREND.cmp}">${ico('trend', 'sm')} Comparar</button>`}</div>`;
   if (S.tablas.trend) {
-    h += `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Mes</th>${dim ? '<th>' + DIMS[dim] + '</th>' : ''}<th>Real</th><th>Objetivo</th><th>%</th></tr></thead><tbody>` +
-      rows.flatMap(r => r.gs.map(g => `<tr><td>${esc(perLabel(r.p).corto)} ${perLabel(r.p).anio}</td>${dim ? `<td>${esc(nomG(g.g))}</td>` : ''}<td>${fmtMetric(g.e.real, m)}</td><td>${fmtMetric(g.e.obj, m)}</td><td>${fmtPct(g.e.ratio, 0)}</td></tr>`)).join('') + '</tbody></table></div>';
+    h += `<div class="tbl-wrap"><table class="tbl"><thead><tr>${dim ? '<th>' + DIMS[dim] + '</th>' : ''}<th>Mes</th><th>Real</th><th>Objetivo</th><th>%</th></tr></thead><tbody>` +
+      barras.map(({ r, x: g }) => `<tr>${dim ? `<td>${esc(nomG(g.g))}</td>` : ''}<td>${esc(perLabel(r.p).corto)} ${perLabel(r.p).anio}</td><td>${fmtMetric(g.e.real, m)}</td><td>${fmtMetric(g.e.obj, m)}</td><td>${fmtPct(g.e.ratio, 0)}</td></tr>`).join('') + '</tbody></table></div>';
     box.innerHTML = h; return;
   }
   const act = rows.find(r => r.p === S.periodo) || rows[rows.length - 1];
-  const ley = dim ? act.gs.map(g => `<span><i class="sw" style="background:${g.col}"></i>${esc(nomG(g.g))} ${m === 'precio' ? (g.e.ratio == null ? '' : fmtDelta(g.e.ratio - 1)) : fmtPct(g.e.ratio, 0)}</span>`).join('') + '<span><i class="sw-line"></i>Objetivo</span>'
-    : `<span><i class="sw" style="background:var(--bar)"></i>Real</span><span><i class="sw-line"></i>Objetivo</span>${rows.some(r => r.gs[0].proy != null) ? '<span><i class="sw" style="background:var(--accent);opacity:.45"></i>Proyección del mes en curso</span>' : ''}`;
-  h += `<div class="chart" id="trendChart"></div><div class="legend">${ley}</div>`;
+  const ley = dim ? act.gs.map(g => `<span><i class="sw" style="background:${g.col}"></i>${esc(nomG(g.g))} ${m === 'precio' ? (g.e.ratio == null ? '' : fmtDelta(g.e.ratio - 1)) : fmtPct(g.e.ratio, 0)}</span>`).join('') + '<span><i class="sw-line g"></i>Objetivo</span>'
+    : `<span><i class="sw" style="background:var(--bar)"></i>Real</span><span><i class="sw-line g"></i>Objetivo</span>${rows.some(r => r.gs[0].proy != null) ? '<span><i class="sw" style="background:var(--accent);opacity:.45"></i>Proyección del mes en curso</span>' : ''}`;
+  h += `<div class="chart" id="trendChart"></div><div class="tr-cmp-res" id="trCmpRes"></div><div class="legend">${ley}</div>`;
   box.innerHTML = h;
-  const W = Math.max(260, $('#trendChart').clientWidth, rows.length * (dim ? 20 + 14 * grupos.length : 46)), T = 22, H = 120, B = 36;
-  $('#trendChart').classList.toggle('scroll-x', W > $('#trendChart').clientWidth + 2);
-  const n = rows.length, slot = W / n, ng = grupos.length;
-  const bw = dim ? Math.min(14, (slot * 0.78) / ng) : Math.min(26, slot * 0.46);
-  const maxV = Math.max(1, ...rows.flatMap(r => r.gs.flatMap(g => [g.e.real || 0, g.e.obj || 0, g.proy || 0]))) * 1.04;
+  const cw = $('#trendChart').clientWidth, GAP = dim ? 16 : 0;
+  const slotMin = dim ? 34 : 46;
+  const W = Math.max(260, cw, nb * slotMin + GAP * (grupos.length - 1));
+  $('#trendChart').classList.toggle('scroll-x', W > cw + 2);
+  const slot = (W - GAP * (grupos.length - 1)) / nb, T = 24, H = 120, B = dim ? 52 : 36;
+  const bw = dim ? Math.min(18, slot * 0.56) : Math.min(26, slot * 0.46);
+  const maxV = Math.max(1, ...barras.flatMap(b => [b.x.e.real || 0, b.x.e.obj || 0, b.x.proy || 0])) * 1.08;
   const Y = v => T + H - (v / maxV) * H;
+  const cxDe = i => i * slot + barras[i].gi * GAP + slot / 2;
   let s = `<svg viewBox="0 0 ${W} ${T + H + B}" height="${T + H + B}" role="img" aria-label="Evolución mensual"><line x1="0" x2="${W}" y1="${T + H + 0.5}" y2="${T + H + 0.5}" class="c-grid"/>`;
-  rows.forEach((r, i) => {
-    const cx = i * slot + slot / 2, esAct = enSel(r.p);
-    const x0 = cx - (bw * ng + (ng - 1) * 2) / 2;
-    let topY = Infinity;
-    r.gs.forEach((g, j) => {
-      const x = x0 + j * (bw + 2);
-      if (g.proy != null && g.proy > (g.e.real || 0)) s += `<path d="${barPath(x, Y(g.proy), bw, T + H - Y(g.proy), 3)}" class="c-ghost"${g.col ? ` style="fill:${g.col};opacity:.25"` : ''}/>`;
-      if (g.e.real) s += `<path d="${barPath(x, Y(g.e.real), bw, T + H - Y(g.e.real), dim ? 3 : 4)}" class="${esAct ? 'c-bar-hi' : 'c-bar'}"${g.col ? ` style="fill:${g.col};opacity:${esAct ? 1 : .72}"` : ''}/>`;
-      if (g.e.obj) s += `<line x1="${(x - (dim ? 1.5 : 5)).toFixed(1)}" x2="${(x + bw + (dim ? 1.5 : 5)).toFixed(1)}" y1="${Y(g.e.obj).toFixed(1)}" y2="${Y(g.e.obj).toFixed(1)}" class="c-tick"/>`;
-      topY = Math.min(topY, Y(g.e.real || 0), g.e.obj ? Y(g.e.obj) : Infinity, g.proy ? Y(g.proy) : Infinity);
-    });
-    const tot = r.gs.reduce((t, g) => t + (g.e.real || 0), 0);
-    if (!dim) s += `<text x="${cx.toFixed(1)}" y="${(topY - 7).toFixed(1)}" text-anchor="middle" class="${esAct ? 'c-lbl' : 'c-lbl-m'}">${esc(axisFmt(tot, m))}</text>`;
+  barras.forEach((b, i) => {
+    const { r, x: g } = b, cx = cxDe(i), x = cx - bw / 2, esAct = enSel(r.p), marcado = TREND.cmp && sel.includes(i);
+    if (g.proy != null && g.proy > (g.e.real || 0)) s += `<path d="${barPath(x, Y(g.proy), bw, T + H - Y(g.proy), 3)}" class="c-ghost"${g.col ? ` style="fill:${g.col};opacity:.25"` : ''}/>`;
+    if (g.e.real) s += `<path d="${barPath(x, Y(g.e.real), bw, T + H - Y(g.e.real), dim ? 3 : 4)}" class="${esAct ? 'c-bar-hi' : 'c-bar'}${marcado ? ' c-sel' : ''}"${g.col ? ` style="fill:${g.col};opacity:${esAct || marcado ? 1 : .72}"` : ''}/>`;
+    if (g.e.obj) s += `<line x1="${(x - (dim ? 2 : 5)).toFixed(1)}" x2="${(x + bw + (dim ? 2 : 5)).toFixed(1)}" y1="${Y(g.e.obj).toFixed(1)}" y2="${Y(g.e.obj).toFixed(1)}" class="c-tick c-tick-g"/>`;
+    const topY = Math.min(Y(g.e.real || 0), g.e.obj ? Y(g.e.obj) : Infinity, g.proy ? Y(g.proy) : Infinity);
+    s += `<text x="${cx.toFixed(1)}" y="${(topY - 6).toFixed(1)}" text-anchor="middle" class="${esAct ? 'c-lbl' : 'c-lbl-m'}${dim ? ' c-lbl-s' : ''}">${esc(axisFmt(g.e.real || 0, m))}</text>`;
     s += `<text x="${cx.toFixed(1)}" y="${T + H + 16}" text-anchor="middle" class="c-axis ${esAct ? 'c-axis-b' : ''}">${esc(perLabel(r.p).corto)}</text>`;
-    const rt = dim ? null : r.gs[0].e.ratio;
-    s += `<text x="${cx.toFixed(1)}" y="${T + H + 30}" text-anchor="middle" class="c-axis">${dim ? '' : rt == null ? '—' : NF0.format(rt * 100) + '%'}</text>`;
-    s += `<rect x="${(i * slot).toFixed(1)}" y="0" width="${slot.toFixed(1)}" height="${T + H + B}" class="c-hit" tabindex="0" role="button" data-per="${r.p}" aria-label="${esc(perLabel(r.p).mes)}"/>`;
+    const rt = g.e.ratio;
+    s += `<text x="${cx.toFixed(1)}" y="${T + H + 30}" text-anchor="middle" class="c-axis">${rt == null ? '—' : m === 'precio' ? fmtDelta(rt - 1, 0) : NF0.format(rt * 100) + '%'}</text>`;
+    s += `<rect x="${(cx - slot / 2).toFixed(1)}" y="0" width="${slot.toFixed(1)}" height="${T + H + B}" class="c-hit" tabindex="0" role="button" ${TREND.cmp ? `data-trsel="${i}"` : `data-per="${r.p}"`} aria-label="${esc(perLabel(r.p).mes)}${dim ? ' · ' + esc(nomG(g.g)) : ''}"/>`;
   });
+  if (dim) grupos.forEach((g, j) => {             // nombre de cada grupo debajo de su bloque de meses
+    const i0 = barras.findIndex(b => b.gi === j), i1 = i0 + rows.length - 1;
+    const x0 = cxDe(i0) - slot / 2 + 3, x1 = cxDe(i1) + slot / 2 - 3;
+    s += `<line x1="${x0.toFixed(1)}" x2="${x1.toFixed(1)}" y1="${T + H + 37}" y2="${T + H + 37}" stroke="${barras[i0].x.col}" stroke-width="2.5" stroke-linecap="round"/>`;
+    s += `<text x="${((x0 + x1) / 2).toFixed(1)}" y="${T + H + 50}" text-anchor="middle" class="c-axis c-axis-b">${esc(nomG(g))}</text>`;
+  });
+  let res = '';
+  if (TREND.cmp && sel.length === 2) {           // comparación: línea punteada entre las dos columnas
+    const topDe = x => Math.min(Y(x.e.real || 0), x.e.obj ? Y(x.e.obj) : Infinity, x.proy ? Y(x.proy) : Infinity) - 18;
+    const [a, b] = sel.map(i => ({ i, bb: barras[i], v: barras[i].x.e.real || 0 }));
+    const ya = topDe(a.bb.x), yb = topDe(b.bb.x), xa = cxDe(a.i), xb = cxDe(b.i);
+    const d = b.v - a.v, pc = a.v ? b.v / a.v - 1 : null, cls = d >= 0 ? 'pos' : 'neg';
+    const txt = `${pc == null ? '—' : fmtDelta(pc, 0)} · ${d >= 0 ? '+' : '−'}${axisFmt(Math.abs(d), m)}`;
+    const my = Math.max(11, Math.min(ya, yb) - 12);
+    s += `<path d="M${xa.toFixed(1)} ${ya.toFixed(1)} L${xa.toFixed(1)} ${my.toFixed(1)} L${xb.toFixed(1)} ${my.toFixed(1)} L${xb.toFixed(1)} ${yb.toFixed(1)}" class="c-cmp"/>`;
+    s += `<circle cx="${xa.toFixed(1)}" cy="${ya.toFixed(1)}" r="3" class="c-cmp-p"/><circle cx="${xb.toFixed(1)}" cy="${yb.toFixed(1)}" r="3" class="c-cmp-p"/>`;
+    const tw = txt.length * 6.2 + 14, mx = Math.max(tw / 2 + 2, Math.min(W - tw / 2 - 2, (xa + xb) / 2));
+    s += `<rect x="${(mx - tw / 2).toFixed(1)}" y="${(my - 10).toFixed(1)}" width="${tw.toFixed(1)}" height="20" rx="10" class="c-cmp-bx ${cls}"/><text x="${mx.toFixed(1)}" y="${(my + 4).toFixed(1)}" text-anchor="middle" class="c-cmp-t">${esc(txt)}</text>`;
+    const nom = x => `${perLabel(x.bb.r.p).corto} ${perLabel(x.bb.r.p).anio}${dim ? ' · ' + nomG(x.bb.x.g) : ''}`;
+    res = `<b>${esc(nom(a))}</b> ${esc(fmtMetric(a.v, m))} → <b>${esc(nom(b))}</b> ${esc(fmtMetric(b.v, m))}: <b class="${cls}">${pc == null ? '—' : fmtDelta(pc, 1)}</b> <span class="${cls}">(${d >= 0 ? '+' : '−'}${esc(fmtMetric(Math.abs(d), m))})</span>`;
+  } else if (TREND.cmp) res = sel.length === 1 ? 'Tocá la segunda columna para comparar.' : 'Tocá 2 columnas para comparar.';
+  $('#trCmpRes').innerHTML = res; $('#trCmpRes').hidden = !TREND.cmp;
   const tc = $('#trendChart'), ancho = tc.classList.contains('scroll-x');
   tc.innerHTML = (ancho ? s.replace('<svg ', `<svg style="width:${W}px;max-width:none" `) : s) + '</svg>';
-  if (ancho) tc.scrollLeft = tc.scrollWidth;                // arranca mostrando los últimos meses
+  if (ancho) { tc.scrollLeft = TREND.scroll != null ? TREND.scroll : tc.scrollWidth; arrastreX(tc); }   // arranca mostrando los últimos meses
+  TREND.scroll = null;
 }
+/** Arrastrar con el mouse para desplazar un gráfico ancho (con el dedo ya se desliza solo). */
+function arrastreX(el) {
+  if (el._arr) return; el._arr = true;
+  let x0 = 0, s0 = 0, act = false, movio = false;
+  el.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; act = true; movio = false; x0 = e.clientX; s0 = el.scrollLeft; });
+  window.addEventListener('pointermove', e => { if (!act) return; const dx = e.clientX - x0; if (Math.abs(dx) > 4) { movio = true; el.classList.add('arrastrando'); } el.scrollLeft = s0 - dx; });
+  window.addEventListener('pointerup', () => { if (!act) return; act = false; el.classList.remove('arrastrando'); setTimeout(() => { movio = false; }, 0); });
+  el.addEventListener('click', e => { if (movio) { e.stopPropagation(); e.preventDefault(); } }, true);
+}
+document.addEventListener('click', ev => {
+  const t = ev.target.closest('[data-trcmp],[data-trsel]');
+  if (!t) return;
+  ev.stopPropagation();
+  const tc = $('#trendChart'); TREND.scroll = tc ? tc.scrollLeft : null;
+  if ('trcmp' in t.dataset) { TREND.cmp = !TREND.cmp; TREND.sel = []; }
+  else { const i = +t.dataset.trsel; TREND.sel = TREND.sel.includes(i) ? TREND.sel.filter(x => x !== i) : TREND.sel.length >= 2 ? [i] : TREND.sel.concat(i); }
+  renderTrend();
+}, true);
 
 /* ---------- Brecha en cascada: vs. objetivo o vs. mes anterior ---------- */
 function efectosPrev(cal) {
@@ -4309,7 +4384,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.35</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.36</p></div>`;
 }
 
 /* ============================================================================
@@ -4366,7 +4441,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.35</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.36</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4436,7 +4511,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.35</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.36</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4476,7 +4551,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.35</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.36</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4782,16 +4857,17 @@ function heroDesglose(cal) {
       fill = `<i class="hd-f" style="width:${Math.min(100, (r || 0) * 100).toFixed(1)}%"></i>`;
       val = r == null ? '—' : fmtPct(r, 0);
     }
+    const vo = e.real != null && e.obj ? `<small class="hd-vo">${esc(axisFmt(e.real, m))}/${esc(axisFmt(e.obj, m).replace(/^(US)?\$/, ''))}</small>` : '';
     return `<button class="hd-row nv${nivel}"${tog ? ` data-act="heroCat" data-hcat="${esc(k)}" aria-expanded="${HERO_CAT === k}"` : ''}>
-      <span class="hd-n">${tog ? `<span class="hd-t">${HERO_CAT === k ? '▾' : '▸'}</span>` : ''}${esc(nombre)}</span><span class="hd-b">${fill}</span><b class="hd-v">${val}</b></button>`;
+      <span class="hd-n">${tog ? `<span class="hd-t">${HERO_CAT === k ? '▾' : '▸'}</span>` : ''}${esc(nombre)}</span><span class="hd-b">${fill}</span><span class="hd-v"><b>${val}</b>${vo}</span></button>`;
   };
   const filas = cats.sort((x, y) => valorDe(y[1], m === 'precio' ? 'fact' : m) - valorDe(x[1], m === 'precio' ? 'fact' : m)).map(([k, a]) => {
     let h = barra(k, a, nomCat(k), 0, conCal);
     if (conCal && HERO_CAT === k) h += [...aggPorDim(SEL, 'calidad', { ...S.f, categoria: k }).entries()].sort((x, y) => String(x[0]).localeCompare(String(y[0]))).map(([q, aq]) => barra(q, aq, q || 'Sin calidad', 1, false)).join('');
     return h;
   }).join('');
-  return `<div class="hero-desg"><div class="hd-head"><span>${m === 'precio' ? 'Desvío vs. precio objetivo por categoría' : '% logrado por categoría'}${conCal ? ' · tocá una para ver sus calidades' : ''}</span></div>${filas}
-    ${m === 'precio' ? '<div class="hd-esc"><span></span><span class="hd-esc-m"><i>−10%</i><i>objetivo</i><i>+10%</i></span><span></span></div>' : ''}</div><div class="hero-exp-row">${btn}</div>`;
+  return `<div class="hero-desg${m === 'precio' ? ' hd-precio' : ''}"><div class="hd-head"><span>${m === 'precio' ? 'Desvío vs. precio objetivo por categoría' : '% logrado por categoría'}${conCal ? ' · tocá una para ver sus calidades' : ''}</span></div>${filas}
+    ${m === 'precio' ? '<div class="hd-esc"><span></span><span class="hd-esc-m"><i>−10%</i><i>obj.</i><i>+10%</i></span><span></span></div>' : ''}</div><div class="hero-exp-row">${btn}</div>`;
 }
 
 function kpiHTML(icon, v, l, d, act) {
@@ -5021,7 +5097,7 @@ function renderAnalisis() {
    ============================================================================ */
 function ringSVG(r, k) {
   const R = 22, C = 2 * Math.PI * R, v = Math.max(0, Math.min(1, r || 0));
-  const col = { good: 'var(--good)', warn: 'var(--warn)', bad: 'var(--bad)', neu: 'var(--bar)' }[k];
+  const col = { good: 'var(--good)', warn: 'var(--warn)', bad: 'var(--bad)', neu: 'var(--bar)', real: 'var(--accent)' }[k];
   return `<svg viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27" cy="27" r="${R}" fill="none" stroke="var(--track)" stroke-width="6"/>
     <circle class="ring-v" cx="27" cy="27" r="${R}" fill="none" stroke="${col}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${(C * v).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 27 27)"/></svg>`;
 }
@@ -5042,19 +5118,21 @@ function renderEquipo() {
   const cuenta = { good: 0, warn: 0, bad: 0 };
   rows.forEach(r => { if (cuenta[r.col.k] != null) cuenta[r.col.k]++; });
   const lbl = S.metric === 'precio' ? ['En precio', 'Atención', 'Bajo precio'] : enCurso ? ['Proyectan cumplir', 'Cerca', 'No llegan'] : ['Cumplieron', 'Cerca', 'No cumplieron'];
+  // v0.36: el anillo muestra solo el alcance real vs. objetivo; en el mes en curso va en gris (la proyección queda en el texto de abajo)
+  const colAnillo = r => enCurso ? 'real' : r.e.estado.k;
   el.innerHTML = `<h1 class="section-t">Equipo</h1><p class="section-s">Ranking por ${S.metric === 'precio' ? 'precio logrado' : '% logrado de ' + METRIC_NAME[S.metric].toLowerCase()} · ${esc(lblSel())}</p>
     ${cal.closed || S.metric === 'precio' || enCurso ? `<div class="team-sum">
       <div><b>${cuenta.good}</b><span class="pill st-good">${ico('check')}${lbl[0]}</span></div>
       <div><b>${cuenta.warn}</b><span class="pill st-warn">${ico('alert')}${lbl[1]}</span></div>
       <div><b>${cuenta.bad}</b><span class="pill st-bad">${ico('down')}${lbl[2]}</span></div>
-    </div>${enCurso ? '<p class="map-nota" style="margin:-4px 2px 12px">Mes en curso: el anillo muestra el % logrado y el color, la proyección de cierre vs. objetivo (verde ≥ 100% · amarillo ≥ 92% · rojo menor).</p>' : ''}` : ''}
+    </div>${enCurso ? '<p class="map-nota" style="margin:-4px 2px 12px">Mes en curso: el anillo muestra el % logrado (real vs. objetivo). La proyección de cierre va debajo de cada nombre y define el resumen de arriba (verde ≥ 100% · amarillo ≥ 92% · rojo menor).</p>' : ''}` : ''}
     <ul class="rows">${rows.map((r, i) => {
       const val = S.metric === 'precio' ? (r.e.ratio == null ? '—' : fmtDelta(r.e.ratio - 1)) : fmtPct(r.e.ratio, 0);
       const ringV = S.metric === 'precio' ? (r.e.ratio == null ? 0 : (r.e.ratio - 0.9) / 0.2) : r.e.ratio;
       return `<li><button class="row" data-det-dim="vendedor" data-det-key="${esc(r.k)}"><div class="person">
         <span class="rank">${i + 1}</span><span class="avatar pic ${i < 3 && r.col.k === 'good' ? 'top' : ''}" style="font-size:24px">${(() => { const u = usuarios().find(x => x.usuario === r.k && x.rol === 'vendedor'); return fotoHTML(u || { usuario: r.k }); })()}</span>
-        <div class="row-name" style="flex:1">${esc(r.k)}<small>${esc(subInfo('vendedor', r.k))}</small><small style="color:var(--ink-2)">${S.metric === 'precio' ? 'Precio ' + (r.e.real == null ? '—' : fmtMoneyFull(r.e.real)) : fmtMetric(r.e.real) + ' de ' + fmtMetric(r.e.obj) + (r.proy != null ? ` · proyección <b class="st-t-${r.col.k}">${fmtPct(r.proy, 0)}</b>` : '')}</small></div>
-        <div class="ring">${ringSVG(ringV, r.col.k)}<span>${val}</span></div></div></button></li>`;
+        <div class="row-name" style="flex:1">${esc(r.k)}<small>${esc(subInfo('vendedor', r.k))}</small><small style="color:var(--ink-2)">${S.metric === 'precio' ? 'Precio ' + (r.e.real == null ? '—' : fmtMoneyFull(r.e.real)) : fmtMetric(r.e.real) + ' de ' + fmtMetric(r.e.obj) + (r.proy != null ? ` <span class="eq-proy">· proyección ${fmtPct(r.proy, 0)}</span>` : '')}</small></div>
+        <div class="ring">${ringSVG(ringV, colAnillo(r))}<span>${val}</span></div></div></button></li>`;
     }).join('')}</ul>`;
 }
 
@@ -5091,7 +5169,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.35 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.36 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
