@@ -1824,6 +1824,23 @@ button.kpi:active{transform:scale(.98)}
 .hd-precio .hd-row,.hd-precio .hd-row.nv1{grid-template-columns:25% 1fr 146px}.hd-precio .hd-v{grid-template-columns:44px 1fr}.hd-precio .hd-esc{grid-template-columns:25% 1fr 146px}
 .hd-precio .hd-row,.hd-precio .hd-row.nv1,.hd-precio .hd-esc{grid-template-columns:29% 1fr 132px;gap:8px}.hd-precio .hd-v{grid-template-columns:42px 1fr;gap:4px}.hd-precio .hd-vo{font-size:10.5px}.hd-esc{gap:8px;grid-template-columns:31% 1fr 118px}
 
+/* ---------- v0.37 · Back order ---------- */
+:root{--bo:#5FA8D3}
+.hdr .bo-btn{font-size:13px}
+.hdr .bo-btn.on{background:var(--bo);color:#fff;border-color:var(--bo)}
+.gauge-bo{display:inline-flex;align-items:center;gap:5px;margin-top:3px;font-size:12px;font-weight:700;color:var(--bo)}
+.gauge-bo i{width:8px;height:8px;border-radius:50%;background:var(--bo)}
+.c-bo{fill:var(--bo)}
+.c-bo-line{stroke:var(--bo);stroke-width:3;stroke-dasharray:3 3;stroke-linecap:round}
+.c-bo-dot{fill:var(--bo);stroke:#fff;stroke-width:1.5}
+.ro-bo{font-size:12px;font-weight:700;color:var(--bo)}
+/* BO y AR: con los dos visibles se apilan en una columna de pastillas para no achicar el saludo */
+.hdr-mini{display:flex;flex-direction:column;gap:5px;align-items:center}
+.hdr-mini.doble .icon-btn{width:42px;height:26px;border-radius:999px;font-size:11.5px}
+.hdr.compacto .hdr-mini.doble .icon-btn{transform:none}
+.hdr.compacto .hdr-mini.doble{transform:scale(.9)}
+.arow.nv4{padding-left:48px}.arow.nv4 .abar{height:24px}.arow.nv4 .abar-n{line-height:24px;font-size:12px}.arow.nv4 .abar-v{font-size:12px}.arow.nv4 .abar-fill{opacity:.66}
+
 </style>
 
 <div class="intro" id="intro" role="dialog" aria-label="Bienvenida">
@@ -1895,7 +1912,7 @@ button.kpi:active{transform:scale(.98)}
       </div>
     </div>
     <div class="hdr-acts">
-      <button class="icon-btn mon-btn" id="btnMoneda" data-act="moneda" hidden>AR</button>
+      <div class="hdr-mini" id="hdrMini"><button class="icon-btn mon-btn bo-btn" id="btnBO" data-act="bo" hidden>BO</button><button class="icon-btn mon-btn" id="btnMoneda" data-act="moneda" hidden>AR</button></div>
       <button class="icon-btn" id="btnActualizar" data-act="cargar" aria-label="Actualizar datos">
         <svg viewBox="0 0 24 24" class="ico"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>
       </button>
@@ -2574,11 +2591,11 @@ function fichaCliente(k) {
    Mix: Categoría, Marca y/o Producto; dos niveles vecinos se pueden enlazar en una sola fila (como en UB).
    Tocando un mes se abre su mix en filas; cada nivel siguiente se despliega con ▶. Respeta los filtros. */
 const EV_PAL = ['#3E6D8E', '#C4863A', '#7A5AA6', '#4E8F6B', '#B5555B'];   // mix que no es por marca (para no confundir con los colores de marca)
-const EV_DIMS = { categoria: 'Categoría', marca: 'Marca', producto: 'Producto' }, EV_DIMS_ORD = ['categoria', 'marca', 'producto'];
+const EV_DIMS = { categoria: 'Categoría', marca: 'Marca', producto: 'Producto', familia: 'Familia' }, EV_DIMS_ORD = ['categoria', 'marca', 'producto', 'familia'];
 const evMix = () => { const a = (S.evMix || ['marca']).filter(d => EV_DIMS[d]); return a.length ? a : ['marca']; };
 const evUnir = () => { const a = evMix(); return a.map((_, i) => !!(Array.isArray(S.evUnir) && S.evUnir[i] && i < a.length - 1)); };
 function evGrupos() { const a = evMix(), un = evUnir(), g = []; a.forEach((d, i) => { if (i && un[i - 1]) g[g.length - 1].push(d); else g.push([d]); }); return g; }
-const evNombre = (d, v) => d === 'categoria' ? ({ Cer: 'Cerámica', Por: 'Porcelanato' }[v] || v || '—') : (v || '—');
+const evNombre = (d, v) => d === 'categoria' ? ({ Cer: 'Cerámica', Por: 'Porcelanato' }[v] || v || '—') : (v || (d === 'familia' ? 'Sin familia' : '—'));
 const evClave = (v, g) => g.map(d => evNombre(d, v[d])).join(' · ');
 function evRender(anim) {
   const el = $('#evBox'); if (!el) return;
@@ -2601,7 +2618,7 @@ function evRender(anim) {
   const max = Math.max(1, ...[...porMes.values()].map(n => n.t)), totAnio = [...porMes.values()].reduce((t, n) => t + n.t, 0);
   const a = evMix(), un = evUnir();
   const lnk = i => `<button class="ap-link" data-evunir="${i}" aria-pressed="${un[i]}" title="${un[i] ? 'Separar' : 'Unir en una fila'}"><svg viewBox="0 0 24 24" class="ico sm"><path d="M10 13a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1.2 1.2M14 11a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1.2-1.2"/></svg></button>`;
-  const selector = `<div class="ev-mix"><span class="ap-t">Mix</span>${EV_DIMS_ORD.map(d => {
+  const selector = `<div class="ev-mix"><span class="ap-t">Mix</span>${EV_DIMS_ORD.filter(d => d !== 'familia' || (IDX.valores.familia || []).length).map(d => {
       const i = a.indexOf(d);
       return `<button class="ev-d" data-evdim="${d}" aria-pressed="${i >= 0}">${EV_DIMS[d]}</button>${i >= 0 && i < a.length - 1 ? lnk(i) : ''}`;
     }).join('')}</div>`;
@@ -2836,10 +2853,11 @@ function listaBarras(dim, rows, cal, f) {
 function arbolProducto(cal) {
   const f = S.f, p = S.periodo;
   const nodo = () => ({ a: { oF: 0, oU: 0, rF: 0, rU: 0, rFo: 0 }, hijos: new Map(), mk: new Map(), prev: 0 });
-  const raiz = nodo(), conCal = (IDX.valores.calidad || []).length > 0, NH = conCal ? 3 : 2;
-  const bajar = r => {
+  const raiz = nodo(), conCal = (IDX.valores.calidad || []).length > 0, conFam = (IDX.valores.familia || []).length > 0, NH = (conCal ? 3 : 2) + (conFam ? 1 : 0);
+  const bajar = (r, esObj) => {
     const ruta = [r.categoria || '—', r.marca, r.producto];
     if (conCal) ruta.push(r.calidad || 'Sin calidad');
+    if (conFam && !esObj) ruta.push(r.familia || 'Sin familia');   // v0.37: Familia (los objetivos llegan hasta Calidad)
     let n = raiz; const pasos = [];
     for (const k of ruta) { if (!n.hijos.has(k)) n.hijos.set(k, nodo()); n = n.hijos.get(k); pasos.push(n); }
     return pasos;
@@ -2991,6 +3009,7 @@ function serieInicio(a, cal) {
 function renderDaily(a, cal) {
   const box = $('#cDaily'), m = S.metric, modo = modoVentas(), sem = modo !== 'dia', porMes = modo === 'mes';
   const serie = serieInicio(a, cal);
+  const boTot = m === 'unid' ? (a.bU || 0) : 0, boIt = boTot ? serie.find(x => x.dias.includes(IDX.corte)) : null;   // BO apilado sobre el día de hoy
   const conDato = serie.filter(s => s.val != null && s.val > 0);
   const selKey = sem ? S.selSem : S.selDia;
   let sel = serie.find(s => s.k === selKey && s.val != null);
@@ -3006,7 +3025,7 @@ function renderDaily(a, cal) {
     if (m === 'precio') e.t = r == null ? '—' : fmtDelta(r - 1) + ' vs. objetivo';
     const tit = porMes ? `${perLabel(sel.desde.slice(0, 7)).mes} · ${sel.nHab} días hábiles` : sem ? `Semana ${sel.k.slice(1)} · ${diaDe(sel.desde)} al ${diaDe(sel.hasta)} ${MES_C[parseISO(sel.desde).getUTCMonth()]} · ${sel.nHab} día${sel.nHab === 1 ? '' : 's'} hábil${sel.nHab === 1 ? '' : 'es'}`
       : fechaLarga(sel.k) + (sel.habil ? '' : ' · no laborable');
-    h += `<div class="readout"><div><div class="readout-d">${esc(tit)}</div><div class="readout-v">${fmtMetric(sel.val, m, false)}</div></div>${sel.meta ? pill(e) : '<span class="pill st-neu">Sin meta</span>'}</div>`;
+    h += `<div class="readout"><div><div class="readout-d">${esc(tit)}</div><div class="readout-v">${fmtMetric(sel.val, m, false)}${boIt && sel.k === boIt.k ? `<small class="ro-bo"> +BO ${esc(fmtUc(boTot))}</small>` : ''}</div></div>${sel.meta ? pill(e) : '<span class="pill st-neu">Sin meta</span>'}</div>`;
   } else h += `<div class="readout"><div class="readout-d">Sin ventas registradas en el periodo.</div></div>`;
   if (S.tablas.daily) {
     h += `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>${sem ? 'Semana' : 'Día'}</th><th>Real</th><th>${m === 'precio' ? 'Objetivo' : 'Meta'}</th><th>%</th></tr></thead><tbody>` +
@@ -3014,11 +3033,11 @@ function renderDaily(a, cal) {
     box.innerHTML = h; return;
   }
   h += `<div class="chart" id="dailyChart"></div>
-    <div class="legend"><span><i class="sw" style="background:var(--track);box-shadow:inset 0 0 0 1px var(--line)"></i>${esc(metaLbl)}</span><span><i class="sw" style="background:var(--bar)"></i>Real</span><span><i class="sw" style="background:var(--accent)"></i>${porMes ? 'Mes elegido' : sem ? 'Semana elegida' : 'Día elegido'}</span>${sem ? '' : '<span><i class="sw sw-off"></i>No laborable</span>'}${serie.some(d => d.man > 0) ? '<span><i class="sw sw-sim"></i>Simulación</span>' : ''}</div>`;
+    <div class="legend"><span><i class="sw" style="background:var(--track);box-shadow:inset 0 0 0 1px var(--line)"></i>${esc(metaLbl)}</span><span><i class="sw" style="background:var(--bar)"></i>Real</span><span><i class="sw" style="background:var(--accent)"></i>${porMes ? 'Mes elegido' : sem ? 'Semana elegida' : 'Día elegido'}</span>${sem ? '' : '<span><i class="sw sw-off"></i>No laborable</span>'}${serie.some(d => d.man > 0) ? '<span><i class="sw sw-sim"></i>Simulación</span>' : ''}${boIt ? `<span><i class="sw" style="background:var(--bo)"></i>BO ${esc(fmtUc(boTot))}</span>` : ''}</div>`;
   box.innerHTML = h;
   const W = Math.max(260, $('#dailyChart').clientWidth), H = 150, AX = 20;
   const n = serie.length || 1, slot = W / n, bw = sem ? Math.min(46, slot * 0.6) : Math.min(16, Math.max(4, slot * 0.66));
-  const maxV = Math.max(1, ...serie.map(s => Math.max(s.val || 0, s.meta || 0))) * 1.06;
+  const maxV = Math.max(1, ...serie.map(s => Math.max((s.val || 0) + (boIt && s.k === boIt.k ? boTot : 0), s.meta || 0))) * 1.06;
   const y = v => H - (v / maxV) * H;
   const every = sem ? 1 : slot >= 13 ? 1 : slot >= 8 ? 2 : 3;
   let s = `<svg viewBox="0 0 ${W} ${H + AX}" height="${H + AX}" role="img" aria-label="${esc(titulo)}"><defs><pattern id="hatchSim" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#F6E3C4"/><rect width="2.2" height="5" fill="#C98A2E"/></pattern></defs>`;
@@ -3032,6 +3051,7 @@ function renderDaily(a, cal) {
       s += `<path d="${barPath(x, y(d.val), bw, H - y(d.val), 4)}" class="${d.k === (sel && sel.k) ? 'c-bar-hi' : 'c-bar'}${off}"/>`;
       if (d.man > 0) s += `<path d="${barPath(x, y(d.val), bw, Math.max(2, y(d.val - d.man) - y(d.val)), 4)}" class="c-sim"/>`;
     }
+    if (boIt && d.k === boIt.k) { const v0 = d.val || 0; s += `<path d="${barPath(x, y(v0 + boTot), bw, Math.max(2, y(v0) - y(v0 + boTot)), 4)}" class="c-bo"/>`; }
     if (i % every === 0 || (sel && d.k === sel.k)) s += `<text x="${(x + bw / 2).toFixed(1)}" y="${H + 15}" text-anchor="middle" class="c-axis ${sel && d.k === sel.k ? 'c-axis-b' : ''}${off ? ' c-axis-off' : ''}">${d.lbl}</text>`;
   });
   serie.forEach((d, i) => {
@@ -3073,6 +3093,7 @@ function renderBurn(a, cal) {
     return { p, n, arr, alDia, L: perLabel(p) };
   }).filter(Boolean);
   const realFin = cur.length ? val(cur[cur.length - 1]) : null;
+  const boB = m === 'unid' && !cal.closed && realFin != null ? (a.bU || 0) : 0;
   const PR = !esPrecio ? proyeccionMes(S.periodo, S.f, m, a, cal) : null;
   const proy = PR ? PR.fin : null;
   // Día calendario → días hábiles transcurridos (para la curva de proyección)
@@ -3092,6 +3113,7 @@ function renderBurn(a, cal) {
   h += `<div class="chart" id="burnChart"></div><div class="legend">
     <span><i class="sw-line"></i>Real ${fmtMetric(realFin, m)}</span>
     ${esPrecio ? '' : `<span><i class="sw-dash"></i>Objetivo ${fmtMetric(objTot, m)}</span>`}
+    ${boB ? `<span><i class="sw" style="background:var(--bo)"></i>Con BO ${fmtMetric(realFin + boB, m)}${objTot ? ' · ' + fmtPct((realFin + boB) / objTot, 0) : ''}</span>` : ''}
     ${proy != null ? `<span><i class="sw-dot"></i>Proyección ${fmtMetric(proy, m)}${PR.metodo === 'historia' ? ' (curva de ' + PR.meses + ' meses)' : ''}</span>` : ''}
     ${prevs.map(x => `<span><i class="sw-prev p${x.n}"></i>${esc(x.L.corto)} al ${Math.min(hoy, x.arr.length)}: ${fmtMetric(val(x.alDia), m)}${cmp(x)}</span>`).join('')}</div>`;
   box.innerHTML = h;
@@ -3100,7 +3122,7 @@ function renderBurn(a, cal) {
   let lo = 0, hi;
   const todos = [...cur.map(val), ...prevs.flatMap(x => x.arr.map(val))].filter(v => v != null);
   if (esPrecio) { lo = Math.min(...todos) * 0.985; hi = Math.max(...todos) * 1.015; }
-  else hi = Math.max(objTot, proy || 0, ...todos) * 1.06 || 1;
+  else hi = Math.max(objTot, proy || 0, (realFin || 0) + boB, ...todos) * 1.06 || 1;
   const Y = v => T + (1 - (v - lo) / (hi - lo)) * H;
   let s = `<svg viewBox="0 0 ${W} ${H + T + B}" height="${H + T + B}" role="img" aria-label="${esc(titulo)}">`;
   if (!sem) dias.forEach((d, i) => { if (!habil.has(d)) s += `<rect x="${(L + i / D * pw).toFixed(1)}" y="${T}" width="${(pw / D).toFixed(1)}" height="${H}" class="c-offband"/>`; });
@@ -3126,6 +3148,7 @@ function renderBurn(a, cal) {
     }
   }
   s += `<path d="${linea(cur, true)}" class="c-real"/>`;
+  if (boB) s += `<line x1="${X(hoy).toFixed(1)}" x2="${X(hoy).toFixed(1)}" y1="${Y(realFin).toFixed(1)}" y2="${Y(realFin + boB).toFixed(1)}" class="c-bo-line"/><circle cx="${X(hoy).toFixed(1)}" cy="${Y(realFin + boB).toFixed(1)}" r="4.5" class="c-bo-dot"/>`;
   if (realFin != null) s += `<circle cx="${X(hoy).toFixed(1)}" cy="${Y(realFin).toFixed(1)}" r="5" class="c-dot"/>`;
   [1, Math.ceil(D / 2), D].forEach((d, j) => s += `<text x="${X(d).toFixed(1)}" y="${H + T + 16}" text-anchor="${j === 0 ? 'start' : j === 2 ? 'end' : 'middle'}" class="c-axis">${esc(fechaCorta(dias[d - 1]))}</text>`);
   s += `<line id="burnCross" x1="0" x2="0" y1="${T}" y2="${T + H}" class="c-cross" visibility="hidden"/>`;
@@ -3165,7 +3188,7 @@ function renderTrend() {
     const gs = grupos.map((g, i) => {
       const a = agg(p, g == null ? S.f : { ...S.f, [dim]: g }), e = evalua(a, cal);
       const pr = proyeccionMes(p, g == null ? S.f : { ...S.f, [dim]: g }, m, a, cal), proy = pr ? pr.fin : null;
-      return { g, i, e, proy, col: colorG(g, i) };
+      return { g, i, e, proy, col: colorG(g, i), bo: m === 'unid' ? boU(p, g == null ? S.f : { ...S.f, [dim]: g }) : 0 };
     });
     return { p, cal, gs };
   });
@@ -3185,8 +3208,8 @@ function renderTrend() {
     box.innerHTML = h; return;
   }
   const act = rows.find(r => r.p === S.periodo) || rows[rows.length - 1];
-  const ley = dim ? act.gs.map(g => `<span><i class="sw" style="background:${g.col}"></i>${esc(nomG(g.g))} ${m === 'precio' ? (g.e.ratio == null ? '' : fmtDelta(g.e.ratio - 1)) : fmtPct(g.e.ratio, 0)}</span>`).join('') + '<span><i class="sw-line g"></i>Objetivo</span>'
-    : `<span><i class="sw" style="background:var(--bar)"></i>Real</span><span><i class="sw-line g"></i>Objetivo</span>${rows.some(r => r.gs[0].proy != null) ? '<span><i class="sw" style="background:var(--accent);opacity:.45"></i>Proyección del mes en curso</span>' : ''}`;
+  const ley = dim ? act.gs.map(g => `<span><i class="sw" style="background:${g.col}"></i>${esc(nomG(g.g))} ${m === 'precio' ? (g.e.ratio == null ? '' : fmtDelta(g.e.ratio - 1)) : fmtPct(g.e.ratio, 0)}</span>`).join('') + '<span><i class="sw-line g"></i>Objetivo</span>' + (rows.some(r => r.gs.some(g => g.bo)) ? '<span><i class="sw" style="background:var(--bo)"></i>BO</span>' : '')
+    : `<span><i class="sw" style="background:var(--bar)"></i>Real</span><span><i class="sw-line g"></i>Objetivo</span>${rows.some(r => r.gs[0].bo) ? '<span><i class="sw" style="background:var(--bo)"></i>BO</span>' : ''}${rows.some(r => r.gs[0].proy != null) ? '<span><i class="sw" style="background:var(--accent);opacity:.45"></i>Proyección del mes en curso</span>' : ''}`;
   h += `<div class="chart" id="trendChart"></div><div class="tr-cmp-res" id="trCmpRes"></div><div class="legend">${ley}</div>`;
   box.innerHTML = h;
   const cw = $('#trendChart').clientWidth, GAP = dim ? 16 : 0;
@@ -3195,7 +3218,7 @@ function renderTrend() {
   $('#trendChart').classList.toggle('scroll-x', W > cw + 2);
   const slot = (W - GAP * (grupos.length - 1)) / nb, T = 24, H = 120, B = dim ? 52 : 36;
   const bw = dim ? Math.min(18, slot * 0.56) : Math.min(26, slot * 0.46);
-  const maxV = Math.max(1, ...barras.flatMap(b => [b.x.e.real || 0, b.x.e.obj || 0, b.x.proy || 0])) * 1.08;
+  const maxV = Math.max(1, ...barras.flatMap(b => [(b.x.e.real || 0) + b.x.bo, b.x.e.obj || 0, b.x.proy || 0])) * 1.08;
   const Y = v => T + H - (v / maxV) * H;
   const cxDe = i => i * slot + barras[i].gi * GAP + slot / 2;
   let s = `<svg viewBox="0 0 ${W} ${T + H + B}" height="${T + H + B}" role="img" aria-label="Evolución mensual"><line x1="0" x2="${W}" y1="${T + H + 0.5}" y2="${T + H + 0.5}" class="c-grid"/>`;
@@ -3203,8 +3226,9 @@ function renderTrend() {
     const { r, x: g } = b, cx = cxDe(i), x = cx - bw / 2, esAct = enSel(r.p), marcado = TREND.cmp && sel.includes(i);
     if (g.proy != null && g.proy > (g.e.real || 0)) s += `<path d="${barPath(x, Y(g.proy), bw, T + H - Y(g.proy), 3)}" class="c-ghost"${g.col ? ` style="fill:${g.col};opacity:.25"` : ''}/>`;
     if (g.e.real) s += `<path d="${barPath(x, Y(g.e.real), bw, T + H - Y(g.e.real), dim ? 3 : 4)}" class="${esAct ? 'c-bar-hi' : 'c-bar'}${marcado ? ' c-sel' : ''}"${g.col ? ` style="fill:${g.col};opacity:${esAct || marcado ? 1 : .72}"` : ''}/>`;
+    if (g.bo) { const v0 = g.e.real || 0; s += `<path d="${barPath(x, Y(v0 + g.bo), bw, Math.max(2, Y(v0) - Y(v0 + g.bo)), 3)}" class="c-bo"/>`; }
     if (g.e.obj) s += `<line x1="${(x - (dim ? 2 : 5)).toFixed(1)}" x2="${(x + bw + (dim ? 2 : 5)).toFixed(1)}" y1="${Y(g.e.obj).toFixed(1)}" y2="${Y(g.e.obj).toFixed(1)}" class="c-tick c-tick-g"/>`;
-    const topY = Math.min(Y(g.e.real || 0), g.e.obj ? Y(g.e.obj) : Infinity, g.proy ? Y(g.proy) : Infinity);
+    const topY = Math.min(Y((g.e.real || 0) + g.bo), g.e.obj ? Y(g.e.obj) : Infinity, g.proy ? Y(g.proy) : Infinity);
     s += `<text x="${cx.toFixed(1)}" y="${(topY - 6).toFixed(1)}" text-anchor="middle" class="${esAct ? 'c-lbl' : 'c-lbl-m'}${dim ? ' c-lbl-s' : ''}">${esc(axisFmt(g.e.real || 0, m))}</text>`;
     s += `<text x="${cx.toFixed(1)}" y="${T + H + 16}" text-anchor="middle" class="c-axis ${esAct ? 'c-axis-b' : ''}">${esc(perLabel(r.p).corto)}</text>`;
     const rt = g.e.ratio;
@@ -4122,7 +4146,7 @@ const S = {
   tab: 'inicio',
   periodo: null,
   metric: 'fact',
-  f: { zona: null, vendedor: null, cliente: null, marca: null, categoria: null, producto: null, calidad: null },
+  f: { zona: null, vendedor: null, cliente: null, marca: null, categoria: null, producto: null, calidad: null, familia: null },
   dimA: 'marca',
   orden: 'venta',
   selDia: null,
@@ -4137,6 +4161,7 @@ const S = {
   rango: null,        // período de varios meses: { d, h, tipo, salto } (null = un mes)
   apertura: null,     // Análisis · Precio · Categoría: orden de la apertura (null = por defecto)
   precioVs: 'curso',  // Campana de precios: referencia del 'curso' (mes actual) | 'prev' (mes anterior completo)
+  bo: false,          // v0.37: back order sumado (botón BO del encabezado; arranca apagado, no se guarda)
 };
 /* Sesión: { rol: 'aprobador'|'vendedor', usuario } o null si no ingresó. */
 let SES = null;
@@ -4168,9 +4193,9 @@ function opciones(k) {
   return [...set].sort((a, b) => a.localeCompare(b, 'es'));
 }
 
-const DIMS = { zona: 'Zona', vendedor: 'Vendedor', cliente: 'Cliente', marca: 'Marca', categoria: 'Categoría', producto: 'Producto', calidad: 'Calidad' };
+const DIMS = { zona: 'Zona', vendedor: 'Vendedor', cliente: 'Cliente', marca: 'Marca', categoria: 'Categoría', producto: 'Producto', calidad: 'Calidad', familia: 'Familia' };
 const DIMS_A = { marca: 'Marca', categoria: 'Categoría', sku: 'Producto', cliente: 'Cliente', zona: 'Zona', vendedor: 'Vendedor' };
-const DIM_PLURAL = { marca: 'marcas', categoria: 'categorías', sku: 'productos', cliente: 'clientes', zona: 'zonas', vendedor: 'vendedores', calidad: 'calidades' };
+const DIM_PLURAL = { marca: 'marcas', categoria: 'categorías', sku: 'productos', cliente: 'clientes', zona: 'zonas', vendedor: 'vendedores', calidad: 'calidades', familia: 'familias' };
 const skuDe = r => r.marca + ' · ' + r.producto;
 const valDim = (r, dim) => dim === 'sku' ? skuDe(r) : r[dim];
 
@@ -4184,7 +4209,7 @@ function buildIndex() {
   const precioObj = new Map();     // periodo|cliente|marca|producto (v1) y periodo|zona|marca|categoria|producto (v2)
   const precioProd = new Map();
   const listaObj = new Map();      // periodo|zona|producto(|calidad) → precio de lista del objetivo    // periodo|marca|categoria|producto → promedio ponderado
-  const valores = { zona: new Set(), vendedor: new Set(), cliente: new Set(), marca: new Set(), categoria: new Set(), producto: new Set(), calidad: new Set() };
+  const valores = { zona: new Set(), vendedor: new Set(), cliente: new Set(), marca: new Set(), categoria: new Set(), producto: new Set(), calidad: new Set(), familia: new Set() };
   const clienteInfo = new Map();
   const lineas = new Map();        // marca|categoria|producto|gp → datos de BASE GENERAL
   const M = d.maestros || {};
@@ -4265,9 +4290,27 @@ const listaF = fv => fv == null ? [] : Array.isArray(fv) ? fv : [fv];
 const txtF = (k, fv) => { const l = listaF(fv).map(v => k === 'categoria' ? ({ Cer: 'Cerámica', Por: 'Porcelanato' }[v] || v) : v); return l.length <= 2 ? l.join(' + ') : `${l.length} ${DIM_PLURAL[k === 'producto' ? 'sku' : k] || 'seleccionados'}`; };
 const match = (r, f) => { for (const k in f) if (f[k] != null && !enF(r[k], f[k])) return false; return true; };
 
+/* ---------- Back order (v0.37) ----------
+   Pedidos pendientes de facturar (solo cantidad), ubicados en el mes de la extracción. El botón BO del encabezado
+   (apagado al abrir) los suma, en otro color, al arco, a las ventas diarias, a la curva y a la evolución mensual. */
+const hayBO = () => !!(DATA && DATA.backOrder && DATA.backOrder.items && DATA.backOrder.items.length);
+function boPer() {
+  const f = hayBO() && DATA.backOrder.fecha ? new Date(DATA.backOrder.fecha) : null;
+  return f && !isNaN(f) ? f.getFullYear() + '-' + pad(f.getMonth() + 1) : IDX.corte.slice(0, 7);
+}
+const boActivo = () => !!S.bo && S.metric === 'unid' && hayBO();
+/** m² de back order para el período y filtro (0 si el botón está apagado o la métrica no es Cantidad). */
+function boU(periodo, f) {
+  if (!boActivo() || !coincidePer(boPer(), periodo)) return 0;
+  let u = 0;
+  for (const b of DATA.backOrder.items) if (enScope(b) && match(b, f)) u += b.unidades;
+  return u;
+}
+const boFechaTxt = () => { const d = new Date(DATA.backOrder.fecha); return isNaN(d) ? '' : pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+
 /** Agregado de objetivos y ventas del periodo para un filtro. */
 function agg(periodo, f) {
-  const a = { oF: 0, oU: 0, rF: 0, rU: 0, rFo: 0, mF: 0, mU: 0, mN: 0, rC: 0, rFc: 0, bmN: 0, bmF: 0, dias: new Map() };
+  const a = { oF: 0, oU: 0, rF: 0, rU: 0, rFo: 0, mF: 0, mU: 0, mN: 0, rC: 0, rFc: 0, bmN: 0, bmF: 0, dias: new Map(), bU: boU(periodo, f) };
   for (const o of DATA.objetivos) if (coincidePer(o.periodo, periodo) && enScope(o) && match(o, f)) { a.oF += o.unidades * o.precio; a.oU += o.unidades; }
   for (const v of DATA.ventas) if (coincidePer(v._p, periodo) && ventaOK(v) && match(v, f)) {
     const F = v.unidades * v.precio, Fo = v.unidades * v._po, man = esManual(v);
@@ -4384,7 +4427,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.36</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.37</p></div>`;
 }
 
 /* ============================================================================
@@ -4441,7 +4484,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.36</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.37</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4511,7 +4554,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.36</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.37</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4551,7 +4594,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.36</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.37</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4674,8 +4717,9 @@ function renderHeader() {
   sub.textContent = lineaInfo(); sub.classList.toggle('largo', sub.textContent.length > 34);
   sub.title = dias > 2 ? 'Datos desactualizados · última venta ' + fechaDia(IDX.corte) : '';
   $('#meFoto').innerHTML = fotoHTML(usuarioActual());
+  const bb = $('#btnBO'); bb.hidden = !hayBO(); bb.classList.toggle('on', !!S.bo); bb.setAttribute('aria-pressed', String(!!S.bo)); bb.setAttribute('aria-label', S.bo ? 'Ocultar back order' : 'Sumar back order (pedidos pendientes)');
   const mb = $('#btnMoneda'), puede = SES.rol === 'aprobador' && tcUsd() > 0;
-  mb.hidden = !puede; if (puede) { mb.textContent = enUSD() ? 'US' : 'AR'; mb.classList.toggle('usd', enUSD()); mb.setAttribute('aria-label', enUSD() ? 'Ver en pesos' : `Ver en dólares (TC ${NF0.format(tcUsd())})`); }
+  mb.hidden = !puede; $('#hdrMini').classList.toggle('doble', !bb.hidden && !puede ? false : !bb.hidden && puede); $('#hdrMini').hidden = bb.hidden && !puede; if (puede) { mb.textContent = enUSD() ? 'US' : 'AR'; mb.classList.toggle('usd', enUSD()); mb.setAttribute('aria-label', enUSD() ? 'Ver en pesos' : `Ver en dólares (TC ${NF0.format(tcUsd())})`); }
 }
 
 /** Indicador blanco del selector Facturación / Cantidad / Precio: se desliza hasta la opción elegida. */
@@ -4781,13 +4825,14 @@ function renderInicio() {
   renderAlertas(cal);
 }
 
-function gaugeSVG(t, marker) {
+function gaugeSVG(t, marker, tBO) {
   const W = 260, cx = 130, cy = 132, r = 108, sw = 18;
   const pt = u => { const ang = Math.PI * (1 - u); return [cx + r * Math.cos(ang), cy - r * Math.sin(ang)]; };
   const arc = (u0, u1) => { const [x0, y0] = pt(u0), [x1, y1] = pt(u1); return `M${x0.toFixed(2)},${y0.toFixed(2)} A${r},${r} 0 0 1 ${x1.toFixed(2)},${y1.toFixed(2)}`; };
   const tt = Math.max(0, Math.min(1, t));
   let s = `<svg viewBox="0 0 ${W} 146" role="img" aria-hidden="true">`;
   s += `<path d="${arc(0, 1)}" stroke="var(--hero-track)" stroke-width="${sw}" fill="none" stroke-linecap="round"/>`;
+  if (tBO != null && tBO > tt + 0.003) s += `<path class="g-bo" d="${arc(Math.max(0.001, tt - 0.01), Math.min(1, tBO))}" stroke="var(--bo)" stroke-width="${sw}" fill="none" stroke-linecap="round"/>`;
   if (tt > 0.003) s += `<path class="g-fill" pathLength="100" d="${arc(0, tt)}" stroke="var(--hero-fill)" stroke-width="${sw}" fill="none" stroke-linecap="round"/>`;
   if (marker != null) {
     const ang = Math.PI * (1 - Math.max(0, Math.min(1, marker)));
@@ -4828,9 +4873,10 @@ function heroHTML(a, cal, e) {
   }
   return `<div class="hero">
     <div class="hero-top"><span class="hero-lbl">${esc(METRIC_NAME[m])} · ${esc(lblSel())}</span>${pillH}</div>
-    <div class="gauge">${gaugeSVG(t, marker)}<div class="gauge-c"><div class="gauge-v">${big}</div><div class="gauge-s">${sub}</div></div></div>
+    <div class="gauge">${gaugeSVG(t, marker, a.bU && e.obj ? (e.real + a.bU) / e.obj : null)}<div class="gauge-c"><div class="gauge-v">${big}</div><div class="gauge-s">${sub}</div>${a.bU && e.obj ? `<div class="gauge-bo"><i></i>con BO ${fmtPct((e.real + a.bU) / e.obj, 0)}</div>` : ''}</div></div>
     <div class="hero-stats">${stats.map(([l, v]) => `<div><span>${l}</span><b>${v}</b></div>`).join('')}</div>
     <div class="hero-foot">${foot}</div>
+    ${a.bU ? `<div class="hero-foot" style="margin-top:6px"><span class="mk" style="background:var(--bo)"></span>BO (pedidos pendientes) +${fmtUc(a.bU)} · con BO ${fmtMetric(e.real + a.bU)}${e.obj ? ' · ' + fmtPct((e.real + a.bU) / e.obj, 0) + ' del objetivo' : ''} · extraído ${esc(boFechaTxt())}</div>` : ''}
     ${a.mN && m !== 'precio' ? `<div class="hero-foot" style="margin-top:6px"><span class="mk" style="background:#F2C27A"></span>Incluye simulación: +${m === 'fact' ? fmtMoney(a.mF) : fmtUc(a.mU)} (${a.mN} registro${a.mN > 1 ? 's' : ''} manual${a.mN > 1 ? 'es' : ''})</div>` : ''}
     ${heroDesglose(cal)}
   </div>`;
@@ -5169,7 +5215,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.36 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.37 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5238,13 +5284,18 @@ function expandirV2(raw) {
   (raw.ventas || []).forEach((v, i) => {
     const c = cliMap.get(v.cliente);
     if (!c) { errores.push(`Venta ${i + 1}: el cliente "${v.cliente}" no está en CLIENTE`); return; }
-    const o = { id: String(v.id || 'x' + i), fecha: v.fecha, zona: c.zona, vendedor: c.vendedorNombre, cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: String(v.calidad || calSku.get(String(v.sku || '')) || '').trim(), sku: v.sku || '', unidades: +v.cantidad || 0, precio: +v.precio || 0 };
+    const o = { id: String(v.id || 'x' + i), fecha: v.fecha, zona: c.zona, vendedor: c.vendedorNombre, cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: String(v.calidad || calSku.get(String(v.sku || '')) || '').trim(), familia: String(v.familia || '').trim(), sku: v.sku || '', unidades: +v.cantidad || 0, precio: +v.precio || 0 };
     if (v.origen) o.origen = v.origen;
     ventas.push(o);
   });
   const meta = { ...(raw.meta || {}) }; meta.feriados = meta.feriados || []; meta.version = 2;
+  // Back order (v0.37): pedidos pendientes de facturar, solo cantidad. Se ubican en el mes de la extracción.
+  const bo = raw.backOrder && Array.isArray(raw.backOrder.items) ? {
+    fecha: raw.backOrder.fecha || meta.generado || '',
+    items: raw.backOrder.items.map(b => { const c = cliMap.get(b.cliente); return c ? { cliente: b.cliente, zona: c.zona, vendedor: c.vendedorNombre, marca: b.marca, categoria: b.categoria || '', producto: b.producto, calidad: String(b.calidad || '').trim(), familia: String(b.familia || '').trim(), unidades: +b.cantidad || 0 } : null; }).filter(b => b && b.unidades > 0),
+  } : null;
   return {
-    data: { meta, usuarios, objetivos, ventas, maestros: { baseGeneral: raw.baseGeneral || [], productos: raw.productos || [], clientes, baseCliente: raw.baseCliente || [], ...geoV2(raw) }, raw },
+    data: { meta, usuarios, objetivos, ventas, ...(bo ? { backOrder: bo } : {}), maestros: { baseGeneral: raw.baseGeneral || [], productos: raw.productos || [], clientes, baseCliente: raw.baseCliente || [], ...geoV2(raw) }, raw },
     errores, avisos: [],
   };
 }
@@ -5335,7 +5386,7 @@ function guardar() {
   if (!store.set(KEY_DATA, JSON.stringify(limpio(DATA, true)))) toast('No se pudo guardar en el dispositivo; los datos se mantienen mientras la app esté abierta.');
 }
 /** Venta interna → fila v2 (para exportar o guardar registros manuales). */
-const ventaV2 = v => { const o = { id: v.id, fecha: v.fecha, cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: v.calidad || '', sku: v.sku || '', cantidad: v.unidades, precio: v.precio }; if (v.origen) o.origen = v.origen; return o; };
+const ventaV2 = v => { const o = { id: v.id, fecha: v.fecha, cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: v.calidad || '', familia: v.familia || '', sku: v.sku || '', cantidad: v.unidades, precio: v.precio }; if (v.origen) o.origen = v.origen; return o; };
 function limpio(d, conOrigen) {
   if (d.raw) {
     const meta = { ...d.meta }; if (!conOrigen) { delete meta._origen; delete meta._cargado; }
@@ -5422,7 +5473,7 @@ function sheetFiltros() {
       <div class="fops">${ops.map(v => `<label><input type="checkbox" value="${esc(v)}"${cur.includes(v) ? ' checked' : ''}><span>${esc(nom(v))}</span></label>`).join('')}</div>
       <div class="fops-act"><button type="button" data-fsel="todos">Marcar todos</button><button type="button" data-fsel="ninguno">Quitar selección</button><span class="fna"></span></div></details>`;
   };
-  openSheet('Filtros', 'Marcá uno o varios valores · se aplican a Inicio, Análisis, Equipo y Mapa', `<div class="fsels">${['zona', 'vendedor', 'cliente', 'marca', 'categoria', 'producto', 'calidad'].filter(k => k !== 'calidad' || opciones('calidad').length).map(campo).join('')}</div>
+  openSheet('Filtros', 'Marcá uno o varios valores · se aplican a Inicio, Análisis, Equipo y Mapa', `<div class="fsels">${['zona', 'vendedor', 'cliente', 'marca', 'categoria', 'producto', 'calidad', 'familia'].filter(k => !['calidad', 'familia'].includes(k) || opciones(k).length).map(campo).join('')}</div>
     <div class="btns"><button class="btn btn-p" id="fAplicar">Aplicar filtros</button><button class="btn btn-g" id="fLimpiar">Limpiar todo</button></div>`, sh => {
     const resumen = d => { const k = d.dataset.k, v = [...d.querySelectorAll('.fops input:checked')].map(x => x.value); d.querySelector('.fv').textContent = v.length ? txtF(k, v) : 'Todos'; };
     const actual = () => { const f = {}; sh.querySelectorAll('.fsel').forEach(d => { const v = [...d.querySelectorAll('.fops input:checked')].map(x => x.value); if (v.length) f[d.dataset.k] = v.length === 1 ? v[0] : v; }); if (esVend()) f.vendedor = SES.usuario; return f; };
@@ -5701,6 +5752,8 @@ document.addEventListener('click', ev => {
     case 'ubcolsreset': S.ubCols = null; render(); break;
     case 'verAperturaUB': S.verAperturaUB = !S.verAperturaUB; renderUB(); break;
     case 'ubreset': S.aperturaUB = null; S.ubUnir = null; UB_EST.clear(); render(); break;
+    case 'bo': S.bo = !S.bo; { const y = window.scrollY; render(); window.scrollTo({ top: y }); }
+      toast(!S.bo ? 'Back order oculto' : S.metric === 'unid' ? `Back order sumado · extraído ${boFechaTxt()}` : 'Back order activo: se suma en Cantidad (m²)'); break;
     case 'moneda': S.moneda = S.moneda === 'USD' ? 'ARS' : 'USD'; { const y = window.scrollY; render(); window.scrollTo({ top: y }); } toast(S.moneda === 'USD' ? `Valores en dólares · TC ${NF0.format(tcUsd())}` : 'Valores en pesos'); break;
     case 'heroExp': HERO_ABIERTO = !HERO_ABIERTO; if (!HERO_ABIERTO) HERO_CAT = null; renderInicio(); break;
     case 'heroCat': HERO_CAT = HERO_CAT === t.dataset.hcat ? null : t.dataset.hcat; renderInicio(); break;
