@@ -2242,6 +2242,8 @@ function clientesMapa() {
   IDX.clienteInfo.forEach((c, k) => {
     if (!enScope({ vendedor: c.vendedor })) return;
     if (S.f.zona && !enF(c.zona, S.f.zona)) return;
+    if (S.f.canalDist && !enF(c.canalDist, S.f.canalDist)) return;
+    if (S.f.canalTipo && !enF(c.canalTipo, S.f.canalTipo)) return;
     if (S.f.vendedor && !enF(c.vendedor, S.f.vendedor)) return;
     if (S.f.cliente && !enF(k, S.f.cliente)) return;
     filas.set(k, { k, zona: c.zona, vendedor: c.vendedor, vcod: c.vendCod || iniciales(c.vendedor || ''), val: 0, prev: 0, ult: null, marcas: new Map(), cds: [], suc: [], pos: null, pers: new Set() });
@@ -4146,7 +4148,7 @@ const S = {
   tab: 'inicio',
   periodo: null,
   metric: 'fact',
-  f: { zona: null, vendedor: null, cliente: null, marca: null, categoria: null, producto: null, calidad: null, familia: null },
+  f: { zona: null, vendedor: null, cliente: null, marca: null, categoria: null, producto: null, calidad: null, familia: null, canalDist: null, canalTipo: null },
   dimA: 'marca',
   orden: 'venta',
   selDia: null,
@@ -4179,7 +4181,7 @@ function opcionesF(k, f) {
   if (!Object.keys(otros).length) return opciones(k);
   const set = new Set();
   const sinCli = !('cliente' in otros);
-  if (sinCli) for (const r of DATA.objetivos) if (enScope(r) && r[k] && match(r, otros)) set.add(r[k]);
+  if (sinCli) for (const r of DATA.objetivos) if (enScope(r) && typeof r[k] === 'string' && match(r, otros)) set.add(r[k]);
   for (const r of DATA.ventas) if (enScope(r) && r[k] && match(r, otros)) set.add(r[k]);
   const base = opciones(k);
   return base.filter(v => set.has(v));
@@ -4188,14 +4190,14 @@ function opcionesF(k, f) {
 function opciones(k) {
   if (!esVend()) return IDX.valores[k];
   const set = new Set();
-  for (const r of DATA.objetivos) if (enScope(r) && r[k]) set.add(r[k]);
+  for (const r of DATA.objetivos) if (enScope(r) && typeof r[k] === 'string') set.add(r[k]);
   for (const r of DATA.ventas) if (enScope(r) && r[k]) set.add(r[k]);
   return [...set].sort((a, b) => a.localeCompare(b, 'es'));
 }
 
-const DIMS = { zona: 'Zona', vendedor: 'Vendedor', cliente: 'Cliente', marca: 'Marca', categoria: 'Categoría', producto: 'Producto', calidad: 'Calidad', familia: 'Familia' };
+const DIMS = { zona: 'Zona', vendedor: 'Vendedor', cliente: 'Cliente', marca: 'Marca', categoria: 'Categoría', producto: 'Producto', calidad: 'Calidad', familia: 'Familia', canalDist: 'Canal distribución', canalTipo: 'Canal cliente' };
 const DIMS_A = { marca: 'Marca', categoria: 'Categoría', sku: 'Producto', cliente: 'Cliente', zona: 'Zona', vendedor: 'Vendedor' };
-const DIM_PLURAL = { marca: 'marcas', categoria: 'categorías', sku: 'productos', cliente: 'clientes', zona: 'zonas', vendedor: 'vendedores', calidad: 'calidades', familia: 'familias' };
+const DIM_PLURAL = { marca: 'marcas', categoria: 'categorías', sku: 'productos', cliente: 'clientes', zona: 'zonas', vendedor: 'vendedores', calidad: 'calidades', familia: 'familias', canalDist: 'canales', canalTipo: 'canales' };
 const skuDe = r => r.marca + ' · ' + r.producto;
 const valDim = (r, dim) => dim === 'sku' ? skuDe(r) : r[dim];
 
@@ -4209,12 +4211,12 @@ function buildIndex() {
   const precioObj = new Map();     // periodo|cliente|marca|producto (v1) y periodo|zona|marca|categoria|producto (v2)
   const precioProd = new Map();
   const listaObj = new Map();      // periodo|zona|producto(|calidad) → precio de lista del objetivo    // periodo|marca|categoria|producto → promedio ponderado
-  const valores = { zona: new Set(), vendedor: new Set(), cliente: new Set(), marca: new Set(), categoria: new Set(), producto: new Set(), calidad: new Set(), familia: new Set() };
+  const valores = { zona: new Set(), vendedor: new Set(), cliente: new Set(), marca: new Set(), categoria: new Set(), producto: new Set(), calidad: new Set(), familia: new Set(), canalDist: new Set(), canalTipo: new Set() };
   const clienteInfo = new Map();
   const lineas = new Map();        // marca|categoria|producto|gp → datos de BASE GENERAL
   const M = d.maestros || {};
   (M.baseGeneral || []).forEach(l => lineas.set(kLinea(l), l));
-  (M.clientes || []).forEach(c => clienteInfo.set(c.cliente, { zona: c.zona, vendedor: c.vendedorNombre || c.vendedor, vendCod: c.vendedor, descCliente: c.descCliente }));
+  (M.clientes || []).forEach(c => clienteInfo.set(c.cliente, { zona: c.zona, vendedor: c.vendedorNombre || c.vendedor, vendCod: c.vendedor, descCliente: c.descCliente, canalDist: c.canalDist || '', canalTipo: c.canalTipo || '' }));
 
   d.objetivos.forEach(o => {
     periodos.add(o.periodo);
@@ -4230,7 +4232,7 @@ function buildIndex() {
   });
   let maxFecha = '';
   [...d.objetivos, ...d.ventas].forEach(r => {
-    for (const k in valores) if (r[k]) valores[k].add(r[k]);
+    for (const k in valores) if (r[k] && typeof r[k] === 'string') valores[k].add(r[k]);
     if (r.cliente && !clienteInfo.has(r.cliente)) clienteInfo.set(r.cliente, { zona: r.zona, vendedor: r.vendedor });
     if (r.gp && !lineas.has(kLinea(r))) lineas.set(kLinea(r), { marca: r.marca, categoria: r.categoria || '', producto: r.producto, gp: r.gp, calidad: r.calidad || '' });
     else if (!r.gp && ![...lineas.values()].some(l => l.marca === r.marca && l.producto === r.producto && (l.calidad || '') === (r.calidad || ''))) lineas.set(kLinea(r), { marca: r.marca, categoria: r.categoria || '', producto: r.producto, gp: '', calidad: r.calidad || '' });
@@ -4288,7 +4290,8 @@ function calendario(periodo) {
 const enF = (val, fv) => Array.isArray(fv) ? fv.includes(val) : val === fv;
 const listaF = fv => fv == null ? [] : Array.isArray(fv) ? fv : [fv];
 const txtF = (k, fv) => { const l = listaF(fv).map(v => k === 'categoria' ? ({ Cer: 'Cerámica', Por: 'Porcelanato' }[v] || v) : v); return l.length <= 2 ? l.join(' + ') : `${l.length} ${DIM_PLURAL[k === 'producto' ? 'sku' : k] || 'seleccionados'}`; };
-const match = (r, f) => { for (const k in f) if (f[k] != null && !enF(r[k], f[k])) return false; return true; };
+const enFv = (val, fv) => Array.isArray(val) ? val.some(x => enF(x, fv)) : enF(val, fv);   // objetivos: lista de canales de su zona
+const match = (r, f) => { for (const k in f) if (f[k] != null && !enFv(r[k], f[k])) return false; return true; };
 
 /* ---------- Back order (v0.37) ----------
    Pedidos pendientes de facturar (solo cantidad), ubicados en el mes de la extracción. El botón BO del encabezado
@@ -4427,7 +4430,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.37</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.38</p></div>`;
 }
 
 /* ============================================================================
@@ -4484,7 +4487,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.37</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.38</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4554,7 +4557,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.37</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.38</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4594,7 +4597,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.37</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.38</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -5215,7 +5218,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.37 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.38 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5277,14 +5280,16 @@ function expandirV2(raw) {
   const clientes = (raw.clientes || []).map(c => ({ ...c, vendedorNombre: nombreDe(c.vendedor) }));
   const cliMap = new Map(clientes.map(c => [c.cliente, c]));
   const zonaVend = new Map(); clientes.forEach(c => { if (!zonaVend.has(c.zona)) zonaVend.set(c.zona, c.vendedorNombre); });
-  const objetivos = (raw.objetivos || []).map(o => ({ periodo: o.periodo, zona: o.zona, vendedor: zonaVend.get(o.zona) || 'Sin asignar', marca: o.marca, categoria: o.categoria || '', producto: o.producto, calidad: String(o.calidad || '').trim(), unidades: +o.cantidad || 0, precio: +o.precioObjetivo || 0, precioLista: +o.precioLista || 0 }))
+  // v0.38: canales del cliente. Los objetivos van por zona: llevan la lista de canales de los clientes de su zona.
+  const zonaCan = new Map(); clientes.forEach(c => { let z = zonaCan.get(c.zona); if (!z) zonaCan.set(c.zona, z = { d: new Set(), t: new Set() }); if (c.canalDist) z.d.add(c.canalDist); if (c.canalTipo) z.t.add(c.canalTipo); });
+  const objetivos = (raw.objetivos || []).map(o => ({ periodo: o.periodo, zona: o.zona, canalDist: [...((zonaCan.get(o.zona) || {}).d || [])], canalTipo: [...((zonaCan.get(o.zona) || {}).t || [])], vendedor: zonaVend.get(o.zona) || 'Sin asignar', marca: o.marca, categoria: o.categoria || '', producto: o.producto, calidad: String(o.calidad || '').trim(), unidades: +o.cantidad || 0, precio: +o.precioObjetivo || 0, precioLista: +o.precioLista || 0 }))
     .filter(o => o.periodo && o.zona && o.marca && o.producto);
   const ventas = [];
   const calSku = new Map((raw.productos || []).filter(x => x.sku && x.calidad).map(x => [String(x.sku), String(x.calidad).trim()]));
   (raw.ventas || []).forEach((v, i) => {
     const c = cliMap.get(v.cliente);
     if (!c) { errores.push(`Venta ${i + 1}: el cliente "${v.cliente}" no está en CLIENTE`); return; }
-    const o = { id: String(v.id || 'x' + i), fecha: v.fecha, zona: c.zona, vendedor: c.vendedorNombre, cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: String(v.calidad || calSku.get(String(v.sku || '')) || '').trim(), familia: String(v.familia || '').trim(), sku: v.sku || '', unidades: +v.cantidad || 0, precio: +v.precio || 0 };
+    const o = { id: String(v.id || 'x' + i), fecha: v.fecha, zona: c.zona, vendedor: c.vendedorNombre, canalDist: c.canalDist || '', canalTipo: c.canalTipo || '', cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: String(v.calidad || calSku.get(String(v.sku || '')) || '').trim(), familia: String(v.familia || '').trim(), sku: v.sku || '', unidades: +v.cantidad || 0, precio: +v.precio || 0 };
     if (v.origen) o.origen = v.origen;
     ventas.push(o);
   });
@@ -5292,7 +5297,7 @@ function expandirV2(raw) {
   // Back order (v0.37): pedidos pendientes de facturar, solo cantidad. Se ubican en el mes de la extracción.
   const bo = raw.backOrder && Array.isArray(raw.backOrder.items) ? {
     fecha: raw.backOrder.fecha || meta.generado || '',
-    items: raw.backOrder.items.map(b => { const c = cliMap.get(b.cliente); return c ? { cliente: b.cliente, zona: c.zona, vendedor: c.vendedorNombre, marca: b.marca, categoria: b.categoria || '', producto: b.producto, calidad: String(b.calidad || '').trim(), familia: String(b.familia || '').trim(), unidades: +b.cantidad || 0 } : null; }).filter(b => b && b.unidades > 0),
+    items: raw.backOrder.items.map(b => { const c = cliMap.get(b.cliente); return c ? { cliente: b.cliente, zona: c.zona, vendedor: c.vendedorNombre, canalDist: c.canalDist || '', canalTipo: c.canalTipo || '', marca: b.marca, categoria: b.categoria || '', producto: b.producto, calidad: String(b.calidad || '').trim(), familia: String(b.familia || '').trim(), unidades: +b.cantidad || 0 } : null; }).filter(b => b && b.unidades > 0),
   } : null;
   return {
     data: { meta, usuarios, objetivos, ventas, ...(bo ? { backOrder: bo } : {}), maestros: { baseGeneral: raw.baseGeneral || [], productos: raw.productos || [], clientes, baseCliente: raw.baseCliente || [], ...geoV2(raw) }, raw },
@@ -5473,7 +5478,7 @@ function sheetFiltros() {
       <div class="fops">${ops.map(v => `<label><input type="checkbox" value="${esc(v)}"${cur.includes(v) ? ' checked' : ''}><span>${esc(nom(v))}</span></label>`).join('')}</div>
       <div class="fops-act"><button type="button" data-fsel="todos">Marcar todos</button><button type="button" data-fsel="ninguno">Quitar selección</button><span class="fna"></span></div></details>`;
   };
-  openSheet('Filtros', 'Marcá uno o varios valores · se aplican a Inicio, Análisis, Equipo y Mapa', `<div class="fsels">${['zona', 'vendedor', 'cliente', 'marca', 'categoria', 'producto', 'calidad', 'familia'].filter(k => !['calidad', 'familia'].includes(k) || opciones(k).length).map(campo).join('')}</div>
+  openSheet('Filtros', 'Marcá uno o varios valores · se aplican a Inicio, Análisis, Equipo y Mapa', `<div class="fsels">${['canalTipo', 'canalDist', 'zona', 'vendedor', 'cliente', 'marca', 'categoria', 'producto', 'calidad', 'familia'].filter(k => !['calidad', 'familia', 'canalDist', 'canalTipo'].includes(k) || opciones(k).length).map(campo).join('')}</div>
     <div class="btns"><button class="btn btn-p" id="fAplicar">Aplicar filtros</button><button class="btn btn-g" id="fLimpiar">Limpiar todo</button></div>`, sh => {
     const resumen = d => { const k = d.dataset.k, v = [...d.querySelectorAll('.fops input:checked')].map(x => x.value); d.querySelector('.fv').textContent = v.length ? txtF(k, v) : 'Todos'; };
     const actual = () => { const f = {}; sh.querySelectorAll('.fsel').forEach(d => { const v = [...d.querySelectorAll('.fops input:checked')].map(x => x.value); if (v.length) f[d.dataset.k] = v.length === 1 ? v[0] : v; }); if (esVend()) f.vendedor = SES.usuario; return f; };
