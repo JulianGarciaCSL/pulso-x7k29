@@ -192,6 +192,21 @@ svg{display:block}
 .kpi-v{font-size:20px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kpi-l{font-size:12px;color:var(--muted);font-weight:600}
 .kpi-d{font-size:12px;font-weight:700;color:var(--ink-2);margin-top:6px;display:flex;align-items:center;gap:5px}
+/* v0.41 · 3 KPIs chicos en fila */
+.kpis.k3{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.k3 .kpi{padding:10px 9px 11px;border-radius:16px}
+.k3 .kpi-i{width:26px;height:26px;border-radius:9px;margin-bottom:6px}
+.k3 .kpi-i .ico{width:15px;height:15px}
+.k3 .kpi-v{font-size:15.5px}
+.k3 .kpi-v small{font-size:11px;font-weight:700;color:var(--muted)}
+.k3 .kpi-l{font-size:10.5px;line-height:1.2}
+.k3 .kpi-d{font-size:10.5px;margin-top:4px;line-height:1.2;display:block}
+.k3 button.kpi::after{right:8px;top:6px;font-size:16px}
+.kpi-bp{gap:0}
+.kpi-sw{display:flex;background:var(--surface-2);border-radius:999px;padding:2px;margin-bottom:6px}
+.kpi-sw button{flex:1;border:0;background:none;font:inherit;font-size:9px;font-weight:800;letter-spacing:-.01em;padding:4px 1px;border-radius:999px;color:var(--muted);cursor:pointer}
+.kpi-sw button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.kpi-bpb{border:0;background:none;font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer;display:flex;flex-direction:column;gap:2px}
 
 /* ---------- 8. Estado (píldoras) ---------- */
 .pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 9px 3px 7px;font-size:11.5px;font-weight:700;white-space:nowrap}
@@ -1841,6 +1856,33 @@ button.kpi:active{transform:scale(.98)}
 .hdr.compacto .hdr-mini.doble{transform:scale(.9)}
 .arow.nv4{padding-left:48px}.arow.nv4 .abar{height:24px}.arow.nv4 .abar-n{line-height:24px;font-size:12px}.arow.nv4 .abar-v{font-size:12px}.arow.nv4 .abar-fill{opacity:.66}
 
+/* v0.41 · Renglón Categoría / Calidad / Precio fijo al bajar */
+.cat-tog{position:sticky;top:var(--hdrH,76px);z-index:25;margin:4px -16px 8px;padding:6px 16px 4px;transition:background-color .2s,box-shadow .2s}
+.cat-tog.pegado{padding-top:16px;background:rgba(236,237,239,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 6px 14px -8px rgba(20,22,26,.35)}
+/* v0.41 · Encabezado: Canal distribución NA / IN / EX + engranaje */
+.hdr-can{display:flex;flex-direction:column;gap:3px;padding:3px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);transition:transform .25s}
+.hdr-can button{width:34px;height:17px;border:0;border-radius:999px;background:transparent;color:rgba(255,255,255,.45);font:inherit;font-size:10.5px;font-weight:800;letter-spacing:.06em;line-height:1;cursor:pointer;transition:background .2s,color .2s}
+.hdr-can button[aria-pressed="true"]{background:#fff;color:#2D3034}
+.hdr-can button:active{transform:scale(.92)}
+.hdr.compacto .hdr-can{transform:scale(.86)}
+#btnActualizar{position:relative}
+.aj-dot{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--bo,#E39B3B);box-shadow:0 0 0 2px #3C4045}
+.aj .aj-i{width:100%;text-align:left;font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.aj-sw{width:40px;height:23px;border-radius:999px;background:#D5D8DD;position:relative;flex:none;transition:background .25s}
+.aj-sw::after{content:"";position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .28s cubic-bezier(.3,1.4,.5,1)}
+.aj-sw.on{background:var(--bo,#E39B3B)}
+.aj-sw.on::after{transform:translateX(17px)}
+.aj-seg{display:flex;background:var(--surface-2);border-radius:999px;padding:3px;flex:none}
+.aj-seg button{border:0;background:none;font:inherit;font-size:12px;font-weight:800;padding:6px 12px;border-radius:999px;color:var(--muted);cursor:pointer}
+.aj-seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+/* v0.41 · apertura Canal ▶ Categoría ▶ Calidad */
+.hd-row.nv2{grid-template-columns:27% 1fr 128px;padding-left:0}
+.hd-row.nv2 .hd-n{padding-left:44px;font-weight:500;font-size:12px;color:rgba(255,255,255,.7)}
+.hd-row.nv2 .hd-b{height:5px}
+.hd-row.nv2 .hd-f{background:rgba(255,255,255,.45)}
+.hd-so{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:9px;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.45);text-transform:uppercase}
+.hd-row:has(.hd-so) .hd-b{height:12px;background:rgba(255,255,255,.06)}
+
 </style>
 
 <div class="intro" id="intro" role="dialog" aria-label="Bienvenida">
@@ -1912,9 +1954,9 @@ button.kpi:active{transform:scale(.98)}
       </div>
     </div>
     <div class="hdr-acts">
-      <div class="hdr-mini" id="hdrMini"><button class="icon-btn mon-btn bo-btn" id="btnBO" data-act="bo" hidden>BO</button><button class="icon-btn mon-btn" id="btnMoneda" data-act="moneda" hidden>AR</button></div>
-      <button class="icon-btn" id="btnActualizar" data-act="cargar" aria-label="Actualizar datos">
-        <svg viewBox="0 0 24 24" class="ico"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>
+      <div class="hdr-can" id="hdrCan" role="group" aria-label="Canal distribución" hidden></div>
+      <button class="icon-btn" id="btnActualizar" data-act="ajustes" aria-label="Opciones: back order, moneda y actualizar">
+        <svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="aj-dot" id="ajDot" hidden></span>
       </button>
       <button class="me" id="btnPerfil" aria-label="Mi perfil"><span id="meFoto" class="pic" style="width:100%;height:100%"></span></button>
     </div>
@@ -1932,9 +1974,9 @@ button.kpi:active{transform:scale(.98)}
       <button data-m="unid" aria-pressed="false"><span class="mb-e">📦</span><span class="mb-l">Cantidad</span></button>
       <button data-m="precio" aria-pressed="false"><span class="mb-e">🏷️</span><span class="mb-l">Precio</span></button>
     </div>
-    <div class="cat-tog" id="catTog" role="group" aria-label="Categorías"></div>
-    <div class="chips" id="chips"></div>
   </div>
+  <div class="cat-tog" id="catTog" role="group" aria-label="Categorías"></div>
+  <div class="chips ctx-chips" id="chips"></div>
 
   <main>
     <section class="screen stack" id="scr-inicio"></section>
@@ -3558,7 +3600,6 @@ function heroPrecioHTML(a, cal, e) {
       <div><span>Operaciones</span><b>${c.vacio ? '—' : NF0.format(c.n) + ' / ' + NF0.format(c.total)}</b></div>
       <div><span>Vs. mes ant.</span><b class="${pv.ratio == null ? '' : pv.ratio >= 1 ? 'pos' : 'neg'}">${pv.ratio == null ? '—' : fmtDelta(pv.ratio - 1)}</b></div>
       <div><span>Vs. objetivo</span><b class="${e.ratio == null ? '' : e.ratio >= 1 ? 'pos' : 'neg'}">${e.ratio == null ? '—' : fmtDelta(e.ratio - 1)}</b></div></div>`; })()}
-    <div class="hero-foot"><span class="mk"></span>Campana: operaciones de ${esc(refTxt)}, cada una contra ${c.porLinea ? 'el precio promedio de su producto' : 'el precio promedio por unidad del grupo'}. Punto = ${esc(c.lblSel)}.${c.fuera ? ` ${c.fuera} operación${c.fuera > 1 ? 'es' : ''} sin producto comparable.` : ''}</div>
     ${heroDesglose(calSel())}
   </div>`;
 }
@@ -4439,7 +4480,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.40</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.41</p></div>`;
 }
 
 /* ============================================================================
@@ -4496,7 +4537,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.40</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.41</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4566,7 +4607,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.40</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.41</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4606,7 +4647,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.40</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.41</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4692,7 +4733,7 @@ function render() {
   $$('.tab').forEach(b => b.toggleAttribute('aria-current', false));
   $(`.tab[data-tab="${t}"]`).setAttribute('aria-current', 'page');
   ['inicio', 'analisis', 'equipo', 'mapa', 'ub', 'datos'].forEach(k => { $('#scr-' + k).hidden = k !== t; });
-  $('#ctx').hidden = t === 'datos';
+  $('#ctx').hidden = t === 'datos'; $('#catTog').hidden = t === 'datos'; $('#chips').hidden = t === 'datos';
   if (t === 'inicio') renderInicio();
   else if (t === 'analisis') renderAnalisis();
   else if (t === 'equipo') renderEquipo();
@@ -4729,9 +4770,14 @@ function renderHeader() {
   sub.textContent = lineaInfo(); sub.classList.toggle('largo', sub.textContent.length > 34);
   sub.title = dias > 2 ? 'Datos desactualizados · última venta ' + fechaDia(IDX.corte) : '';
   $('#meFoto').innerHTML = fotoHTML(usuarioActual());
-  const bb = $('#btnBO'); bb.hidden = !hayBO(); bb.classList.toggle('on', !!S.bo); bb.setAttribute('aria-pressed', String(!!S.bo)); bb.setAttribute('aria-label', S.bo ? 'Ocultar back order' : 'Sumar back order (pedidos pendientes)');
-  const mb = $('#btnMoneda'), puede = SES.rol === 'aprobador' && tcUsd() > 0;
-  mb.hidden = !puede; $('#hdrMini').classList.toggle('doble', !bb.hidden && !puede ? false : !bb.hidden && puede); $('#hdrMini').hidden = bb.hidden && !puede; if (puede) { mb.textContent = enUSD() ? 'US' : 'AR'; mb.classList.toggle('usd', enUSD()); mb.setAttribute('aria-label', enUSD() ? 'Ver en pesos' : `Ver en dólares (TC ${NF0.format(tcUsd())})`); }
+  // v0.41: botones NA / IN / EX (Canal distribución) y engranaje con back order, moneda y actualizar
+  const cc = $('#hdrCan'), cans = canalesHdr();
+  cc.hidden = cans.length < 2;
+  if (!cc.hidden) {
+    const firma = cans.join('|'); if (cc.dataset.firma !== firma) { cc.dataset.firma = firma; cc.innerHTML = cans.map(c => `<button data-hcan="${esc(c)}">${esc(c)}</button>`).join(''); }
+    cc.querySelectorAll('button').forEach(b => { const on = S.f.canalDist == null || enF(b.dataset.hcan, S.f.canalDist); b.setAttribute('aria-pressed', String(on)); b.setAttribute('aria-label', `Canal ${b.dataset.hcan}${on ? ' (incluido)' : ' (excluido)'}`); });
+  }
+  $('#ajDot').hidden = !(S.bo || enUSD());
 }
 
 /** Indicador blanco del selector Facturación / Cantidad / Precio: se desliza hasta la opción elegida. */
@@ -4759,6 +4805,8 @@ function ajustarBanda() {
 function encabezadoScroll() {
   const h = $('#hdr');
   if (h) h.classList.toggle('compacto', window.scrollY > 28);
+  const ct = $('#catTog');   // v0.41: renglón de toggles fijo debajo del encabezado
+  if (h && ct) { const hh = h.offsetHeight; document.documentElement.style.setProperty('--hdrH', hh + 'px'); ct.classList.toggle('pegado', !ct.hidden && window.scrollY > 28 && ct.getBoundingClientRect().top <= hh + 1); }
 }
 window.addEventListener('scroll', encabezadoScroll, { passive: true });
 window.addEventListener('resize', () => { ajustarBanda(); moverIndicador(); });
@@ -4899,34 +4947,59 @@ function heroHTML(a, cal, e) {
    Botón ▼ abajo a la derecha: estira la tarjeta y muestra barras del % logrado (Facturación / Cantidad)
    o del desvío vs. precio objetivo (Precio) por categoría; tocar una categoría abre sus calidades.
    Arranca siempre cerrado (no se recuerda). */
-let HERO_ABIERTO = false, HERO_CAT = null;
+let HERO_ABIERTO = false, HERO_CAT = null, HERO_CAN = null;
+/* v0.41 · Si hay más de un Canal distribución encendido, la apertura empieza por canal (NA / IN / EX) ▶ Categoría ▶ Calidad.
+   Los objetivos se cargan por zona: NA lleva el objetivo de sus zonas; IN y EX muestran solo lo vendido. */
 function heroDesglose(cal) {
-  const m = S.metric, cats = [...aggPorDim(SEL, 'categoria', S.f).entries()].filter(([k]) => k);
-  if (!cats.length) return '';
-  const btn = `<button class="hero-exp" data-act="heroExp" aria-expanded="${HERO_ABIERTO}" aria-label="${HERO_ABIERTO ? 'Minimizar' : 'Ver por categoría'}">${HERO_ABIERTO ? '▲' : '▼'}</button>`;
+  const m = S.metric, conCal = (IDX.valores.calidad || []).length > 0;
+  const cans = canalesHdr().filter(c => S.f.canalDist == null || enF(c, S.f.canalDist));
+  const porCanal = cans.length > 1;
+  const cats0 = [...aggPorDim(SEL, 'categoria', S.f).entries()].filter(([k]) => k);
+  if (!cats0.length && !porCanal) return '';
+  const btn = `<button class="hero-exp" data-act="heroExp" aria-expanded="${HERO_ABIERTO}" aria-label="${HERO_ABIERTO ? 'Minimizar' : porCanal ? 'Ver por canal' : 'Ver por categoría'}">${HERO_ABIERTO ? '▲' : '▼'}</button>`;
   if (!HERO_ABIERTO) return `<div class="hero-exp-row">${btn}</div>`;
-  const conCal = (IDX.valores.calidad || []).length > 0;
-  const barra = (k, a, nombre, nivel, tog) => {
+  const sinObj = a => ({ ...a, oF: 0, oU: 0 });
+  const barra = (a, nombre, nivel, tog) => {
     const e = evalua(a, cal, m), r = e.ratio;
     let fill, val;
     if (m === 'precio') {
       const d = r == null ? 0 : r - 1, w = Math.min(50, Math.abs(d) / 0.1 * 50);
       fill = `<i class="hd-p ${d >= 0 ? 'pos' : 'neg'}" style="${d >= 0 ? 'left:50%' : `left:${(50 - w).toFixed(1)}%`};width:${w.toFixed(1)}%"></i><i class="hd-mid"></i>`;
       val = r == null ? '—' : fmtDelta(d);
+    } else if (!e.obj) {   // sin objetivo (IN / EX): solo lo vendido
+      fill = `<i class="hd-so">sin objetivo</i>`;
+      val = e.real ? axisFmt(e.real, m) : '—';
     } else {
       fill = `<i class="hd-f" style="width:${Math.min(100, (r || 0) * 100).toFixed(1)}%"></i>`;
       val = r == null ? '—' : fmtPct(r, 0);
     }
-    const vo = e.real != null && e.obj ? `<small class="hd-vo">${esc(axisFmt(e.real, m))}/${esc(axisFmt(e.obj, m).replace(/^(US)?\$/, ''))}</small>` : '';
-    return `<button class="hd-row nv${nivel}"${tog ? ` data-act="heroCat" data-hcat="${esc(k)}" aria-expanded="${HERO_CAT === k}"` : ''}>
-      <span class="hd-n">${tog ? `<span class="hd-t">${HERO_CAT === k ? '▾' : '▸'}</span>` : ''}${esc(nombre)}</span><span class="hd-b">${fill}</span><span class="hd-v"><b>${val}</b>${vo}</span></button>`;
+    const vo = e.real != null && e.obj && m !== 'precio' ? `<small class="hd-vo">${esc(axisFmt(e.real, m))}/${esc(axisFmt(e.obj, m).replace(/^(US)?\$/, ''))}</small>` : '';
+    const at = tog ? ` data-act="${tog.act}" data-hk="${esc(tog.k)}" aria-expanded="${tog.abierto}"` : '';
+    return `<button class="hd-row nv${nivel}"${at}>
+      <span class="hd-n">${tog ? `<span class="hd-t">${tog.abierto ? '▾' : '▸'}</span>` : ''}${esc(nombre)}</span><span class="hd-b">${fill}</span><span class="hd-v"><b>${val}</b>${vo}</span></button>`;
   };
-  const filas = cats.sort((x, y) => valorDe(y[1], m === 'precio' ? 'fact' : m) - valorDe(x[1], m === 'precio' ? 'fact' : m)).map(([k, a]) => {
-    let h = barra(k, a, nomCat(k), 0, conCal);
-    if (conCal && HERO_CAT === k) h += [...aggPorDim(SEL, 'calidad', { ...S.f, categoria: k }).entries()].sort((x, y) => String(x[0]).localeCompare(String(y[0]))).map(([q, aq]) => barra(q, aq, q || 'Sin calidad', 1, false)).join('');
+  const orden = (x, y) => valorDe(y[1], m === 'precio' ? 'fact' : m) - valorDe(x[1], m === 'precio' ? 'fact' : m);
+  const catsHTML = (f, nivel, pre, quitarObj) => [...aggPorDim(SEL, 'categoria', f).entries()].filter(([k]) => k).sort(orden).map(([k, a]) => {
+    const key = pre + k, ab = HERO_CAT === key;
+    let h = barra(quitarObj ? sinObj(a) : a, nomCat(k), nivel, conCal ? { act: 'heroCat', k: key, abierto: ab } : null);
+    if (conCal && ab) h += [...aggPorDim(SEL, 'calidad', { ...f, categoria: k }).entries()].sort((x, y) => String(x[0]).localeCompare(String(y[0]))).map(([q, aq]) => barra(quitarObj ? sinObj(aq) : aq, q || 'Sin calidad', nivel + 1, null)).join('');
     return h;
   }).join('');
-  return `<div class="hero-desg${m === 'precio' ? ' hd-precio' : ''}"><div class="hd-head"><span>${m === 'precio' ? 'Desvío vs. precio objetivo por categoría' : '% logrado por categoría'}${conCal ? ' · tocá una para ver sus calidades' : ''}</span></div>${filas}
+  let filas, titulo;
+  if (porCanal) {
+    titulo = m === 'precio' ? 'Desvío vs. precio objetivo por canal' : '% logrado por canal';
+    filas = cans.map(c => [c, agg(SEL, { ...S.f, canalDist: c })]).sort(orden).map(([c, a]) => {
+      const ab = HERO_CAN === c, nac = c === 'NA';
+      let h = barra(nac ? a : sinObj(a), c, 0, { act: 'heroCan', k: c, abierto: ab });
+      if (ab) h += catsHTML({ ...S.f, canalDist: c }, 1, c + '»', !nac);
+      return h;
+    }).join('');
+  } else {
+    titulo = m === 'precio' ? 'Desvío vs. precio objetivo por categoría' : '% logrado por categoría';
+    filas = catsHTML(S.f, 0, '', false);
+  }
+  const ayuda = porCanal ? ' · tocá un canal para ver sus categorías' : conCal ? ' · tocá una para ver sus calidades' : '';
+  return `<div class="hero-desg${m === 'precio' ? ' hd-precio' : ''}"><div class="hd-head"><span>${titulo}${ayuda}</span></div>${filas}
     ${m === 'precio' ? '<div class="hd-esc"><span></span><span class="hd-esc-m"><i>−10%</i><i>obj.</i><i>+10%</i></span><span></span></div>' : ''}</div><div class="hero-exp-row">${btn}</div>`;
 }
 
@@ -5003,6 +5076,38 @@ function sheetBajoPrecio(dim, modo) {
       <div class="bp-v"><b>${fmtDelta(f.gap)}</b><small>${esc(sgnMoney(f.imp))}</small></div></button>`).join('')}</div>` : `<p class="card-s">Ninguno con desvío peor a −2,5% vs. ${esc(refLbl)}.</p>`);
   openSheet(`${nom} bajo precio`, `${filas.length} con desvío peor a −2,5% vs. ${refLbl} · ${lblSel()}`, body);
 }
+let KPI_BP = 'cli';
+/** v0.41 · Canales de distribución del encabezado: NA, IN, EX primero, después cualquier otro. */
+const ORD_CAN = ['NA', 'IN', 'EX'];
+const canalesHdr = () => (IDX.valores.canalDist || []).filter(Boolean).slice().sort((a, b) => ((ORD_CAN.indexOf(a) + 1) || 9) - ((ORD_CAN.indexOf(b) + 1) || 9) || a.localeCompare(b));
+function togCanal(c) {
+  const todos = canalesHdr(), act = S.f.canalDist == null ? todos.slice() : todos.filter(x => enF(x, S.f.canalDist));
+  const nuevo = act.includes(c) ? act.filter(x => x !== c) : act.concat(c);
+  if (!nuevo.length) { toast('Dejá al menos un canal encendido'); return; }
+  S.f.canalDist = nuevo.length === todos.length ? null : nuevo.length === 1 ? nuevo[0] : nuevo;
+  S.selDia = null; HERO_CAN = null;
+  const y = window.scrollY; render(); window.scrollTo({ top: y });
+}
+/** v0.41 · Engranaje: back order, moneda y actualizar datos. */
+function sheetAjustes() {
+  const puede = SES.rol === 'aprobador' && tcUsd() > 0, sw = on => `<span class="aj-sw${on ? ' on' : ''}"></span>`;
+  const filas = [];
+  if (hayBO()) filas.push(`<button class="menu-i aj-i" data-act="bo" aria-pressed="${!!S.bo}"><span class="mi">${ico('box')}</span><span class="grow"><b>Ver back order</b><span class="sub">Pedidos pendientes de facturar · extraído ${esc(boFechaTxt())}</span></span>${sw(!!S.bo)}</button>`);
+  if (puede) filas.push(`<div class="menu-i aj-i"><span class="mi">${ico('money')}</span><span class="grow"><b>Moneda</b><span class="sub">TC ${NF0.format(tcUsd())} · solo aprobador</span></span><span class="aj-seg"><button data-act="moneda" data-mon="ARS" aria-pressed="${!enUSD()}">AR</button><button data-act="moneda" data-mon="USD" aria-pressed="${enUSD()}">US</button></span></div>`);
+  filas.push(`<button class="menu-i aj-i" data-act="cargar"><span class="mi">${ico('refresh')}</span><span class="grow"><b>Actualizar datos</b><span class="sub">${esc(lineaInfo())}</span></span>${ico('chevR', 'sm chev')}</button>`);
+  openSheet('Opciones', '', `<div class="menu aj">${filas.join('')}</div>`);
+}
+/** v0.41 · % de 2da calidad: m² de 2da ÷ m² totales (sin el filtro de calidad), vs. el período anterior a la misma fecha. */
+function segundaTile() {
+  const seg = (IDX.valores.calidad || []).filter(q => /^2/.test(q));
+  if (!seg.length) return kpiHTML('box', '—', '% 2da calidad', 'Sin calidades');
+  const f = { ...S.f, calidad: null }, f2 = { ...f, calidad: seg };
+  let t = 0, t2 = 0;
+  for (const v of DATA.ventas) if (enSel(v._p) && ventaOK(v) && match(v, f)) { t += v.unidades; if (seg.includes(v.calidad)) t2 += v.unidades; }
+  const pt = realPrevSel(f, 'unid'), p2 = realPrevSel(f2, 'unid');
+  const r = t > 0 ? t2 / t : null, rp = pt > 0 ? p2 / pt : null;
+  return kpiHTML('box', r == null ? '—' : fmtPct(r, 1), '% 2da calidad', r == null || rp == null ? 'Sin dato anterior' : fmtPP(r - rp) + ' vs. ' + (esRango() ? 'ant.' : perLabel(perAnterior(S.periodo)).mes.slice(0, 3).toLowerCase() + '.'));
+}
 function kpisHTML(a, cal) {
   const m = S.metric;
   const eF = evalua(a, cal, 'fact'), eU = evalua(a, cal, 'unid'), eP = evalua(a, cal, 'precio');
@@ -5019,32 +5124,21 @@ function kpisHTML(a, cal) {
     const porDia = cal.restantes ? falta / cal.restantes : falta;
     return kpiHTML('target', fmtMetric(falta, mm), 'Falta para el objetivo', (cal.restantes ? fmtMetric(porDia, mm) + ' por día hábil' : 'Último día hábil'));
   };
-  if (m === 'fact') {
-    tiles.push(proyTile(eF, 'fact'), faltaTile(eF, 'fact'));
-    tiles.push(kpiHTML('box', fmtUc(eU.real), 'Cantidad vendida', fmtPct(eU.ratio, 0) + ' del objetivo'));
-    tiles.push(kpiHTML('tag', eP.real == null ? '—' : fmtMoneyFull(eP.real), 'Precio promedio', eP.ratio == null ? '—' : fmtDelta(eP.ratio - 1) + ' vs. objetivo'));
-  } else if (m === 'unid') {
-    tiles.push(proyTile(eU, 'unid'), faltaTile(eU, 'unid'));
-    tiles.push(kpiHTML('money', fmtMoney(eF.real), 'Facturación', fmtPct(eF.ratio, 0) + ' del objetivo'));
-    tiles.push(kpiHTML('tag', eP.real == null ? '—' : fmtMoneyFull(eP.real), 'Precio promedio', eP.ratio == null ? '—' : fmtDelta(eP.ratio - 1) + ' vs. objetivo'));
-  } else {
-    const efecto = a.rF - a.rFo;
-    const kc = bajoPrecioKPI('cliente'), ks = bajoPrecioKPI('sku');
-    const refK = BP_MODO === 'obj' ? 'objetivo' : lblProm2();
-    tiles.push(kpiHTML('money', sgnMoney(efecto), 'Efecto precio en $', 'Real vs. precio objetivo'));
-    tiles.push(kpiHTML('store', `${kc.bajo} de ${kc.total}`, 'Clientes bajo precio', `Peor a −2,5% vs. ${refK} · ver lista`, 'bajoCli'));
-    tiles.push(kpiHTML('box', `${ks.bajo} de ${ks.total}`, 'Productos bajo precio', `Peor a −2,5% vs. ${refK} · ver lista`, 'bajoSku'));
-    tiles.push(kpiHTML('trend', fmtMoney(eF.real), 'Facturación', fmtPct(eF.ratio, 0) + ' del objetivo'));
-  }
-  // Utilidad bruta: solo aprobador y solo si el archivo trae costos.
+  // v0.41: 3 KPIs chicos. Facturación / Cantidad: brecha o proyección · % 2da · UB. Precio: bajo precio (clientes ⇄ productos) · % 2da · UB.
+  if (m === 'precio') {
+    const dim = KPI_BP === 'sku' ? 'sku' : 'cliente', k = bajoPrecioKPI(dim);
+    tiles.push(`<div class="kpi kpi-bp"><div class="kpi-sw" role="group" aria-label="Bajo precio por"><button data-kbp="cli" aria-pressed="${dim === 'cliente'}">Clientes</button><button data-kbp="sku" aria-pressed="${dim === 'sku'}">Productos</button></div>
+      <button class="kpi-bpb" data-act="${dim === 'cliente' ? 'bajoCli' : 'bajoSku'}"><div class="kpi-v">${k.bajo} <small>de ${k.total}</small></div><div class="kpi-l">${dim === 'cliente' ? 'Clientes' : 'Productos'} bajo precio</div><div class="kpi-d">Peor a −2,5% · ver lista</div></button></div>`);
+  } else tiles.push(proyTile(m === 'unid' ? eU : eF, m));
+  tiles.push(segundaTile());
   if (!esVend() && IDX.conCostos && a.rFc > 0) {
     const ub = a.rFc - a.rC;
-    tiles.push(kpiHTML('money', fmtMoney(ub), 'Utilidad bruta', 'UB ' + fmtPct(ub / a.rFc) + ' · solo aprobador'));
+    tiles.push(kpiHTML('money', fmtMoney(ub), 'Utilidad bruta', 'UB ' + fmtPct(ub / a.rFc)));
+  } else {
+    const efecto = a.rF - a.rFo;
+    tiles.push(kpiHTML('money', sgnMoney(efecto), 'Efecto precio', 'Real vs. precio obj.'));
   }
-  if (a.bmN > 0 || (!esVend() && IDX.conCostos && a.rFc > 0)) {
-    tiles.push(kpiHTML('alert', String(a.bmN), 'Ventas bajo precio mínimo', a.bmN ? fmtMoney(a.bmF) + ' facturados' : 'Ninguna en el periodo'));
-  }
-  return `<div class="kpis">${tiles.join('')}</div>`;
+  return `<div class="kpis k3">${tiles.join('')}</div>`;
 }
 
 /* ---------- Gráfico: ventas diarias ---------- */
@@ -5229,7 +5323,13 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.40 · funciona sin conexión</p>`;
+    <details class="help"><summary>¿Cómo se lee el gráfico de Precio? ${ico('chevR', 'sm')}</summary>
+      <p><b>Campana.</b> Cada operación del período de referencia (mes anterior o el mismo período) se compara contra el precio promedio de su producto; la campana muestra cómo se reparten esas diferencias, ponderadas por m².</p>
+      <p><b>Punto.</b> Es la selección actual (empresa, zona, vendedor o cliente, según los filtros): su precio frente al promedio de los mismos productos. A la derecha de la campana, vende más caro que el promedio; a la izquierda, más barato.</p>
+      <p><b>Operaciones sin producto comparable.</b> Ventas de productos que no se vendieron en el período de referencia: no entran en la comparación.</p>
+      <p><b>Precio promedio.</b> Siempre ponderado: facturación ÷ m² (neto o con flete, según el selector Precio).</p>
+    </details>
+    <p class="foot-note">Pulso Comercial · v0.41 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5736,6 +5836,8 @@ document.addEventListener('click', ev => {
   if (t.dataset.tree) { const id = t.dataset.tree; if (ABIERTOS.has(id)) { [...ABIERTOS].forEach(x => { if (x === id || x.startsWith(id + '»')) ABIERTOS.delete(x); }); } else { ABIERTOS.add(id); RECIEN = id; } renderAnalisis(); RECIEN = null; return; }
   if (t.dataset.sub && detState) { sheetDetalle(detState.dim, detState.key, t.dataset.sub); return; }
   if (t.dataset.quitar) { S.f[t.dataset.quitar] = null; S.selDia = null; render(); return; }
+  if (t.dataset.hcan) { togCanal(t.dataset.hcan); return; }
+  if (t.dataset.kbp) { KPI_BP = t.dataset.kbp; renderInicio(); return; }
   if (t.dataset.pf) { if (S.pf !== t.dataset.pf) { S.pf = t.dataset.pf; const y = window.scrollY; render(); window.scrollTo({ top: y }); toast(S.pf === 'flete' ? 'Facturación y precios con flete' : 'Facturación y precios netos (sin flete)'); } return; }
   if (t.dataset.cattog) {
     const c = t.dataset.cattog, k = t.dataset.tk || 'categoria', l = listaF(S.f[k]);
@@ -5774,10 +5876,11 @@ document.addEventListener('click', ev => {
     case 'verAperturaUB': S.verAperturaUB = !S.verAperturaUB; renderUB(); break;
     case 'ubreset': S.aperturaUB = null; S.ubUnir = null; UB_EST.clear(); render(); break;
     case 'bo': S.bo = !S.bo; { const y = window.scrollY; render(); window.scrollTo({ top: y }); }
-      toast(!S.bo ? 'Back order oculto' : S.metric === 'unid' ? `Back order sumado · extraído ${boFechaTxt()}` : 'Back order activo: se suma en Cantidad (m²)'); break;
-    case 'moneda': S.moneda = S.moneda === 'USD' ? 'ARS' : 'USD'; { const y = window.scrollY; render(); window.scrollTo({ top: y }); } toast(S.moneda === 'USD' ? `Valores en dólares · TC ${NF0.format(tcUsd())}` : 'Valores en pesos'); break;
-    case 'heroExp': HERO_ABIERTO = !HERO_ABIERTO; if (!HERO_ABIERTO) HERO_CAT = null; renderInicio(); break;
-    case 'heroCat': HERO_CAT = HERO_CAT === t.dataset.hcat ? null : t.dataset.hcat; renderInicio(); break;
+      toast(!S.bo ? 'Back order oculto' : S.metric === 'unid' ? `Back order sumado · extraído ${boFechaTxt()}` : 'Back order activo: se suma en Cantidad (m²)'); if ($('#sheet .aj')) sheetAjustes(); break;
+    case 'moneda': { const nm = t.dataset.mon || (S.moneda === 'USD' ? 'ARS' : 'USD'); if (nm === S.moneda) break; S.moneda = nm; } { const y = window.scrollY; render(); window.scrollTo({ top: y }); } toast(S.moneda === 'USD' ? `Valores en dólares · TC ${NF0.format(tcUsd())}` : 'Valores en pesos'); if ($('#sheet .aj')) sheetAjustes(); break;
+    case 'heroExp': HERO_ABIERTO = !HERO_ABIERTO; if (!HERO_ABIERTO) { HERO_CAT = null; HERO_CAN = null; } renderInicio(); break;
+    case 'heroCat': HERO_CAT = HERO_CAT === t.dataset.hk ? null : t.dataset.hk; renderInicio(); break;
+    case 'heroCan': HERO_CAN = HERO_CAN === t.dataset.hk ? null : t.dataset.hk; HERO_CAT = null; renderInicio(); break;
     case 'verApertura': S.verApertura = !S.verApertura; renderAnalisis(); break;
     case 'sigMetrica': { const ms = ['fact', 'unid', 'precio']; S.metric = ms[(ms.indexOf(S.metric) + 1) % 3]; const y = window.scrollY; render(); window.scrollTo({ top: y }); const m = $('#hdrMet'); m.classList.remove('pop'); void m.offsetWidth; m.classList.add('pop'); break; }
     case 'detalle': S.detalle = !S.detalle; renderAnalisis(); if (!$('#sheetWrap').hidden && detState) sheetDetalle(detState.dim, detState.key, detState.sub2); guardarUI(); break;
@@ -5788,7 +5891,8 @@ document.addEventListener('click', ev => {
     case 'perNext': cambiarPeriodo(1); break;
     case 'fab': case 'nueva': sheetNuevaVenta(); break;
     case 'btnOrden': { const k = Object.keys(ORDENES); S.orden = k[(k.indexOf(S.orden) + 1) % k.length]; render(); break; }
-    case 'cargar': if (REMOTO) sincronizar(true); else $('#fileInput').click(); break;
+    case 'ajustes': sheetAjustes(); break;
+    case 'cargar': closeSheet(); if (REMOTO) sincronizar(true); else $('#fileInput').click(); break;
     case 'exportar': { const d = limpio(DATA, false); d.meta.actualizado = IDX.corte; sheetExport(jsonTexto(d), 'ventas_' + IDX.corte + '.json', 'Exportar datos'); break; }
     case 'plantilla': sheetExport(jsonTexto(plantilla()), 'plantilla_pulso_comercial.json', 'Plantilla JSON'); break;
     case 'restaurar': sheetConfirmar('Volver a los datos demo', 'Se reemplaza el archivo cargado por los datos de prueba. Los registros manuales se conservan.', 'Restaurar demo', () => { aplicarDatos(normalizar(generarDemo()).data, 'Demo'); toast('Datos demo restaurados'); }); break;
