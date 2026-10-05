@@ -2192,9 +2192,17 @@ function sheetPeriodo() {
 /** Venta del período anterior equivalente (cortado a la misma fecha si el actual está en curso). */
 function realPrevSel(f, metric) {
   const prevs = perSelPrev(); let t = 0;
-  for (const v of DATA.ventas) if (enPrevComparable(v, prevs) && ventaOK(v) && match(v, f)) t += metric === 'unid' ? v.unidades : v.unidades * v.precio;
+  for (const v of DATA.ventas) if (enPrevComparable(v, prevs) && ventaOK(v) && match(v, f)) t += metric === 'unid' ? v.unidades : fv(v);
   return t;
 }
+/** v0.39 · Facturación de una venta: el importe que viene de Power BI (filas con cantidad 0, ej. ajustes de precio)
+    o cantidad × precio neto (el precio ya es facturación ÷ m² de la operación). */
+const fvN = v => v.importe != null ? v.importe : v.unidades * v.precio;
+/** v0.40 · Con el selector "c/flete" la facturación (y por lo tanto todos los precios ΣF ÷ Σm²) suma el flete de cada operación. */
+const fv = v => S.pf === 'flete' && v.flete ? fvN(v) + v.flete : fvN(v);
+/** Precio unitario de una operación según el selector (neto o c/flete). */
+const pu = v => v.unidades ? fv(v) / v.unidades : 0;
+const hayFlete = () => !!(DATA && DATA.ventas && DATA.ventas.some(v => v.flete));
 
 /* ============================================================================
    H. MAPA (v0.9)
@@ -2253,7 +2261,7 @@ function clientesMapa() {
     if (!r || !ventaOK(v)) continue;
     if (!r.ult || v.fecha > r.ult) r.ult = v.fecha;
     if (!match(v, { marca: fV.marca, categoria: fV.categoria, producto: fV.producto, calidad: fV.calidad })) continue;
-    const x = m === 'unid' ? v.unidades : v.unidades * v.precio;
+    const x = m === 'unid' ? v.unidades : fv(v);
     if (x > 0) r.pers.add(v._p);
     if (enSel(v._p)) { r.val += x; r.marcas.set(v.marca, (r.marcas.get(v.marca) || 0) + x); }
     else if (esRango() ? enPrevComparable(v, prev) : prev.includes(v._p)) r.prev += esRango() ? x : x / prev.length;
@@ -2733,7 +2741,7 @@ function prevPorDim(dim, f) {
   for (const v of DATA.ventas) {
     if (!ps.has(v._p) || !ventaOK(v) || !match(v, f)) continue;
     const k = valDim(v, dim); if (k == null) continue;
-    out.set(k, (out.get(k) || 0) + (S.metric === 'unid' ? v.unidades : v.unidades * v.precio));
+    out.set(k, (out.get(k) || 0) + (S.metric === 'unid' ? v.unidades : fv(v)));
   }
   const fx = factorPrev();
   if (fx !== 1) out.forEach((x, k) => out.set(k, x * fx));
@@ -2749,7 +2757,7 @@ function topMarcas(f, n = 5) {
   const t = new Map();
   for (const v of DATA.ventas) {
     if (!enSel(v._p) || !ventaOK(v) || !match(v, f)) continue;
-    t.set(v.marca, (t.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : v.unidades * v.precio));
+    t.set(v.marca, (t.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : fv(v)));
   }
   const orden = [...t.entries()].sort((a, b) => b[1] - a[1]).map(x => x[0]);
   return { top: orden.slice(0, n), resto: orden.length > n };
@@ -2787,7 +2795,7 @@ function mezclaMarca(dim, f) {
     if (!enSel(v._p) || !ventaOK(v) || !match(v, f)) continue;
     const k = valDim(v, dim); if (k == null) continue;
     let mm = out.get(k); if (!mm) out.set(k, mm = new Map());
-    mm.set(v.marca, (mm.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : v.unidades * v.precio));
+    mm.set(v.marca, (mm.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : fv(v)));
   }
   return out;
 }
@@ -2866,8 +2874,8 @@ function arbolProducto(cal) {
   };
   for (const o of DATA.objetivos) if (enSel(o.periodo) && enScope(o) && match(o, f)) bajar(o, true).forEach(n => { n.a.oF += o.unidades * o.precio; n.a.oU += o.unidades; });
   const conPrev = vsPrevActivo('sku'), psPrev = new Set(persPrevCompletos());
-  if (conPrev) for (const v of DATA.ventas) if (psPrev.has(v._p) && ventaOK(v) && match(v, f)) bajar(v, false).forEach(n => { n.prev += (S.metric === 'unid' ? v.unidades : v.unidades * v.precio) * factorPrev(); });
-  for (const v of DATA.ventas) if (enSel(v._p) && ventaOK(v) && match(v, f)) bajar(v, false).forEach(n => { n.a.rF += v.unidades * v.precio; n.a.rU += v.unidades; n.a.rFo += v.unidades * v._po; n.mk.set(v.marca, (n.mk.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : v.unidades * v.precio)); });
+  if (conPrev) for (const v of DATA.ventas) if (psPrev.has(v._p) && ventaOK(v) && match(v, f)) bajar(v, false).forEach(n => { n.prev += (S.metric === 'unid' ? v.unidades : fv(v)) * factorPrev(); });
+  for (const v of DATA.ventas) if (enSel(v._p) && ventaOK(v) && match(v, f)) bajar(v, false).forEach(n => { n.a.rF += fv(v); n.a.rU += v.unidades; n.a.rFo += v.unidades * v._po; n.mk.set(v.marca, (n.mk.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : fv(v))); });
   const prods = new Map(((DATA.maestros || {}).productos || []).map(x => [x.sku, x]));
   const orden = (a, b) => {
     const ea = evalua(a[1].a, cal), eb = evalua(b[1].a, cal);
@@ -2909,7 +2917,7 @@ function marimekkoHTML(f) {
   const cats = new Map();
   for (const v of DATA.ventas) {
     if (!enSel(v._p) || !ventaOK(v) || !match(v, f)) continue;
-    const c = v.categoria || '—', x = m === 'unid' ? v.unidades : v.unidades * v.precio;
+    const c = v.categoria || '—', x = m === 'unid' ? v.unidades : fv(v);
     let cc = cats.get(c); if (!cc) cats.set(c, cc = { t: 0, mk: new Map() });
     cc.t += x; cc.mk.set(v.marca, (cc.mk.get(v.marca) || 0) + x);
   }
@@ -3291,13 +3299,13 @@ function efectosPrev(cal) {
   const lp = new Map(); let Fp = 0;
   for (const v of DATA.ventas) {
     if (!ok(v) || !ventaOK(v) || !match(v, S.f)) continue;
-    const F = v.unidades * v.precio; Fp += F;
+    const F = fv(v); Fp += F;
     const k = kLinea(v), o = lp.get(k) || { f: 0, u: 0 }; o.f += F; o.u += v.unidades; lp.set(k, o);
   }
   let Fc = 0, base = 0;
   for (const v of DATA.ventas) {
     if (!enSel(v._p) || !ventaOK(v) || !match(v, S.f)) continue;
-    const F = v.unidades * v.precio, o = lp.get(kLinea(v));
+    const F = fv(v), o = lp.get(kLinea(v));
     Fc += F; base += o && o.u ? v.unidades * (o.f / o.u) : F;    // líneas nuevas: sin efecto precio
   }
   const p1 = prevs[0];
@@ -3412,14 +3420,14 @@ function campanaPrecio(selIn, refIn) {
   const lin = new Map(), opsRef = [];
   for (const v of DATA.ventas) {
     if (!refPers.has(v._p) || !incluye(v) || !(v.precio > 0) || !ventaEnFiltro(v, ref)) continue;
-    const k = clave(v), o = lin.get(k) || { f: 0, u: 0 }; o.f += v.unidades * v.precio; o.u += v.unidades; lin.set(k, o); opsRef.push(v);
+    const k = clave(v), o = lin.get(k) || { f: 0, u: 0 }; o.f += fv(v); o.u += v.unidades; lin.set(k, o); opsRef.push(v);
   }
   const base = { sel, ref, pRef, prev, porLinea, lblSel: etiquetaFiltro(sel), lblRef: etiquetaFiltro(ref), mismo: JSON.stringify(sel) === JSON.stringify(ref) };
   if (opsRef.length < 3) return { ...base, vacio: true };
   const prom = k => { const o = lin.get(k); return o && o.u ? o.f / o.u : null; };
   // Distribución de la referencia (ponderada por unidades)
   const idx = [], pesos = [];
-  opsRef.forEach(v => { idx.push(v.precio / prom(clave(v))); pesos.push(v.unidades); });
+  opsRef.forEach(v => { idx.push(pu(v) / prom(clave(v))); pesos.push(v.unidades); });
   const W = pesos.reduce((t, x) => t + x, 0);
   const mean = idx.reduce((t, x, i) => t + x * pesos[i], 0) / W;
   const sd = Math.max(0.004, Math.sqrt(idx.reduce((t, x, i) => t + pesos[i] * (x - mean) ** 2, 0) / W));
@@ -3428,9 +3436,9 @@ function campanaPrecio(selIn, refIn) {
   for (const v of DATA.ventas) {
     if (!enSel(v._p) || !incluye(v) || !(v.precio > 0) || !ventaEnFiltro(v, sel)) continue;
     const pr = prom(clave(v)); if (!pr) { fuera++; continue; }
-    su += v.unidades * v.precio; sm += v.unidades * pr; n++;
+    su += fv(v); sm += v.unidades * pr; n++;
   }
-  let rf = 0, ru = 0; opsRef.forEach(v => { rf += v.unidades * v.precio; ru += v.unidades; });
+  let rf = 0, ru = 0; opsRef.forEach(v => { rf += fv(v); ru += v.unidades; });
   return { ...base, idx, pesos, mean, sd, mio: sm ? su / sm : null, su, sm, n, fuera, total: opsRef.length, promRef: ru ? rf / ru : null };
 }
 /** Análisis con métrica Precio en "Vs. promedio": barra = precio de cada elemento, línea punteada = promedio
@@ -3482,7 +3490,7 @@ function precioPromedioLista(dim, cfg = null) {
   const refTxt = dim === 'sku' ? (cfg && cfg.quitar ? (() => { const fr = { ...base }; delete fr[cfg.quitar]; return 'cada producto en ' + txtFiltro(fr); })() : 'su marca en la categoría') : txtFiltro(base);
   // Promedio del elemento del detalle (ej. la zona): precio por unidad de todas sus ventas del período
   let promEl = null;
-  if (cfg) { let F = 0, U = 0; const inc = v => S.sim || v.origen !== 'manual'; for (const v of DATA.ventas) if (enSel(v._p) && inc(v) && v.precio > 0 && ventaEnFiltro(v, base)) { F += v.unidades * v.precio; U += v.unidades; } promEl = U ? F / U : null; }
+  if (cfg) { let F = 0, U = 0; const inc = v => S.sim || v.origen !== 'manual'; for (const v of DATA.ventas) if (enSel(v._p) && inc(v) && v.precio > 0 && ventaEnFiltro(v, base)) { F += fv(v); U += v.unidades; } promEl = U ? F / U : null; }
   const unico = filas.every(f => Math.abs(f.r - filas[0].r) < 0.005);
   // Escala en $ recortada para que se vean las diferencias; marca de corte al inicio de cada barra
   const vals = filas.flatMap(f => [f.v, f.r]), mn = Math.min(...vals), mx = Math.max(...vals);
@@ -3640,7 +3648,7 @@ function precioArbol() {
   const ref = nodo();
   for (const v of DATA.ventas) {
     if (!refPers.has(v._p) || !incluye(v) || !(v.precio > 0) || !ventaEnFiltro(v, baseRef)) continue;
-    const F = v.unidades * v.precio, kl = kLinea(v);
+    const F = fv(v), kl = kLinea(v);
     let n = ref;
     const sumar = x => { x.f += F; x.u += v.unidades; x.n++; const l = x.lin.get(kl) || { f: 0, u: 0 }; l.f += F; l.u += v.unidades; x.lin.set(kl, l); };
     sumar(n);
@@ -3650,7 +3658,7 @@ function precioArbol() {
   const cur = nodo();
   for (const v of DATA.ventas) {
     if (!enSel(v._p) || !incluye(v) || !(v.precio > 0) || !ventaEnFiltro(v, base)) continue;
-    const F = v.unidades * v.precio, kl = kLinea(v);
+    const F = fv(v), kl = kLinea(v);
     let n = cur, rp = ref; n.f += F; n.u += v.unidades; n.n++;
     for (const d of niveles) {
       const k = v[d] || '—'; let x = n.h.get(k); if (!x) n.h.set(k, x = nodo());
@@ -3756,7 +3764,7 @@ function proyeccionSel(f, metric, a, cal) {
    días hábiles de cada mes). Proyección = acumulado actual ÷ proporción esperada a hoy. */
 const CURVA_CACHE = new Map();
 function curvaHistorica(p, f) {
-  const key = p + '|' + JSON.stringify(f) + '|' + S.sim + '|' + (SES ? SES.usuario : '');
+  const key = p + '|' + JSON.stringify(f) + '|' + S.sim + '|' + S.pf + '|' + (SES ? SES.usuario : '');
   if (CURVA_CACHE.has(key)) return CURVA_CACHE.get(key);
   const meses = [];
   for (let n = 1; n <= 3; n++) {
@@ -3876,13 +3884,13 @@ function precioPrevMix(f) {
   const lin = new Map();
   for (const v of DATA.ventas) {
     if (!prevs.has(v._p) || !incluye(v) || !(v.precio > 0) || !ventaEnFiltro(v, f)) continue;
-    const k = kLinea(v), o = lin.get(k) || { f: 0, u: 0 }; o.f += v.unidades * v.precio; o.u += v.unidades; lin.set(k, o);
+    const k = kLinea(v), o = lin.get(k) || { f: 0, u: 0 }; o.f += fv(v); o.u += v.unidades; lin.set(k, o);
   }
   let su = 0, sm = 0, u = 0;
   for (const v of DATA.ventas) {
     if (!enSel(v._p) || !incluye(v) || !(v.precio > 0) || !ventaEnFiltro(v, f)) continue;
     const o = lin.get(kLinea(v)); if (!o || !o.u) continue;
-    su += v.unidades * v.precio; sm += v.unidades * o.f / o.u; u += v.unidades;
+    su += fv(v); sm += v.unidades * o.f / o.u; u += v.unidades;
   }
   return { precio: u ? sm / u : null, ratio: sm ? su / sm : null };
 }
@@ -3953,7 +3961,7 @@ function renderUB() {
   const clave = g => v => g.map(d => valor(v, d)).join(' · ');
   for (const v of DATA.ventas) {
     if (!enSel(v._p) || !ventaOK(v) || !match(v, S.f) || !(v.precio > 0)) continue;
-    const F = v.unidades * v.precio; factTot += F; cantTot += v.unidades;
+    const F = fvN(v); factTot += F; cantTot += v.unidades;
     if (v._costo == null) continue;
     const suma = x => { x.F += F; x.U += v.unidades; x.C += v.unidades * v._costo; if (v._lista) { x.L += v.unidades * v._lista; x.UL += v.unidades; x.FL += F; } };
     suma(raiz);
@@ -4148,6 +4156,7 @@ const S = {
   tab: 'inicio',
   periodo: null,
   metric: 'fact',
+  pf: 'neto',         // v0.40 · facturación y precio: 'neto' | 'flete' (c/flete)
   f: { zona: null, vendedor: null, cliente: null, marca: null, categoria: null, producto: null, calidad: null, familia: null, canalDist: null, canalTipo: null },
   dimA: 'marca',
   orden: 'venta',
@@ -4316,7 +4325,7 @@ function agg(periodo, f) {
   const a = { oF: 0, oU: 0, rF: 0, rU: 0, rFo: 0, mF: 0, mU: 0, mN: 0, rC: 0, rFc: 0, bmN: 0, bmF: 0, dias: new Map(), bU: boU(periodo, f) };
   for (const o of DATA.objetivos) if (coincidePer(o.periodo, periodo) && enScope(o) && match(o, f)) { a.oF += o.unidades * o.precio; a.oU += o.unidades; }
   for (const v of DATA.ventas) if (coincidePer(v._p, periodo) && ventaOK(v) && match(v, f)) {
-    const F = v.unidades * v.precio, Fo = v.unidades * v._po, man = esManual(v);
+    const F = fv(v), Fo = v.unidades * v._po, man = esManual(v);
     a.rF += F; a.rU += v.unidades; a.rFo += Fo;
     if (man) { a.mF += F; a.mU += v.unidades; a.mN++; }
     if (v._costo != null) { a.rC += v.unidades * v._costo; a.rFc += F; }
@@ -4334,7 +4343,7 @@ function aggPorDim(periodo, dim, f) {
   const m = new Map();
   const get = k => { let a = m.get(k); if (!a) { a = { oF: 0, oU: 0, rF: 0, rU: 0, rFo: 0 }; m.set(k, a); } return a; };
   for (const o of DATA.objetivos) if (coincidePer(o.periodo, periodo) && enScope(o) && match(o, f) && valDim(o, dim) != null) { const a = get(valDim(o, dim)); a.oF += o.unidades * o.precio; a.oU += o.unidades; }
-  for (const v of DATA.ventas) if (coincidePer(v._p, periodo) && ventaOK(v) && match(v, f) && valDim(v, dim) != null) { const a = get(valDim(v, dim)); a.rF += v.unidades * v.precio; a.rU += v.unidades; a.rFo += v.unidades * v._po; }
+  for (const v of DATA.ventas) if (coincidePer(v._p, periodo) && ventaOK(v) && match(v, f) && valDim(v, dim) != null) { const a = get(valDim(v, dim)); a.rF += fv(v); a.rU += v.unidades; a.rFo += v.unidades * v._po; }
   return m;
 }
 
@@ -4430,7 +4439,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.38</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.40</p></div>`;
 }
 
 /* ============================================================================
@@ -4487,7 +4496,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.38</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.40</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4557,7 +4566,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.38</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.40</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4597,7 +4606,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.38</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.40</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4696,7 +4705,7 @@ function render() {
   if (clave !== ultimaVista) { ultimaVista = clave; animarBarras($('#scr-' + t)); }
   guardarUI();
 }
-function guardarUI() { store.set(KEY_UI, JSON.stringify({ metric: S.metric, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2, moneda: S.moneda, mixCli: S.mixCli, evMix: S.evMix, evUnir: S.evUnir })); }
+function guardarUI() { store.set(KEY_UI, JSON.stringify({ metric: S.metric, pf: S.pf, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2, moneda: S.moneda, mixCli: S.mixCli, evMix: S.evMix, evUnir: S.evUnir })); }
 
 /** v0.35 · "Info al 30/09/26 15:05 | act. 15:07": hasta cuándo llega la información (hora en que se extrajo
     de Power BI / se guardó el Excel) y cuándo se publicó. Si la publicación es de otro día, muestra también la fecha. */
@@ -4787,11 +4796,13 @@ const TOG_DIMS = ['categoria', 'calidad'];
 function renderCatTog() {
   const box = $('#catTog'); if (!box) return;
   const grupos = TOG_DIMS.map(k => [k, opciones(k) || []]).filter(([, l]) => l.length > 1);
-  const firma = grupos.map(([k, l]) => k + ':' + l.join('|')).join('/');
+  const fl = hayFlete(), firma = grupos.map(([k, l]) => k + ':' + l.join('|')).join('/') + (fl ? '/pf' : '');
   if (box.dataset.firma !== firma) {
     box.dataset.firma = firma;
-    box.innerHTML = grupos.map(([k, l]) => `<div class="tog-g" data-g="${k}" style="flex:${l.length}"><span class="tog-t">${esc(DIMS[k])}</span><div class="tog-r">${l.map(c => `<button data-cattog="${esc(c)}" data-tk="${k}" aria-pressed="false" aria-label="${esc(DIMS[k])} ${esc(c)}">${esc(c)}</button>`).join('')}</div></div>`).join('');
+    box.innerHTML = grupos.map(([k, l]) => `<div class="tog-g" data-g="${k}" style="flex:${l.length}"><span class="tog-t">${esc(DIMS[k])}</span><div class="tog-r">${l.map(c => `<button data-cattog="${esc(c)}" data-tk="${k}" aria-pressed="false" aria-label="${esc(DIMS[k])} ${esc(c)}">${esc(c)}</button>`).join('')}</div></div>`).join('')
+      + (fl ? `<div class="tog-g" data-g="pf" style="flex:2"><span class="tog-t">Precio</span><div class="tog-r"><button data-pf="neto" aria-pressed="false" aria-label="Facturación y precio netos (sin flete)">Neto</button><button data-pf="flete" aria-pressed="false" aria-label="Facturación y precio con flete">c/flete</button></div></div>` : '');
   }
+  box.querySelectorAll('button[data-pf]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pf === S.pf)));
   grupos.forEach(([k]) => {
     const hay = new Set(opcionesF(k, S.f));
     box.querySelectorAll(`button[data-tk="${k}"]`).forEach(b => { const on = enF(b.dataset.cattog, S.f[k]); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('sin', !on && !hay.has(b.dataset.cattog)); });
@@ -4937,7 +4948,7 @@ function sheetDia(clave, sub) {
     if (!dias.has(v.fecha) || !ventaOK(v) || !match(v, S.f)) continue;
     const k = valDim(v, dim); if (k == null) continue;
     let a = porK.get(k); if (!a) porK.set(k, a = { oF: 0, oU: 0, rF: 0, rU: 0, rFo: 0 });
-    const F = v.unidades * v.precio; a.rF += F; a.rU += v.unidades; a.rFo += v.unidades * v._po;
+    const F = fv(v); a.rF += F; a.rU += v.unidades; a.rFo += v.unidades * v._po;
     tot.rF += F; tot.rU += v.unidades; tot.rFo += v.unidades * v._po; tot.n++; tot.cli.add(v.cliente);
     if (dim !== 'marca') { let mm = mezcla.get(k); if (!mm) mezcla.set(k, mm = new Map()); mm.set(v.marca, (mm.get(v.marca) || 0) + (S.metric === 'unid' ? v.unidades : F)); }
   }
@@ -4963,7 +4974,7 @@ function bajoPrecioFilas(dim, modo) {
   const ps = new Set(mesesProm2()), inc = v => S.sim || v.origen !== 'manual', lin = new Map();
   for (const v of DATA.ventas) {
     if (!ps.has(v._p) || !inc(v) || !(v.precio > 0) || !ventaEnFiltro(v, base)) continue;
-    const k = kLinea(v), o = lin.get(k) || { f: 0, u: 0 }; o.f += v.unidades * v.precio; o.u += v.unidades; lin.set(k, o);
+    const k = kLinea(v), o = lin.get(k) || { f: 0, u: 0 }; o.f += fv(v); o.u += v.unidades; lin.set(k, o);
   }
   const out = new Map();
   for (const v of DATA.ventas) {
@@ -4971,7 +4982,7 @@ function bajoPrecioFilas(dim, modo) {
     const o = lin.get(kLinea(v)); if (!o || !o.u) continue;
     const k = valDim(v, dim); if (k == null) continue;
     let x = out.get(k); if (!x) out.set(k, x = { k, F: 0, U: 0, ref: 0 });
-    x.F += v.unidades * v.precio; x.U += v.unidades; x.ref += v.unidades * o.f / o.u;
+    x.F += fv(v); x.U += v.unidades; x.ref += v.unidades * o.f / o.u;
   }
   return [...out.values()].filter(x => x.ref > 0).map(x => ({ ...x, gap: x.F / x.ref - 1, imp: x.F - x.ref }));
 }
@@ -5191,7 +5202,7 @@ function renderEquipo() {
 function renderDatos() {
   const el = $('#scr-datos');
   const d = DATA, manual = d.ventas.filter(v => esManual(v) && enScope(v)).sort((a, b) => b.fecha.localeCompare(a.fecha) || String(b.id).localeCompare(String(a.id)));
-  const totF = manual.reduce((t, v) => t + v.unidades * v.precio, 0), totU = manual.reduce((t, v) => t + v.unidades, 0);
+  const totF = manual.reduce((t, v) => t + fv(v), 0), totU = manual.reduce((t, v) => t + v.unidades, 0);
   const pers = IDX.periodos;
   el.innerHTML = `<div><h1 class="section-t">Datos</h1><p class="section-s">Registros de simulación, carga de archivos y exportación.</p></div>
     <div class="card" id="simCard">
@@ -5200,7 +5211,7 @@ function renderDatos() {
       <div class="facts"><div><b>${manual.length}</b><span>registros</span></div><div><b>${fmtUc(totU)}</b><span>cantidad</span></div><div><b>${fmtMoney(totF)}</b><span>facturación</span></div></div>
       <div class="sim-note" style="margin-top:12px"><span class="dot"></span>${S.sim ? 'Visibles: se suman a los gráficos y métricas.' : 'Ocultos: los gráficos muestran solo las ventas reales.'}</div>
       <div style="margin-top:6px">${manual.map(v => `<div class="man"><div class="grow"><b>${esc(v.cliente)}</b><span>${esc(fechaDia(v.fecha))} · ${esc(v.marca)} ${esc(v.producto)} · ${fmtU(v.unidades)} × ${fmtMoneyFull(v.precio)}</span>${esVend() ? '' : `<span>${esc(v.vendedor)}</span>`}</div>
-        <div class="amt">${fmtMoney(v.unidades * v.precio)}</div><div class="acts"><button class="del" data-editar="${esc(v.id)}" aria-label="Editar registro">${ico('pen', 'sm')}</button><button class="del" data-borrar="${esc(v.id)}" aria-label="Eliminar registro">${ico('trash', 'sm')}</button></div></div>`).join('') || '<p class="card-s" style="margin:12px 0 4px">Todavía no hay registros. Usá el botón + para simular una venta.</p>'}</div>
+        <div class="amt">${fmtMoney(fv(v))}</div><div class="acts"><button class="del" data-editar="${esc(v.id)}" aria-label="Editar registro">${ico('pen', 'sm')}</button><button class="del" data-borrar="${esc(v.id)}" aria-label="Eliminar registro">${ico('trash', 'sm')}</button></div></div>`).join('') || '<p class="card-s" style="margin:12px 0 4px">Todavía no hay registros. Usá el botón + para simular una venta.</p>'}</div>
       <div class="btns"><button class="btn btn-p" data-act="nueva">${ico('pen')} Nuevo registro manual</button></div>
     </div>
     <div class="card"><div class="src"><div class="src-i">${ico('file')}</div><div style="min-width:0"><div class="card-t">${esc(d.meta._origen || 'Demo')}</div>
@@ -5218,7 +5229,7 @@ function renderDatos() {
       <p><b>4. Control de acceso.</b> La clave vence cada cierto tiempo y el administrador puede cambiarla o bloquear el acceso: en ese caso los equipos borran los datos guardados y piden la clave nueva. Además, si un equipo pasa varios días sin conectarse, pide conexión antes de mostrar los datos.</p>
       <p>Los registros manuales (simulaciones) quedan solo en este equipo y no se pierden al actualizar.</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.38 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.40 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5290,6 +5301,8 @@ function expandirV2(raw) {
     const c = cliMap.get(v.cliente);
     if (!c) { errores.push(`Venta ${i + 1}: el cliente "${v.cliente}" no está en CLIENTE`); return; }
     const o = { id: String(v.id || 'x' + i), fecha: v.fecha, zona: c.zona, vendedor: c.vendedorNombre, canalDist: c.canalDist || '', canalTipo: c.canalTipo || '', cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: String(v.calidad || calSku.get(String(v.sku || '')) || '').trim(), familia: String(v.familia || '').trim(), sku: v.sku || '', unidades: +v.cantidad || 0, precio: +v.precio || 0 };
+    if (v.importe != null && isFinite(+v.importe)) o.importe = +v.importe;
+    if (v.flete && isFinite(+v.flete)) o.flete = +v.flete;
     if (v.origen) o.origen = v.origen;
     ventas.push(o);
   });
@@ -5330,6 +5343,8 @@ function normalizar(raw) {
   venIn.forEach((r, i) => {
     const v = { id: txt(campo(r, 'id')), fecha: aFecha(campo(r, 'fecha')), zona: txt(campo(r, 'zona')), vendedor: txt(campo(r, 'vendedor')), cliente: txt(campo(r, 'cliente')), marca: txt(campo(r, 'marca')), producto: txt(campo(r, 'producto')), unidades: aNum(campo(r, 'unidades')), precio: aNum(campo(r, 'precio')) };
     const origen = txt(campo(r, 'origen')); if (origen) v.origen = origen;
+    const fl = aNum(campo(r, 'flete')); if (isFinite(fl) && fl) v.flete = fl;
+    const imp = aNum(campo(r, 'importe')); if (isFinite(imp) && campo(r, 'importe') !== '' && campo(r, 'importe') != null) v.importe = imp;
     const falta = ['fecha', 'cliente', 'marca', 'producto'].filter(k => !v[k]);
     if (falta.length) return errores.push(`Venta ${i + 1}: falta ${falta.join(', ')}${campo(r, 'fecha') && !v.fecha ? ' (fecha AAAA-MM-DD)' : ''}`);
     if (!isFinite(v.unidades) || !isFinite(v.precio) || v.precio < 0) return errores.push(`Venta ${i + 1}: unidades o precio inválidos`);
@@ -5391,7 +5406,7 @@ function guardar() {
   if (!store.set(KEY_DATA, JSON.stringify(limpio(DATA, true)))) toast('No se pudo guardar en el dispositivo; los datos se mantienen mientras la app esté abierta.');
 }
 /** Venta interna → fila v2 (para exportar o guardar registros manuales). */
-const ventaV2 = v => { const o = { id: v.id, fecha: v.fecha, cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: v.calidad || '', familia: v.familia || '', sku: v.sku || '', cantidad: v.unidades, precio: v.precio }; if (v.origen) o.origen = v.origen; return o; };
+const ventaV2 = v => { const o = { id: v.id, fecha: v.fecha, cliente: v.cliente, marca: v.marca, categoria: v.categoria || '', producto: v.producto, gp: v.gp || '', calidad: v.calidad || '', familia: v.familia || '', sku: v.sku || '', cantidad: v.unidades, precio: v.precio }; if (v.origen) o.origen = v.origen; if (v.importe != null) o.importe = v.importe; if (v.flete) o.flete = v.flete; return o; };
 function limpio(d, conOrigen) {
   if (d.raw) {
     const meta = { ...d.meta }; if (!conOrigen) { delete meta._origen; delete meta._cargado; }
@@ -5401,7 +5416,7 @@ function limpio(d, conOrigen) {
     return { ...d.raw, version: 2, meta, usuarios, ventas: base.concat(d.ventas.filter(esManual).map(ventaV2)) };
   }
   const meta = { ...d.meta }; if (!conOrigen) delete meta._origen;
-  const cleanV = v => { const o = { id: v.id, fecha: v.fecha, zona: v.zona, vendedor: v.vendedor, cliente: v.cliente, marca: v.marca, producto: v.producto, unidades: v.unidades, precio: v.precio }; if (v.origen) o.origen = v.origen; return o; };
+  const cleanV = v => { const o = { id: v.id, fecha: v.fecha, zona: v.zona, vendedor: v.vendedor, cliente: v.cliente, marca: v.marca, producto: v.producto, unidades: v.unidades, precio: v.precio }; if (v.origen) o.origen = v.origen; if (v.importe != null) o.importe = v.importe; if (v.flete) o.flete = v.flete; return o; };
   const out = { meta };
   if (d.usuarios) out.usuarios = d.usuarios.map(u => ({ usuario: u.usuario, rol: u.rol, clave: u.clave, foto: u.foto }));
   return { ...out, objetivos: d.objetivos.map(o => ({ periodo: o.periodo, zona: o.zona, vendedor: o.vendedor, cliente: o.cliente, marca: o.marca, producto: o.producto, unidades: o.unidades, precio: o.precio })), ventas: d.ventas.map(cleanV) };
@@ -5616,7 +5631,7 @@ function sheetNuevaVenta(editId) {
       guardar();
       closeSheet();
       render();
-      toast(`${ed ? 'Registro actualizado' : 'Registro guardado'}: ${fmtU(v.unidades)} · ${fmtMoneyFull(v.unidades * v.precio)}`);
+      toast(`${ed ? 'Registro actualizado' : 'Registro guardado'}: ${fmtU(v.unidades)} · ${fmtMoneyFull(fv(v))}`);
     };
   });
 }
@@ -5721,6 +5736,7 @@ document.addEventListener('click', ev => {
   if (t.dataset.tree) { const id = t.dataset.tree; if (ABIERTOS.has(id)) { [...ABIERTOS].forEach(x => { if (x === id || x.startsWith(id + '»')) ABIERTOS.delete(x); }); } else { ABIERTOS.add(id); RECIEN = id; } renderAnalisis(); RECIEN = null; return; }
   if (t.dataset.sub && detState) { sheetDetalle(detState.dim, detState.key, t.dataset.sub); return; }
   if (t.dataset.quitar) { S.f[t.dataset.quitar] = null; S.selDia = null; render(); return; }
+  if (t.dataset.pf) { if (S.pf !== t.dataset.pf) { S.pf = t.dataset.pf; const y = window.scrollY; render(); window.scrollTo({ top: y }); toast(S.pf === 'flete' ? 'Facturación y precios con flete' : 'Facturación y precios netos (sin flete)'); } return; }
   if (t.dataset.cattog) {
     const c = t.dataset.cattog, k = t.dataset.tk || 'categoria', l = listaF(S.f[k]);
     const n = l.includes(c) ? l.filter(x => x !== c) : [...l, c];
@@ -5833,7 +5849,7 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
 })();
 
 (function init() {
-  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (ui.moneda === 'USD') S.moneda = 'USD'; if (typeof ui.mixCli === 'boolean') S.mixCli = ui.mixCli; if (Array.isArray(ui.evMix)) S.evMix = ui.evMix; if (Array.isArray(ui.evUnir)) S.evUnir = ui.evUnir; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
+  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (ui.pf === 'flete') S.pf = 'flete'; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (ui.moneda === 'USD') S.moneda = 'USD'; if (typeof ui.mixCli === 'boolean') S.mixCli = ui.mixCli; if (Array.isArray(ui.evMix)) S.evMix = ui.evMix; if (Array.isArray(ui.evUnir)) S.evUnir = ui.evUnir; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
   let d = null, origen = 'Demo';
   try {
     const raw = store.get(KEY_DATA);
