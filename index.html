@@ -1953,7 +1953,7 @@ button.kpi:active{transform:scale(.98)}
     <div class="intro-s">Cada metro suma. Tu avance, al día.</div>
   </div>
   <button class="intro-go" id="introGo">Ingresar <svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-  <div class="intro-skip">v0.43 <span class="sep">|</span> Producido en ARG - Julián García</div>
+  <div class="intro-skip">v0.44 <span class="sep">|</span> Producido en ARG - Julián García</div>
 </div>
 
 <div class="app" id="app">
@@ -3959,7 +3959,7 @@ function precioPrevMix(f) {
    Solo cuentan las ventas cuya línea tiene Costo unit. en BASE GENERAL.
    ============================================================================ */
 const UB_DEF = ['categoria', 'producto'];
-const UB_DIMS = { categoria: 'Categoría', marca: 'Marca', producto: 'Producto', calidad: 'Calidad', zona: 'Zona', vendedor: 'Vendedor', cliente: 'Cliente' };
+const UB_DIMS = { categoria: 'Categoría', marca: 'Marca', producto: 'Producto', calidad: 'Calidad', familia: 'Familia', zona: 'Zona', vendedor: 'Vendedor', cliente: 'Cliente' };
 const UB_EST = new Map();
 /* Columnas de la tabla: se prenden y apagan con el botón Métricas */
 const UB_COLS = [['cant', 'Cant. k'], ['lista', 'P. lista'], ['neto', 'P. neto'], ['cost', 'Cost.'], ['dt', 'DT%'], ['ubu', 'UB unit.'], ['ubp', 'UB%'], ['ubt', 'UB total'], ['part', 'Part.']];
@@ -3971,7 +3971,7 @@ function aperturaUB() {
   return a.length ? a : UB_DEF.slice();
 }
 function selectorAperturaUB() {
-  const a = aperturaUB(), dims = Object.keys(UB_DIMS).filter(d => !(d === 'calidad' && !(IDX.valores.calidad || []).length));
+  const a = aperturaUB(), dims = Object.keys(UB_DIMS).filter(d => !((d === 'calidad' || d === 'familia') && !(IDX.valores[d] || []).length));
   const sel = [];
   for (let i = 0; i <= Math.min(a.length, dims.length - 1); i++) {
     const usados = new Set(a.slice(0, i)), val = a[i] || '';
@@ -4014,7 +4014,7 @@ function renderUB() {
   const raiz = nodo();
   let factTot = 0, cantTot = 0;
   const nomVal = (d, k) => d === 'categoria' ? nomCat(k) : d === 'zona' ? zonaCorta(k) : k;
-  const valor = (v, d) => d === 'calidad' ? (v.calidad || 'Sin calidad') : (v[d] || '—');
+  const valor = (v, d) => d === 'calidad' ? (v.calidad || 'Sin calidad') : d === 'familia' ? (v.familia || 'Sin familia') : (v[d] || '—');
   const clave = g => v => g.map(d => valor(v, d)).join(' · ');
   for (const v of DATA.ventas) {
     if (!enSel(v._p) || !ventaOK(v) || !match(v, S.f) || !(v.precio > 0)) continue;
@@ -4497,7 +4497,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.43</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.44</p></div>`;
 }
 
 /* ============================================================================
@@ -4554,7 +4554,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.43</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.44</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4624,7 +4624,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.43</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.44</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4664,7 +4664,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.43</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.44</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -5349,7 +5349,7 @@ function renderDatos() {
       <p><b>Operaciones sin producto comparable.</b> Ventas de productos que no se vendieron en el período de referencia: no entran en la comparación.</p>
       <p><b>Precio promedio.</b> Siempre ponderado: facturación ÷ m² (neto o con flete, según el selector Precio).</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.43 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.44 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
