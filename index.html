@@ -1898,6 +1898,56 @@ button.kpi:active{transform:scale(.98)}
 .card-tools{flex-wrap:wrap;row-gap:6px}
 .hdr .hdr-t{font-size:calc(18px * var(--fzg,1))}
 :root[data-fz="100"] .cat-tog button,:root[data-fz="120"] .cat-tog button{letter-spacing:.02em;padding:0 3px}
+/* ---------- v0.45 · VC · Cadena de valor ---------- */
+.vc-fil{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
+.vc-f{flex:1;min-width:140px;display:flex;flex-direction:column;gap:3px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 10px}
+.vc-f span{font-size:calc(10px * var(--fz,1));font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3,#8A8F98)}
+.vc-f select{border:0;background:transparent;font:inherit;font-size:calc(13px * var(--fz,1));font-weight:700;color:var(--ink);padding:2px 0;max-width:100%}
+.vc-bar{align-items:center}
+.btn-sim{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font:inherit;font-size:calc(13px * var(--fz,1));font-weight:800;color:var(--ink);cursor:pointer}
+.btn-sim.on{background:#E39B3B;border-color:#E39B3B;color:#fff}
+.vc-res{background:#FFF6E9;border:1px solid #F1D2A4;border-radius:14px;padding:10px 12px;font-size:calc(12.5px * var(--fz,1));line-height:1.45;color:var(--ink-2);margin:0 0 10px}
+.vc-res.vacio{color:var(--ink-3,#8A8F98)}
+.vc-res .pos{color:var(--good-ink,#1E7A46);font-weight:800}.vc-res .neg{color:var(--bad-ink,#A8202F);font-weight:800}
+.vc-acc{display:flex;justify-content:flex-end;margin:-4px 0 8px}
+.ap-sep{color:var(--ink-3,#8A8F98);font-size:calc(11px * var(--fz,1))}
+.vc-t{border-collapse:separate;border-spacing:0;font-size:calc(12px * var(--fz,1));font-variant-numeric:tabular-nums;white-space:nowrap;min-width:100%}
+.vc-t th,.vc-t td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.vc-t .n{text-align:right}
+.vc-t .vc-m{position:sticky;left:0;z-index:2;background:#F4F5F7;font-weight:700;color:var(--ink);box-shadow:6px 0 8px -8px rgba(0,0,0,.25);max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.vc-t thead th{background:var(--surface,#fff);font-size:calc(11px * var(--fz,1));font-weight:800;color:var(--ink);vertical-align:bottom}
+.vc-t thead th.vc-m{z-index:3;font-size:calc(10px * var(--fz,1));letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3,#8A8F98)}
+.vc-h small{display:block;font-size:calc(9px * var(--fz,1));font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3,#8A8F98);margin-bottom:2px}
+.vc-h.tg{cursor:pointer}.vc-h.tg:active{opacity:.6}
+.vc-tg{display:inline-block;width:calc(12px * var(--oz,1));color:var(--ink-3,#8A8F98)}
+.vc-h.nv0,.vc-t td.vc-tot{background:#EEF0F3}
+.vc-h.nv1{border-left:2px solid #D5D8DD}.vc-h.nv2{background:#FAFAFB}.vc-h.nv3,.vc-h.nv4{background:#FAFAFB;color:var(--ink-2)}
+.vc-t .vc-sim{background:#FFF6E9}
+.vc-t th.vc-sim{color:#B66A12}
+.vc-t td.vc-sim.cambio{background:#FDE9C8}
+.vc-in{width:84px;border:1px solid #E7C38E;border-radius:8px;background:#fff;font:inherit;font-size:calc(12px * var(--fz,1));font-weight:700;text-align:right;padding:5px 6px;color:var(--ink)}
+.vc-in:focus{outline:2px solid #E39B3B;outline-offset:0}
+.vc-u{font-size:calc(10px * var(--fz,1));color:var(--ink-3,#8A8F98);margin-left:2px}
+.vc-d{display:block;font-size:calc(10px * var(--fz,1));font-weight:800}.vc-d.pos{color:var(--good-ink,#1E7A46)}.vc-d.neg{color:var(--bad-ink,#A8202F)}
+.vc-t .neg{color:var(--bad-ink,#A8202F)}
+.vc-t.inv .vc-r.tg{cursor:pointer}
+.vc-t.inv .vc-r.nv0 .vc-m{background:#E6E9ED}.vc-t.inv .vc-r.nv1 .vc-m{font-weight:800}.vc-t.inv .vc-r.nv3 .vc-m,.vc-t.inv .vc-r.nv4 .vc-m{font-weight:500;color:var(--ink-2)}
+.vc-t.inv .vc-r.sim .vc-m{background:#FFF6E9;font-weight:700}
+.vc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px;background:#fff;border:1px solid var(--line)}
+/* Datos (desde el engranaje): volver */
+.volver{display:inline-flex;align-items:center;gap:6px;border:0;background:none;font:inherit;font-size:calc(14px * var(--fz,1));font-weight:800;color:var(--ink);padding:6px 0;margin:0 0 6px;cursor:pointer}
+.volver .ico{transform:rotate(180deg)}
+.vc-bar{flex-wrap:wrap;row-gap:8px}
+.vc-bar .vista-der{display:flex;flex-direction:row;flex-wrap:nowrap;gap:4px;justify-content:flex-end}
+.vc-bar .vista-der .link-btn{padding-left:9px;padding-right:9px}
+.vc-hist{align-self:center}
+.vc-bases{font-size:calc(11.5px * var(--fz,1));color:var(--ink-3,#8A8F98)}
+
+/* v0.49 · el campo de simulación no ensancha la columna */
+.vc-t td.vc-sim{padding:4px 5px}
+.vc-in{width:66px;max-width:100%;padding:4px 5px;font-size:calc(11.5px * var(--fz,1));border-radius:7px;box-sizing:border-box}
+.vc-t td.vc-sim .vc-u{margin-left:1px}
+.vc-in[data-vck="dt"]{width:calc(52px * var(--oz,1))}
 
 </style>
 
@@ -1953,7 +2003,7 @@ button.kpi:active{transform:scale(.98)}
     <div class="intro-s">Cada metro suma. Tu avance, al día.</div>
   </div>
   <button class="intro-go" id="introGo">Ingresar <svg viewBox="0 0 24 24" class="ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-  <div class="intro-skip">v0.44 <span class="sep">|</span> Producido en ARG - Julián García</div>
+  <div class="intro-skip">v0.49 <span class="sep">|</span> Producido en ARG - Julián García</div>
 </div>
 
 <div class="app" id="app">
@@ -2000,6 +2050,7 @@ button.kpi:active{transform:scale(.98)}
     <section class="screen" id="scr-equipo" hidden></section>
     <section class="screen" id="scr-mapa" hidden></section>
     <section class="screen" id="scr-ub" hidden></section>
+    <section class="screen" id="scr-vc" hidden></section>
     <section class="screen stack" id="scr-datos" hidden></section>
   </main>
 </div>
@@ -2012,7 +2063,8 @@ button.kpi:active{transform:scale(.98)}
       <button class="tab" data-tab="equipo"><svg viewBox="0 0 24 24" class="ico"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20v-1a5 5 0 0 0-3.5-4.8"/></svg>Equipo</button>
       <button class="tab" data-tab="mapa"><svg viewBox="0 0 24 24" class="ico"><path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z M9 4v13.5M15 6.5V20"/></svg>Zonas</button>
       <button class="tab" data-tab="ub" hidden><svg viewBox="0 0 24 24" class="ico"><rect x="2.5" y="7" width="15" height="9" rx="1.5"/><circle cx="10" cy="11.5" r="2"/><path d="M6.5 19h13a1.5 1.5 0 0 0 1.5-1.5V10"/></svg>UB</button>
-      <button class="tab" data-tab="datos"><svg viewBox="0 0 24 24" class="ico"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Datos</button>
+      <button class="tab" data-tab="vc" hidden><svg viewBox="0 0 24 24" class="ico"><path d="M10 13a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1.2 1.2M14 11a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1.2-1.2"/></svg>VC</button>
+      <button class="tab" data-tab="datos" hidden><svg viewBox="0 0 24 24" class="ico"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Datos</button>
     </nav>
     <button class="fab" id="fab" aria-label="Nuevo registro manual"><svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg></button>
   </div>
@@ -4090,6 +4142,257 @@ document.addEventListener('click', ev => {
   S.ubCols = c; render();
 });
 
+/* ============================================================================
+   M. VC · CADENA DE VALOR (solo aprobadores, v0.45)
+   Tabla de doble entrada: por defecto métricas en el Eje Y (filas) y la apertura en el Eje X (columnas desplegables
+   Categoría ▶ Marca ▶ Producto ▶ Calidad). "Invertir ejes" pasa la apertura a las filas.
+   Simular (v0.47): agrega UNA columna (o fila) "mes siguiente · Sim" que parte del último mes del período; el resto queda
+   como historia. Se editan Cant., P. lista, Dt y P. neto en el total del mes simulado o abriéndolo (el cambio se reparte
+   en % a lo que contiene); el costo unitario queda fijo.
+   ============================================================================ */
+const VC_DIMS = { mes: 'Mes', ...UB_DIMS };
+const VC_X_DEF = ['mes', 'categoria', 'marca', 'producto', 'calidad'];
+/* v0.46 · VC no sigue el mes de arriba: período propio (por defecto toda la historia) */
+const vcPers = () => { const ps = IDX.periodos; let d = S.vcDesde && ps.includes(S.vcDesde) ? S.vcDesde : ps[0], h = S.vcHasta && ps.includes(S.vcHasta) ? S.vcHasta : ps[ps.length - 1]; if (d > h) [d, h] = [h, d]; return { d, h }; };
+const vcEnPer = p => { const { d, h } = vcPers(); return p >= d && p <= h; };
+const perCorto = p => { const L = perLabel(p); return L.corto + ' ' + String(L.anio).slice(2); };
+const vcLblPer = () => { const { d, h } = vcPers(), ps = IDX.periodos; return (d === ps[0] && h === ps[ps.length - 1] ? 'Toda la historia · ' : '') + (d === h ? perCorto(d) : perCorto(d) + ' – ' + perCorto(h)); };
+const VC_MET = [
+  ['cant', 'Cant.'], ['lista', 'P. lista'], ['dt', 'Dt'], ['neto', 'P. neto'], ['cost', 'Costo'],
+  ['ubu', 'UB unit.'], ['ubp', 'UB %'], ['ubt', 'UB total'], ['fact', 'Fact.'], ['part', 'Part. %'],
+  ['flete', 'Flete'], ['netof', 'P. c/flete'],
+];
+const VC_Y_DEF = ['cant', 'lista', 'dt', 'neto', 'cost', 'ubp', 'ubt'];
+const VC_EDIT = { cant: 1, lista: 1, dt: 1, neto: 1 };
+const VC_ABIERTOS = new Set();          // columnas (o filas) abiertas: id de ruta "Cer»CSL"
+let VC_SIM = false;                      // modo simulación: agrega un mes adicional (§) a partir del último mes del período
+const VC_K = new Map();                  // factores simulados por hoja (ruta completa): { q, p, l }
+let VC_VER = null;                       // panel abierto: 'x' | 'y' | null
+
+const vcX = () => { let a = Array.isArray(S.vcX) && S.vcX.length ? S.vcX.filter(d => VC_DIMS[d]) : VC_X_DEF.slice(); a = a.filter(d => !((d === 'calidad' || d === 'familia') && !(IDX.valores[d] || []).length)); return a.length ? a : ['categoria']; };
+const vcY = () => { const y = Array.isArray(S.vcY) && S.vcY.length ? S.vcY : VC_Y_DEF; const hayFl = typeof hayFlete === 'function' && hayFlete(); return VC_MET.map(m => m[0]).filter(k => y.includes(k) && (hayFl || !['flete', 'netof'].includes(k))); };
+
+/** Árbol de la apertura con las sumas reales. Con Simular, además un "mes adicional" (§): copia del último mes del
+    período abierto con la misma apertura (sin el nivel Mes), cuyas hojas llevan los factores simulados. */
+const mesSig = p => { const [y, m] = p.split('-').map(Number); return m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, '0')}`; };
+function vcArbol() {
+  const dims = vcX(), ult = vcPers().h;
+  // v0.49 · El mes simulado va en el nivel Mes, dentro de cada elemento de los niveles anteriores (ej. Calidad ▶ Marca ▶ Mes:
+  // un "Oct · Sim" después de los meses de cada marca). Sin Mes en la apertura, va al final, arriba de todo.
+  const mi = dims.indexOf('mes'), pre = mi < 0 ? [] : dims.slice(0, mi), post = mi < 0 ? dims.slice() : dims.slice(mi + 1);
+  const z = () => ({ U: 0, F: 0, C: 0, L: 0, UL: 0, FL: 0, FT: 0 });
+  const nodo = (nom, ruta, nivel) => ({ nom, ruta, nivel, h: new Map(), r: z(), s: z() });
+  const raiz = nodo('Total', '', -1), sims = [], nomSim = perCorto(mesSig(ult)) + ' · Sim';
+  const nomVal = (d, k) => d === 'categoria' ? nomCat(k) : d === 'zona' ? zonaCorta(k) : d === 'mes' ? perCorto(k) : k;
+  const valor = (v, d) => d === 'mes' ? v._p : d === 'calidad' ? (v.calidad || 'Sin calidad') : d === 'familia' ? (v.familia || 'Sin familia') : (v[d] || '—');
+  const okV = v => vcEnPer(v._p) && ventaOK(v) && match(v, S.f) && v.precio > 0;
+  // Base de la simulación: último mes con venta de cada (niveles anteriores + primer nivel posterior al Mes)
+  const bKey = v => pre.concat(post.slice(0, 1)).map(d => valor(v, d)).join('»'), ultG = new Map();
+  if (VC_SIM) for (const v of DATA.ventas) { if (!okV(v) || v._costo == null) continue; const g = bKey(v); if (!ultG.has(g) || v._p > ultG.get(g)) ultG.set(g, v._p); }
+  let factTot = 0;
+  for (const v of DATA.ventas) {
+    if (!okV(v)) continue;
+    factTot += fvN(v);
+    if (v._costo == null) continue;
+    const F = fvN(v), U = v.unidades, C = U * v._costo, L = v._lista ? U * v._lista : 0, UL = v._lista ? U : 0, FL = v._lista ? F : 0, FT = v.flete || 0;
+    const sumaR = x => { x.r.U += U; x.r.F += F; x.r.C += C; x.r.L += L; x.r.UL += UL; x.r.FL += FL; x.r.FT += FT; };
+    sumaR(raiz);
+    const ks = dims.map(d => valor(v, d));
+    let n = raiz, padre = mi === 0 || mi < 0 ? raiz : null;
+    ks.forEach((key, i) => { let x = n.h.get(key); if (!x) { n.h.set(key, x = nodo(nomVal(dims[i], key), ks.slice(0, i + 1).join('»'), i)); x.dim = dims[i]; x.lbl = VC_DIMS[dims[i]]; } x.mk = dims[i] === 'marca' ? v.marca : null; sumaR(x); n = x; if (i === mi - 1) padre = x; });
+    if (VC_SIM && v._p === ultG.get(bKey(v))) {   // mes simulado del padre, a partir de la última venta de su grupo
+      let sm = padre.sm;
+      if (!sm) { sm = padre.sm = nodo(nomSim, padre.ruta ? padre.ruta + '»§' : '§', padre.nivel + 1); sm.esSim = true; sm.dim = 'mes'; sm.bases = new Map(); sims.push(sm); }
+      const sk = post.map(d => valor(v, d)), hoja = [sm.ruta].concat(sk).join('»'), k = VC_K.get(hoja) || { q: 1, p: 1, l: 1 };
+      const sumaS = x => { sumaR(x); x.s.U += U * k.q; x.s.F += F * k.q * k.p; x.s.C += C * k.q; x.s.L += L * k.q * k.l; x.s.UL += UL * k.q; x.s.FL += FL * k.q * k.p; x.s.FT += FT * k.q; };
+      sumaS(sm);
+      sm.bases.set(post.length ? nomVal(post[0], sk[0]) : 'Total', v._p);
+      let m = sm;
+      sk.forEach((key, i) => { let x = m.h.get(key); if (!x) { m.h.set(key, x = nodo(nomVal(post[i], key), [sm.ruta].concat(sk.slice(0, i + 1)).join('»'), sm.nivel + 1 + i)); x.dim = post[i]; x.lbl = VC_DIMS[post[i]]; x.esSim = true; } x.mk = post[i] === 'marca' ? v.marca : null; sumaS(x); m = x; });
+    }
+  }
+  sims.forEach(sm => { const ms = [...new Set(sm.bases.values())]; sm.lbl = ms.length === 1 ? 'Base ' + perCorto(ms[0]) : 'Base: última venta'; });
+  // Totales de todos los meses simulados (para el resumen)
+  let sim = null;
+  if (VC_SIM && sims.length) {
+    sim = { r: z(), s: z(), sims, nom: nomSim, bases: new Map() };
+    sims.forEach(sm => { for (const q of ['r', 's']) for (const c in sim[q]) sim[q][c] += sm[q][c]; sm.bases.forEach((p, g) => { if (!sim.bases.has(g) || p > sim.bases.get(g)) sim.bases.set(g, p); }); });
+    const ms = [...new Set(sims.flatMap(sm => [...sm.bases.values()]))];
+    sim.unaBase = ms.length === 1 ? ms[0] : null;
+  }
+  raiz.factTot = factTot;
+  return { raiz, dims, sim, ult, post };
+}
+/** Valor de una métrica para un acumulado (real o simulado). */
+function vcVal(a, k, base) {
+  const ub = a.F - a.C;
+  switch (k) {
+    case 'cant': return a.U;
+    case 'lista': return a.UL ? a.L / a.UL : null;
+    case 'dt': return a.L ? 1 - a.FL / a.L : null;
+    case 'neto': return a.U ? a.F / a.U : null;
+    case 'cost': return a.U ? a.C / a.U : null;
+    case 'ubu': return a.U ? ub / a.U : null;
+    case 'ubp': return a.F ? ub / a.F : null;
+    case 'ubt': return ub;
+    case 'fact': return a.F;
+    case 'part': return base && base.F ? a.F / base.F : null;
+    case 'flete': return a.U ? a.FT / a.U : null;
+    case 'netof': return a.U ? (a.F + a.FT) / a.U : null;
+  }
+  return null;
+}
+function vcFmt(k, x) {
+  if (x == null || !isFinite(x)) return '—';
+  if (k === 'cant') return fmtUc(x);
+  if (k === 'dt' || k === 'ubp' || k === 'part') return fmtPct(x, 1);
+  if (k === 'ubt' || k === 'fact') return fmtMoney(x);
+  return fmtMoneyFull(x);
+}
+/** Valor para el campo editable (en la moneda que se está viendo). */
+const vcIn = (k, x) => x == null || !isFinite(x) ? '' : k === 'cant' ? String(Math.round(x)) : k === 'dt' ? (x * 100).toFixed(1) : (enUSD() ? (x / tcUsd()).toFixed(2) : String(Math.round(x)));
+const vcNum = s => { s = String(s).trim().replace(/[^\d.,-]/g, ''); if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.'); else if (!/^-?\d+\.\d{1,2}$/.test(s)) s = s.replace(/\./g, ''); return parseFloat(s); };
+const vcOut = (k, s) => { const n = vcNum(s); if (!isFinite(n)) return null; return k === 'cant' ? n : k === 'dt' ? n / 100 : (enUSD() ? n * tcUsd() : n); };
+/** Aplica una edición simulada en un nodo: el cambio se reparte en % a todas las hojas que contiene. */
+function vcEditar(ruta, k, valor) {
+  const { raiz } = vcArbol();
+  if (!ruta || !ruta.split('»').includes('§')) return;
+  let n = raiz; for (const p of ruta.split('»')) { n = p === '§' ? n.sm : n.h.get(p); if (!n) return; }
+  const actual = vcVal(n.s, k);
+  if (valor == null || actual == null) return;
+  let f = 1, campo;
+  if (k === 'cant') { if (!actual) return; f = valor / actual; campo = 'q'; }
+  else if (k === 'lista') { if (!actual) return; f = valor / actual; campo = 'lp'; }
+  else if (k === 'neto') { if (!actual) return; f = valor / actual; campo = 'p'; }
+  else if (k === 'dt') { if (actual >= 1 || valor >= 1) return; f = (1 - valor) / (1 - actual); campo = 'p'; }
+  if (!isFinite(f) || f < 0) return;
+  const hojas = [];
+  const junta = x => { if (!x.h.size) hojas.push(x.ruta); else x.h.forEach(junta); };
+  junta(n);
+  hojas.forEach(h => { const o = VC_K.get(h) || { q: 1, p: 1, l: 1 }; if (campo === 'q') o.q *= f; else if (campo === 'p') o.p *= f; else { o.l *= f; o.p *= f; } VC_K.set(h, o); });
+}
+
+/** Secciones visibles (en orden) según lo abierto: [{n, nivel}] empezando por el Total. */
+function vcVisibles(raiz, sim) {
+  const out = S.vcTot === false ? [] : [{ n: raiz, nivel: -1 }];
+  const orden = m => [...m.h.values()].sort((a, b) => a.dim === 'mes' && b.dim === 'mes' ? (a.ruta < b.ruta ? -1 : 1) : b.r.F - a.r.F);
+  const recorre = x => {
+    orden(x).forEach(c => { out.push({ n: c, nivel: c.nivel }); if (c.h.size && VC_ABIERTOS.has(c.ruta)) recorre(c); });
+    if (x.sm && x.sm.r.U) { out.push({ n: x.sm, nivel: x.sm.nivel }); if (x.sm.h.size && VC_ABIERTOS.has(x.sm.ruta)) recorre(x.sm); }   // mes simulado al final de los meses
+  };
+  recorre(raiz);
+  return out;
+}
+function vcSelectorX() {
+  const a = vcX(), dims = Object.keys(VC_DIMS).filter(d => !((d === 'calidad' || d === 'familia') && !(IDX.valores[d] || []).length));
+  const sel = [];
+  for (let i = 0; i <= Math.min(a.length, dims.length - 1); i++) {
+    const usados = new Set(a.slice(0, i)), val = a[i] || '';
+    sel.push(`<label class="ap-n"><span>${i + 1}</span><select data-vcx="${i}" aria-label="Nivel ${i + 1}">${i ? '<option value="">—</option>' : ''}${dims.filter(d => !usados.has(d)).map(d => `<option value="${d}"${d === val ? ' selected' : ''}>${VC_DIMS[d]}</option>`).join('')}</select></label>`);
+    if (!val) break;
+  }
+  return `<div class="apertura"><span class="ap-t">Apertura · ${S.vcInv ? 'Eje Y (filas)' : 'Eje X (columnas)'}</span>${sel.join('<span class="ap-sep">▶</span>')}${a.join() === VC_X_DEF.join() ? '' : '<button class="link-btn ap-reset" data-act="vcResetX">Restablecer</button>'}</div>`;
+}
+function vcSelectorY() {
+  const y = vcY(), hayFl = typeof hayFlete === 'function' && hayFlete();
+  return `<div class="ub-met"><span class="ap-t">Métricas · ${S.vcInv ? 'Eje X (columnas)' : 'Eje Y (filas)'}</span><div class="ub-met-l">${VC_MET.filter(([k]) => hayFl || !['flete', 'netof'].includes(k)).map(([k, l]) => `<button class="ub-mc" data-vcy="${k}" aria-pressed="${y.includes(k)}">${l}</button>`).join('')}</div>${y.join() === VC_Y_DEF.join() ? '' : '<button class="link-btn ap-reset" data-act="vcResetY">Restablecer</button>'}</div>`;
+}
+function vcFiltros() {
+  const opt = (k, todos) => { const v = S.f[k] == null ? '' : Array.isArray(S.f[k]) ? (S.f[k].length === 1 ? S.f[k][0] : '__varios') : S.f[k]; const l = (opciones(k) || []).slice().sort((a, b) => a.localeCompare(b, 'es'));
+    return `<option value="">${todos}</option>${v === '__varios' ? '<option value="__varios" selected>Varios (filtro)</option>' : ''}${l.map(x => `<option value="${esc(x)}"${x === v ? ' selected' : ''}>${esc(x)}</option>`).join('')}`; };
+  const fam = (IDX.valores.familia || []).length;
+  const ps = IDX.periodos, { d, h } = vcPers(), op = v => ps.map(p => `<option value="${p}"${p === v ? ' selected' : ''}>${esc(perCorto(p))}</option>`).join('');
+  return `<div class="vc-fil"><label class="vc-f"><span>Desde</span><select data-vcper="d">${op(d)}</select></label><label class="vc-f"><span>Hasta</span><select data-vcper="h">${op(h)}</select></label>${(d !== ps[0] || h !== ps[ps.length - 1]) ? '<button class="link-btn vc-hist" data-act="vcHist">Toda la historia</button>' : ''}</div><div class="vc-fil">${fam ? `<label class="vc-f"><span>Familia</span><select data-vcf="familia">${opt('familia', 'Todas')}</select></label>` : ''}<label class="vc-f"><span>Cliente</span><select data-vcf="cliente">${opt('cliente', 'Todos')}</select></label></div>`;
+}
+
+function renderVC() {
+  const el = $('#scr-vc'), { raiz, dims, sim, ult, post } = vcArbol(), y = vcY(), vis = vcVisibles(raiz, sim), inv = !!S.vcInv;
+  const R = raiz.r;
+  const tg = x => x.n.h.size && x.nivel >= 0;
+  const cab = x => {   // encabezado de una sección
+    const tog = tg(x) ? `<span class="vc-tg">${VC_ABIERTOS.has(x.n.ruta) ? '▾' : '▸'}</span>` : '';
+    const col = x.n.mk ? `<i class="ub-dot" style="background:${colorMarca(x.n.mk)}"></i>` : '';
+    return `<small>${x.nivel < 0 ? '&nbsp;' : esc(x.n.lbl || '')}</small>${tog}${col}${esc(x.n.nom)}`;
+  };
+  const celda = x => k => {
+    const sm = !!x.n.esSim, a = sm ? x.n.s : x.n.r, v = vcVal(a, k, sm ? sim.s : R);
+    const neg = (k === 'ubt' || k === 'ubp' || k === 'ubu') && v < 0 ? ' neg' : '';
+    if (sm && VC_EDIT[k] && !(k === 'lista' && !a.UL) && !(k === 'dt' && !a.L)) {
+      const base = vcVal(x.n.r, k), cambio = base != null && v != null && Math.abs(v - base) > Math.abs(base) * 1e-6 + 1e-9;
+      return `<td class="n vc-sim${cambio ? ' cambio' : ''}"><input class="vc-in" inputmode="decimal" data-vcr="${esc(x.n.ruta)}" data-vck="${k}" value="${vcIn(k, v)}" aria-label="${esc(VC_MET.find(m => m[0] === k)[1])} simulado · ${esc(x.n.nom)}">${k === 'dt' ? '<span class="vc-u">%</span>' : ''}</td>`;
+    }
+    let d = '';
+    if (sm) { const r = vcVal(x.n.r, k, sim.r); if (r != null && v != null && Math.abs(v - r) > 1e-9 && ['ubt', 'ubp', 'fact', 'ubu'].includes(k)) d = `<small class="vc-d ${v >= r ? 'pos' : 'neg'}">${k === 'ubp' ? fmtPP(v - r) : (v >= r ? '+' : '') + vcFmt(k, v - r)}</small>`; }
+    return `<td class="n${sm ? ' vc-sim' : ''}${x.nivel < 0 ? ' vc-tot' : ''}"><span class="${neg}">${vcFmt(k, v)}</span>${d}</td>`;
+  };
+  let tabla;
+  if (!R.U) tabla = '<p class="card-s">No hay ventas con costo cargado para este filtro.</p>';
+  else if (!inv) {   // métricas en filas, secciones en columnas
+    tabla = `<table class="vc-t"><thead><tr><th class="vc-m">Métrica</th>${vis.map(x => `<th class="n vc-h nv${x.nivel + 1}${x.n.esSim ? ' vc-sim' : ''}${tg(x) ? ' tg' : ''}"${tg(x) ? ` data-vcab="${esc(x.n.ruta)}"` : ''}>${cab(x)}</th>`).join('')}</tr></thead>
+      <tbody>${y.map(k => `<tr><th class="vc-m">${esc(VC_MET.find(m => m[0] === k)[1])}</th>${vis.map(x => celda(x)(k)).join('')}</tr>`).join('')}</tbody></table>`;
+  } else {           // secciones en filas, métricas en columnas
+    tabla = `<table class="vc-t inv"><thead><tr><th class="vc-m">${esc(dims.map(d => VC_DIMS[d]).join(' ▶ '))}</th>${y.map(k => `<th class="n vc-h">${esc(VC_MET.find(m => m[0] === k)[1])}</th>`).join('')}</tr></thead>
+      <tbody>${vis.map(x => `<tr class="vc-r nv${x.nivel + 1}${x.n.esSim ? ' sim' : ''}${tg(x) ? ' tg' : ''}"${tg(x) ? ` data-vcab="${esc(x.n.ruta)}"` : ''}><th class="vc-m${x.n.esSim ? ' vc-sim' : ''}" style="padding-left:${10 + Math.max(0, x.nivel + 1) * 12}px">${tg(x) ? `<span class="vc-tg">${VC_ABIERTOS.has(x.n.ruta) ? '▾' : '▸'}</span>` : ''}${x.n.mk ? `<i class="ub-dot" style="background:${colorMarca(x.n.mk)}"></i>` : ''}${esc(x.n.nom)}</th>${y.map(celda(x)).join('')}</tr>`).join('')}</tbody></table>`;
+  }
+  const haySim = VC_K.size > 0;
+  let res = '';
+  if (VC_SIM && sim && sim.r.U) {
+    const B = sim.r, Sm = sim.s, ubB = B.F - B.C, ubS = Sm.F - Sm.C, pB = B.F ? ubB / B.F : 0, pS = Sm.F ? ubS / Sm.F : 0;
+    const mi = dims.indexOf('mes'), grp = (mi < 0 ? [] : dims.slice(0, mi)).concat(post.slice(0, 1)).map(d => VC_DIMS[d].toLowerCase()).join(' y ') || 'total';
+    const bTxt = sim.unaBase ? perCorto(sim.unaBase) : 'la última venta de cada ' + grp;
+    const bs = [...sim.bases.entries()].sort((a, b) => a[0].localeCompare(b[0], 'es'));
+    const bLst = sim.unaBase || bs.length > 6 || mi > 0 ? '' : ` <span class="vc-bases">(${bs.map(([g, p]) => esc(g) + ' ' + esc(perCorto(p))).join(' · ')})</span>`;
+    const dnd = mi > 0 ? ` en cada ${esc(VC_DIMS[dims[mi - 1]].toLowerCase())} (${sim.sims.length})` : '';
+    res = `<div class="vc-res${haySim ? '' : ' vacio'}">${haySim ? `<b>${esc(sim.nom)}</b> vs. ${esc(bTxt)}${bLst} · UB total ${fmtMoney(ubS)} <span class="${ubS >= ubB ? 'pos' : 'neg'}">(${ubS >= ubB ? '+' : ''}${fmtMoney(ubS - ubB)})</span> · UB ${fmtPct(pS, 1)} <span class="${pS >= pB ? 'pos' : 'neg'}">(${fmtPP(pS - pB)})</span> · Fact. ${fmtMoney(Sm.F)}`
+      : `Se agregó <b>${esc(sim.nom)}</b>${dnd}: un mes adicional que parte de ${sim.unaBase ? 'lo vendido en ' + esc(perCorto(sim.unaBase)) : 'la última venta de cada ' + esc(grp)}${bLst}. Editá Cant., P. lista, Dt o P. neto (en el total del mes o abriéndolo); el cambio se reparte en % a lo que contiene y se recalcula el resto. El costo unitario queda fijo.`}</div>`;
+  } else if (VC_SIM) res = `<div class="vc-res vacio">No hay ventas con costo en el período para simular.</div>`;
+  el.innerHTML = `<h1 class="section-t">Cadena de valor</h1><p class="section-s">Rentabilidad por ${esc(dims.map(d => VC_DIMS[d].toLowerCase()).join(' ▶ '))} · ${esc(vcLblPer())} · solo aprobadores</p>
+    ${vcFiltros()}
+    <div class="vista-bar vc-bar"><button class="btn-sim${VC_SIM ? ' on' : ''}" data-act="vcSim" aria-pressed="${VC_SIM}">${ico('sliders', 'sm')} ${VC_SIM ? 'Simulando' : 'Simular'}</button>
+      <div class="vista-der"><button class="link-btn" data-act="vcTot" aria-pressed="${S.vcTot !== false}">Total</button><button class="link-btn" data-act="vcInv" aria-pressed="${inv}" title="Invertir ejes">⇄ Ejes</button><button class="link-btn" data-act="vcVerY" aria-pressed="${VC_VER === 'y'}">${ico('list', 'sm')} Métricas</button><button class="link-btn" data-act="vcVerX" aria-pressed="${VC_VER === 'x'}">${ico('sliders', 'sm')} Apertura${vcX().join() !== VC_X_DEF.join() ? ' ·' : ''}</button></div></div>
+    ${VC_VER === 'y' ? vcSelectorY() : VC_VER === 'x' ? vcSelectorX() : ''}
+    ${res}${VC_SIM && haySim ? '<div class="vc-acc"><button class="link-btn" data-act="vcLimpiar">Volver a los valores reales</button></div>' : ''}
+    <div class="card ub-card vc-card"><div class="ub-scroll vc-scroll">${tabla}</div></div>
+    <p class="map-nota" style="margin-top:10px">${inv ? 'Tocá una fila para abrir su apertura.' : 'Tocá el encabezado de una columna para abrirla en el nivel siguiente.'} Precio lista: el del objetivo del mes (o BASE GENERAL). Descuento total: de lista a neto. Precio neto y UB sin flete. Solo ventas con costo cargado.${enUSD() ? ` Valores en dólares (TC ${NF0.format(tcUsd())}).` : ''}</p>`;
+}
+
+document.addEventListener('click', ev => {
+  const h = ev.target.closest && ev.target.closest('[data-vcab]');
+  if (h && !ev.target.closest('input')) { const r = h.dataset.vcab; if (VC_ABIERTOS.has(r)) [...VC_ABIERTOS].forEach(x => { if (x === r || x.startsWith(r + '»')) VC_ABIERTOS.delete(x); }); else VC_ABIERTOS.add(r); renderVC(); return; }
+  const b = ev.target.closest && ev.target.closest('[data-vcy]');
+  if (b) { let y = vcY().slice(); const k = b.dataset.vcy; y = y.includes(k) ? y.filter(x => x !== k) : y.concat(k); if (!y.length) return; S.vcY = VC_MET.map(m => m[0]).filter(x => y.includes(x)); guardarUI(); renderVC(); }
+});
+document.addEventListener('change', ev => {
+  const t = ev.target; if (!t.matches) return;
+  if (t.matches('select[data-vcx]')) {
+    const i = +t.dataset.vcx, v = t.value; let a = vcX().slice();
+    if (!v) a = a.slice(0, i); else { const j = a.indexOf(v), viejo = a[i]; if (j > i) a[j] = viejo; a[i] = v; a = a.filter(Boolean); }
+    S.vcX = a.length ? a : VC_X_DEF.slice(); VC_ABIERTOS.clear(); VC_K.clear(); guardarUI(); renderVC();
+  } else if (t.matches('select[data-vcper]')) {
+    if (t.dataset.vcper === 'd') S.vcDesde = t.value; else S.vcHasta = t.value; VC_K.clear(); guardarUI(); renderVC();
+  } else if (t.matches('select[data-vcf]')) {
+    const k = t.dataset.vcf; if (t.value === '__varios') return; S.f[k] = t.value || null; VC_K.clear(); render();
+  } else if (t.matches('input[data-vck]')) {
+    const k = t.dataset.vck, v = vcOut(k, t.value); vcEditar(t.dataset.vcr, k, v); const y = window.scrollY, sc = $('.vc-scroll'), sx = sc ? sc.scrollLeft : 0; renderVC(); window.scrollTo({ top: y }); const s2 = $('.vc-scroll'); if (s2) s2.scrollLeft = sx;
+  }
+});
+document.addEventListener('keydown', ev => { if (ev.key === 'Enter' && ev.target.matches && ev.target.matches('input[data-vck]')) ev.target.blur(); });
+function vcAccion(a) {
+  if (a === 'vcSim') { VC_SIM = !VC_SIM; if (!VC_SIM) VC_K.clear(); }
+  else if (a === 'vcInv') S.vcInv = !S.vcInv;
+  else if (a === 'vcVerX') VC_VER = VC_VER === 'x' ? null : 'x';
+  else if (a === 'vcVerY') VC_VER = VC_VER === 'y' ? null : 'y';
+  else if (a === 'vcResetX') { S.vcX = null; VC_ABIERTOS.clear(); VC_K.clear(); }
+  else if (a === 'vcResetY') S.vcY = null;
+  else if (a === 'vcLimpiar') VC_K.clear();
+  else if (a === 'vcHist') { S.vcDesde = S.vcHasta = null; VC_K.clear(); }
+  else if (a === 'vcTot') S.vcTot = S.vcTot === false;
+  else return false;
+  guardarUI(); renderVC();
+  if (a === 'vcSim' && VC_SIM) { const sc = $('.vc-scroll'); if (sc) sc.scrollLeft = sc.scrollWidth; }   // muestra el mes simulado
+  return true;
+}
+
 'use strict';
 /* ============================================================================
    A. UTILIDADES
@@ -4497,7 +4800,7 @@ function mostrarArchivo() {
     <p>Elegí <b>pulso_datos.json</b> en la carpeta compartida de OneDrive. Se hace una sola vez: después se actualiza desde la app.</p>
     ${ARCH_ERR ? `<div class="warnbox" role="alert" style="margin:0 0 4px">${esc(ARCH_ERR)}</div>` : ''}
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Elegir archivo</button>
-    <p class="login-foot">Pulso Comercial · v0.44</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.49</p></div>`;
 }
 
 /* ============================================================================
@@ -4554,7 +4857,7 @@ function mostrarClave() {
       <input class="pin clave-in" id="claveIn" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="PULSO-XXXX-XXXX-XXXX-XXXX-XXXX" aria-label="Clave de acceso">
       <button class="btn btn-p" type="submit" id="claveOk">Ingresar</button>
     </form>
-    <p class="login-foot">Pulso Comercial · v0.44</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.49</p></div>`;
   $('#claveForm').onsubmit = ev => { ev.preventDefault(); validarClave($('#claveIn').value); };
 }
 /** Primera vez: prueba la clave contra el archivo publicado y, si abre, guarda todo. */
@@ -4624,7 +4927,7 @@ function mostrarConexion() {
     <h1>Conectate para seguir</h1>
     <p>Pasaron más de ${+acc.offlineDias || 7} días sin que este equipo se conecte. Por seguridad, conectate a internet para verificar tu acceso.</p>
     <button class="btn btn-p" data-act="cargar">${ico('refresh')} Reintentar</button>
-    <p class="login-foot">Pulso Comercial · v0.44</p></div>`;
+    <p class="login-foot">Pulso Comercial · v0.49</p></div>`;
 }
 /** Aviso en Inicio cuando la clave está por vencer. */
 function avisoClaveHTML() {
@@ -4664,7 +4967,7 @@ function mostrarLogin() {
         <button class="btn btn-p" type="submit">Ingresar</button>
       </form>`;
   }
-  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.44</p></div>`;
+  el.innerHTML = `<div class="login-in">${h}<p class="login-foot">Pulso Comercial · v0.49</p></div>`;
   const f = $('#loginForm');
   if (f) {
     const pin = $('#loginPin');
@@ -4741,29 +5044,31 @@ function render() {
   const verUB = !esVend() && IDX.conCostos;
   $('.tab[data-tab="ub"]').hidden = !verUB;
   if (S.tab === 'ub' && !verUB) S.tab = 'inicio';
-  $('.tab[data-tab="datos"]').hidden = esVend();
+  $('.tab[data-tab="vc"]').hidden = !verUB;
+  if (S.tab === 'vc' && !verUB) S.tab = 'inicio';
   if (esVend() && S.tab === 'datos') S.tab = 'inicio';
-  document.body.classList.toggle('sin-metrica', S.tab === 'ub');
+  document.body.classList.toggle('sin-metrica', S.tab === 'ub' || S.tab === 'vc');
   renderHeader();
   renderCtx();
   const t = S.tab;
   $$('.tab').forEach(b => b.toggleAttribute('aria-current', false));
-  $(`.tab[data-tab="${t}"]`).setAttribute('aria-current', 'page');
-  ['inicio', 'analisis', 'equipo', 'mapa', 'ub', 'datos'].forEach(k => { $('#scr-' + k).hidden = k !== t; });
-  $('#ctx').hidden = t === 'datos'; $('#catTog').hidden = t === 'datos'; $('#chips').hidden = t === 'datos';
+  const tb = $(`.tab[data-tab="${t}"]`); if (tb) tb.setAttribute('aria-current', 'page');
+  ['inicio', 'analisis', 'equipo', 'mapa', 'ub', 'vc', 'datos'].forEach(k => { $('#scr-' + k).hidden = k !== t; });
+  $('#ctx').hidden = t === 'datos' || t === 'vc'; $('#catTog').hidden = t === 'datos'; $('#chips').hidden = t === 'datos';
   if (t === 'inicio') renderInicio();
   else if (t === 'analisis') renderAnalisis();
   else if (t === 'equipo') renderEquipo();
   else if (t === 'mapa') renderMapa();
   else if (t === 'ub') renderUB();
-  else renderDatos();
+  else if (t === 'vc') renderVC();
+  else { renderDatos(); $('#scr-datos').insertAdjacentHTML('afterbegin', `<button class="volver" data-act="volverDatos">${ico('chevR', 'sm')}<span>Volver</span></button>`); }
   ajustarBanda(); encabezadoScroll();
   // Animación de carga de barras: al entrar a una solapa o cambiar mes, métrica o filtros.
   const clave = [t, S.periodo, JSON.stringify(S.rango), S.metric, JSON.stringify(S.f), S.dimA].join('|');
   if (clave !== ultimaVista) { ultimaVista = clave; animarBarras($('#scr-' + t)); }
   guardarUI();
 }
-function guardarUI() { store.set(KEY_UI, JSON.stringify({ metric: S.metric, pf: S.pf, fz: S.fz, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2, moneda: S.moneda, mixCli: S.mixCli, evMix: S.evMix, evUnir: S.evUnir })); }
+function guardarUI() { store.set(KEY_UI, JSON.stringify({ metric: S.metric, pf: S.pf, fz: S.fz, vcX: S.vcX, vcY: S.vcY, vcInv: !!S.vcInv, vcTot: S.vcTot !== false, vcDesde: S.vcDesde || null, vcHasta: S.vcHasta || null, dimA: S.dimA, orden: S.orden, sim: S.sim, vista: S.vista, detalle: S.detalle, agrup: S.agrup, evol: S.evol, fxVs: S.fxVs, precioVs: S.precioVs, apertura: S.apertura, aperturaUB: S.aperturaUB, ubUnir: S.ubUnir, ubCols: S.ubCols, ubColsV: 2, moneda: S.moneda, mixCli: S.mixCli, evMix: S.evMix, evUnir: S.evUnir })); }
 
 /** v0.35 · "Info al 30/09/26 15:05 | act. 15:07": hasta cuándo llega la información (hora en que se extrajo
     de Power BI / se guardó el Excel) y cuándo se publicó. Si la publicación es de otro día, muestra también la fecha. */
@@ -5114,6 +5419,7 @@ function sheetAjustes() {
   if (hayBO()) filas.push(`<button class="menu-i aj-i" data-act="bo" aria-pressed="${!!S.bo}"><span class="mi">${ico('box')}</span><span class="grow"><b>Ver back order</b><span class="sub">Pedidos pendientes de facturar · extraído ${esc(boFechaTxt())}</span></span>${sw(!!S.bo)}</button>`);
   if (puede) filas.push(`<div class="menu-i aj-i"><span class="mi">${ico('money')}</span><span class="grow"><b>Moneda</b><span class="sub">TC ${NF0.format(tcUsd())} · solo aprobador</span></span><span class="aj-seg"><button data-act="moneda" data-mon="ARS" aria-pressed="${!enUSD()}">AR</button><button data-act="moneda" data-mon="USD" aria-pressed="${enUSD()}">US</button></span></div>`);
   filas.push(`<div class="menu-i aj-i"><span class="mi" style="font-weight:800;font-size:15px">Aa</span><span class="grow"><b>Tamaño de letra</b><span class="sub">En este equipo</span></span><span class="aj-seg">${[80, 100, 120].map(z => `<button data-fz="${z}" aria-pressed="${(S.fz || 80) === z}">${z}%</button>`).join('')}</span></div>`);
+  if (!esVend()) filas.push(`<button class="menu-i aj-i" data-act="irDatos"><span class="mi">${ico('file')}</span><span class="grow"><b>Datos</b><span class="sub">Archivo, clave de acceso, registros manuales y ayuda</span></span>${ico('chevR', 'sm chev')}</button>`);
   filas.push(`<button class="menu-i aj-i" data-act="cargar"><span class="mi">${ico('refresh')}</span><span class="grow"><b>Actualizar datos</b><span class="sub">${esc(lineaInfo())}</span></span>${ico('chevR', 'sm chev')}</button>`);
   openSheet('Opciones', '', `<div class="menu aj">${filas.join('')}</div>`);
 }
@@ -5349,7 +5655,7 @@ function renderDatos() {
       <p><b>Operaciones sin producto comparable.</b> Ventas de productos que no se vendieron en el período de referencia: no entran en la comparación.</p>
       <p><b>Precio promedio.</b> Siempre ponderado: facturación ÷ m² (neto o con flete, según el selector Precio).</p>
     </details>
-    <p class="foot-note">Pulso Comercial · v0.44 · funciona sin conexión</p>`;
+    <p class="foot-note">Pulso Comercial · v0.49 · funciona sin conexión</p>`;
 }
 
 /* ---------- Normalización y validación de archivos ---------- */
@@ -5886,6 +6192,7 @@ document.addEventListener('click', ev => {
   if (t.dataset.detDim) { if (!$('#sheetWrap').hidden) { closeSheet(); setTimeout(() => sheetDetalle(t.dataset.detDim, t.dataset.detKey), 270); } else sheetDetalle(t.dataset.detDim, t.dataset.detKey); return; }
   if (t.dataset.borrar) { borrarManual(t.dataset.borrar); return; }
   const act = t.dataset.act || t.id;
+  if (/^vc[A-Z]/.test(act) && vcAccion(act)) return;
   switch (act) {
     case 'btnFiltros': case 'filtros': sheetFiltros(); break;
     case 'btnPerfil': sheetPerfil(); break;
@@ -5913,6 +6220,8 @@ document.addEventListener('click', ev => {
     case 'fab': case 'nueva': sheetNuevaVenta(); break;
     case 'btnOrden': { const k = Object.keys(ORDENES); S.orden = k[(k.indexOf(S.orden) + 1) % k.length]; render(); break; }
     case 'ajustes': sheetAjustes(); break;
+    case 'irDatos': closeSheet(); if (S.tab !== 'datos') S.tabPrev = S.tab; S.tab = 'datos'; render(); window.scrollTo({ top: 0 }); break;
+    case 'volverDatos': S.tab = S.tabPrev && S.tabPrev !== 'datos' ? S.tabPrev : 'inicio'; render(); window.scrollTo({ top: 0 }); break;
     case 'cargar': closeSheet(); if (REMOTO) sincronizar(true); else $('#fileInput').click(); break;
     case 'exportar': { const d = limpio(DATA, false); d.meta.actualizado = IDX.corte; sheetExport(jsonTexto(d), 'ventas_' + IDX.corte + '.json', 'Exportar datos'); break; }
     case 'plantilla': sheetExport(jsonTexto(plantilla()), 'plantilla_pulso_comercial.json', 'Plantilla JSON'); break;
@@ -5974,7 +6283,7 @@ window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() =
 })();
 
 (function init() {
-  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (ui.pf === 'flete') S.pf = 'flete'; if ([100, 120].includes(ui.fz)) S.fz = ui.fz; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (ui.moneda === 'USD') S.moneda = 'USD'; if (typeof ui.mixCli === 'boolean') S.mixCli = ui.mixCli; if (Array.isArray(ui.evMix)) S.evMix = ui.evMix; if (Array.isArray(ui.evUnir)) S.evUnir = ui.evUnir; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
+  try { const ui = JSON.parse(store.get(KEY_UI) || '{}'); if (typeof ui.sim === 'boolean') S.sim = ui.sim; if (METRIC_NAME[ui.metric]) S.metric = ui.metric; if (ui.pf === 'flete') S.pf = 'flete'; if ([100, 120].includes(ui.fz)) S.fz = ui.fz; if (Array.isArray(ui.vcX)) S.vcX = ui.vcX; if (Array.isArray(ui.vcY)) S.vcY = ui.vcY; S.vcInv = !!ui.vcInv; S.vcTot = ui.vcTot !== false; if (ui.vcDesde) S.vcDesde = ui.vcDesde; if (ui.vcHasta) S.vcHasta = ui.vcHasta; if (DIMS_A[ui.dimA]) S.dimA = ui.dimA; if (ORDENES[ui.orden]) S.orden = ui.orden; if (ui.vista === 'acum' || ui.vista === 'obj') S.vista = ui.vista; if (typeof ui.detalle === 'boolean') S.detalle = ui.detalle; if (['dia', 'semana'].includes(ui.agrup)) S.agrup = ui.agrup; if (['total', 'categoria', 'marca'].includes(ui.evol)) S.evol = ui.evol; if (['obj', 'prev'].includes(ui.fxVs)) S.fxVs = ui.fxVs; if (['curso', 'prev'].includes(ui.precioVs)) S.precioVs = ui.precioVs; if (Array.isArray(ui.apertura)) S.apertura = ui.apertura; if (ui.moneda === 'USD') S.moneda = 'USD'; if (typeof ui.mixCli === 'boolean') S.mixCli = ui.mixCli; if (Array.isArray(ui.evMix)) S.evMix = ui.evMix; if (Array.isArray(ui.evUnir)) S.evUnir = ui.evUnir; if (Array.isArray(ui.aperturaUB)) S.aperturaUB = ui.aperturaUB; if (Array.isArray(ui.ubCols)) S.ubCols = ui.ubCols.includes('cost') || ui.ubColsV === 2 ? ui.ubCols : ui.ubCols.concat('cost'); if (Array.isArray(ui.ubUnir)) S.ubUnir = ui.ubUnir; } catch (e) { /* preferencias por defecto */ }
 aplicarLetra();
   let d = null, origen = 'Demo';
   try {

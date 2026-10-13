@@ -1,5 +1,5 @@
-/* Pulso Comercial · service worker v0.44 (a3c2f56e) */
-const CACHE = 'pulso-v0.44-a3c2f56e';
+/* Pulso Comercial · service worker v0.49 (f8684c6a) */
+const CACHE = 'pulso-v0.49-f8684c6a';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icons/apple-touch-icon.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/favicon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARCHIVOS.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });
 self.addEventListener('message', e => { if (e.data === 'activar') self.skipWaiting(); });
